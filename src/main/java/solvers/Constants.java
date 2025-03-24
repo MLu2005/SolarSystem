@@ -1,4 +1,4 @@
-package src.solvers;
+package solvers;
 
 public class Constants {
 

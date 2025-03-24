@@ -1,4 +1,5 @@
-package src;
+package main;
+
 import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;

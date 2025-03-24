@@ -1,8 +1,8 @@
-package src.solvers;
+package solvers;
 
 import java.util.ArrayList;
 
-import static src.solvers.Constants.*;
+import static solvers.Constants.*;
 
 public class ODEUtility {
 
@@ -34,7 +34,7 @@ public class ODEUtility {
         return min;
     }
 
-    public static double[] xIntersectInStep(double[][] valuePairs) {
+    public static double[] getXIntersectInStep(double[][] valuePairs) {
         if (valuePairs.length == 0) return null;
         if (getMin(valuePairs) > TOLERANCE) return null;
 
@@ -48,9 +48,10 @@ public class ODEUtility {
         }
         return intersectArray;
     }
-    public static double[][] xIntersectInterval(double[][] valuePairs) {
+    public static double[][] getXIntersectInterval(double[][] valuePairs) {
         if (valuePairs.length == 0) return null;
         if (getMin(valuePairs) > 0) return null;
+        if (getMax(valuePairs) < 0) return null;
 
         ArrayList<double[]> intersects = new ArrayList<>();
 
@@ -65,5 +66,18 @@ public class ODEUtility {
         }
         return intersects.toArray(new double[0][]);
     }
+
+    public static double getSlopeAt(double[][] valuePairs, double x) {
+        for (int i = 0; i < valuePairs.length - 1; i++) {
+            double x1 = valuePairs[i][0], y1 = valuePairs[i][1];
+            double x2 = valuePairs[i + 1][0], y2 = valuePairs[i + 1][1];
+
+            if (x1 <= x && x <= x2) {
+                return (y2 - y1) / (x2 - x1);
+            }
+        }
+        return Double.NaN;
+    }
+
 
 }

@@ -1,4 +1,4 @@
-package src.solvers;
+package solvers;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
@@ -6,14 +6,15 @@ public class firstOrder {
 
     // for easy testing, delete later
     public static void main(String[] args) {
-        BiFunction<Double, Double, Double> testEquation = (x, y) -> x + y;
+
+        BiFunction<Double, Double, Double> testEquation = (x, y) -> x  -10;
 
         System.out.println(Arrays.deepToString(euler(testEquation, 0, 1, 1, 100)));
 
         double[][] list = euler(testEquation, 0, 1, 1, 100);
 
-        double val = ODEUtility.getValueAt(list, 1.5);
-        System.out.println(val);
+        double[][] val = ODEUtility.getXIntersectInterval(list);
+        System.out.println(Arrays.deepToString(val));
     }
 
     /**
