@@ -1,5 +1,9 @@
 # Group Project, group 15
 
+##
+background info for differential equations:
+
+- differential equations: https://www.youtube.com/watch?v=-_POEWfygmU&list=PL96AE8D9C68FEB902
 
 ##  Picture Links
 Include relevant images or diagrams to illustrate the project.
