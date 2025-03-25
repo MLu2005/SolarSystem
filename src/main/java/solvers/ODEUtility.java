@@ -2,7 +2,7 @@ package solvers;
 
 import java.util.ArrayList;
 
-import static solvers.Constants.*;
+import static executables.solvers.Constants.*;
 
 public class ODEUtility {
 
