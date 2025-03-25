@@ -66,5 +66,4 @@ public class ODEUtility {
         }
         return intersects.toArray(new double[0][]);
     }
-
 }
