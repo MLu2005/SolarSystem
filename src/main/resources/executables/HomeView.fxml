@@ -16,6 +16,20 @@
     <children>
         <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
+                <Tab text="ODE Solver">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <Label layoutX="101.0" layoutY="22.0" prefHeight="29.0" prefWidth="322.0" text="Results" />
+                                <TextField layoutX="640.0" layoutY="119.0" prefHeight="71.0" prefWidth="150.0" text="Enter the ODE" />
+                        <Separator layoutX="634.0" orientation="VERTICAL" prefHeight="482.0" prefWidth="2.0" />
+                        <ChoiceBox layoutX="640.0" layoutY="56.0" prefWidth="150.0" />
+                        <Label layoutX="639.0" layoutY="27.0" prefHeight="18.0" prefWidth="152.0" text="Number of Dimensions" />
+                        <Button layoutX="640.0" layoutY="215.0" prefHeight="26.0" prefWidth="146.0" text="Start the calculations" />
+                        <Separator layoutX="1.0" layoutY="53.0" prefHeight="0.0" prefWidth="634.0" />
+                            </children></AnchorPane>
+                    </content>
+                </Tab>
                 <Tab text="Solar System">
                     <content>
                         <AnchorPane fx:id="root" style="-fx-background-image: url('images/background.jpg'); -fx-background-size: cover;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
@@ -50,20 +64,6 @@
                                 </children>
                             </HBox>
                         </AnchorPane>
-                    </content>
-                </Tab>
-                <Tab text="ODE Solver">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                                <Label layoutX="101.0" layoutY="22.0" prefHeight="29.0" prefWidth="322.0" text="Results" />
-                                <TextField layoutX="640.0" layoutY="119.0" prefHeight="71.0" prefWidth="150.0" text="Enter the ODE" />
-                        <Separator layoutX="634.0" orientation="VERTICAL" prefHeight="482.0" prefWidth="2.0" />
-                        <ChoiceBox layoutX="640.0" layoutY="56.0" prefWidth="150.0" />
-                        <Label layoutX="639.0" layoutY="27.0" prefHeight="18.0" prefWidth="152.0" text="Number of Dimensions" />
-                        <Button layoutX="640.0" layoutY="215.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="146.0" text="Start the calculations" />
-                        <Separator layoutX="1.0" layoutY="53.0" prefHeight="0.0" prefWidth="634.0" />
-                            </children></AnchorPane>
                     </content>
                 </Tab>
             </tabs>
