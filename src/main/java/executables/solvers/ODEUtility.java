@@ -66,4 +66,23 @@ public class ODEUtility {
         }
         return intersects.toArray(new double[0][]);
     }
+
+    // Adds two vectors element-wise
+    public static double[] addVectors(double[] a, double[] b) {
+        double[] result = new double[a.length];
+        for (int i = 0; i < a.length; i++) {
+            result[i] = a[i] + b[i];
+        }
+        return result;
+    }
+
+    // Scales a vector by a constant
+    public static double[] scaleVector(double[] v, double scalar) {
+        double[] result = new double[v.length];
+        for (int i = 0; i < v.length; i++) {
+            result[i] = scalar * v[i];
+        }
+        return result;
+    }
+
 }

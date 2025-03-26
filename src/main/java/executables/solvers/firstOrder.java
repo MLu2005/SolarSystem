@@ -1,6 +1,8 @@
 package executables.solvers;
 import java.util.Arrays;
 import java.util.function.BiFunction;
+import static executables.solvers.ODEUtility.addVectors;
+import static executables.solvers.ODEUtility.scaleVector;
 
 public class firstOrder {
 
@@ -47,4 +49,63 @@ public class firstOrder {
         }
         return valuePairs;
     }
+
+    /**
+     * RK4 solver with an optional stopping condition.
+     * Stops early if the condition evaluates to true.
+     */
+    public static double[][] rungeKutta4(
+            BiFunction<Double, double[], double[]> f,
+            double t0,
+            double[] y0,
+            double stepSize,
+            int maxSteps,
+            BiFunction<Double, double[], Boolean> stopCondition
+    ) {
+        int dim = y0.length;
+        double[][] valuePairs = new double[maxSteps][dim + 1]; // first column = time
+        double t = t0;
+        double[] y = Arrays.copyOf(y0, dim); // copy of initial state
+
+        for (int i = 0; i < maxSteps; i++) {
+            valuePairs[i][0] = t;
+            for (int j = 0; j < dim; j++) {
+                valuePairs[i][j + 1] = y[j];
+            }
+
+            // Stop early if stopping condition is met
+            if (stopCondition != null && stopCondition.apply(t, y)) {
+                return Arrays.copyOf(valuePairs, i + 1);
+            }
+
+            // RK4 steps
+            double[] k1 = f.apply(t, y);
+            double[] k2 = f.apply(t + stepSize / 2.0, addVectors(y, scaleVector(k1, stepSize / 2.0)));
+            double[] k3 = f.apply(t + stepSize / 2.0, addVectors(y, scaleVector(k2, stepSize / 2.0)));
+            double[] k4 = f.apply(t + stepSize, addVectors(y, scaleVector(k3, stepSize)));
+
+            // Weighted average of slopes
+            for (int j = 0; j < dim; j++) {
+                y[j] += (stepSize / 6.0) * (k1[j] + 2 * k2[j] + 2 * k3[j] + k4[j]);
+            }
+
+            t += stepSize;
+        }
+
+        return valuePairs;
+    }
+
+    /**
+     * RK4 solver with a fixed number of steps (no stopping condition).
+     */
+    public static double[][] rungeKutta4(
+            BiFunction<Double, double[], double[]> f,
+            double t0,
+            double[] y0,
+            double stepSize,
+            int maxSteps
+    ) {
+        return rungeKutta4(f, t0, y0, stepSize, maxSteps, null);
+    }
+
 }
