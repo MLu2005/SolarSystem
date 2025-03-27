@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.layout.StackPane?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" snapToPixel="false" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="executables.Controller">
     <children>
         <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -53,14 +54,17 @@
                 </Tab>
                 <Tab text="ODE Solver">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="600.0">
                             <children>
                                 <Label layoutX="172.0" layoutY="142.0" prefHeight="124.0" prefWidth="322.0" text="Results" />
                                 <TextField layoutX="172.0" layoutY="68.0" prefHeight="26.0" prefWidth="250.0" text="Enter the ODE" />
                                 <Text layoutX="239.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ODE solver" wrappingWidth="93.98307228088379" />
-                            </children></AnchorPane>
+                                <StackPane fx:id="chartContainer" layoutX="50.0" layoutY="200.0" prefHeight="300.0" prefWidth="500.0" />
+                            </children>
+                        </AnchorPane>
                     </content>
                 </Tab>
+
             </tabs>
         </TabPane>
     </children>

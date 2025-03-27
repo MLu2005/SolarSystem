@@ -2,7 +2,12 @@ package executables;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.AnchorPane;import javafx.scene.chart.LineChart;
+import javafx.scene.layout.StackPane;
+import executables.solvers.FirstDimension;
+import executables.testing.plotter;
+import java.util.function.BiFunction;
+
 
 
 public class Controller {
@@ -16,11 +21,28 @@ public class Controller {
     @FXML private AnchorPane jupiter;
     @FXML private AnchorPane saturn;
 
+
+    @FXML
+    private StackPane chartContainer;
+
     @FXML
     public void initialize() {
 
+        BiFunction<Double, Double, Double> f = (x, y) -> x + y;
+
+
+        double[][] solution = FirstDimension.euler1st(f, 0, 1, 0.1, 100);
+
+
+        LineChart<Number, Number> chart = plotter.plotSolution(solution, "Euler", "x", "y(x)");
+
+
+        chartContainer.getChildren().add(chart);
+
         bindPlanetPositions();
+
     }
+
 
     private void bindPlanetPositions() {
 
