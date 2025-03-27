@@ -22,7 +22,7 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="703.0">
                             <children>
-                                <Label layoutX="50.0" layoutY="14.0" prefHeight="124.0" prefWidth="322.0" text="Results" />
+                                <Label layoutX="50.0" prefHeight="124.0" prefWidth="322.0" text="Results" />
                                 <StackPane fx:id="chartContainer" layoutX="50.0" layoutY="200.0" prefHeight="300.0" prefWidth="500.0" />
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bee0ff" height="444.0" layoutX="620.0" stroke="#bee0ff" strokeType="INSIDE" width="190.0" />
                                 <Text layoutX="635.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" wrappingWidth="93.98307228088379" />
