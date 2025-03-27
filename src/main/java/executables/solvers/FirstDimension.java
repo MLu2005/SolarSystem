@@ -1,19 +1,21 @@
 package executables.solvers;
 import java.util.Arrays;
 import java.util.function.BiFunction;
+import static executables.solvers.ODEUtility.addVectors;
+import static executables.solvers.ODEUtility.scaleVector;
 
-public class firstOrder {
+public class FirstDimension {
 
     // for easy testing, delete later
     public static void main(String[] args) {
         BiFunction<Double, Double, Double> testEquation = (x, y) -> x + y;
 
-        System.out.println(Arrays.deepToString(euler(testEquation, 0, 1, 1, 100)));
+        System.out.println(Arrays.deepToString(euler1st(testEquation, 0, 1, 1, 100)));
 
-        double[][] list = euler(testEquation, 0, 1, 1, 100);
+        double[][] list = euler1st(testEquation, 0, 1, 1, 100);
 
-        double val = ODEUtility.getValueAt(list, 1.5);
-        System.out.println(val);
+        Double[] val = ODEUtility.getValueAt(list, 1.5);
+        System.out.println(Arrays.toString(val));
     }
 
     /**
@@ -27,7 +29,7 @@ public class firstOrder {
      * @param steps the total number of steps, how far we want to go
      * @return a list value pairs
      */
-    public static double[][] euler(BiFunction<Double, Double, Double> f, double x0, double y0, double stepSize,
+    public static double[][] euler1st(BiFunction<Double, Double, Double> f, double x0, double y0, double stepSize,
                                       int steps) {
         double[][] valuePairs = new double[steps][2];
         double x = x0, y = y0;
@@ -47,4 +49,7 @@ public class firstOrder {
         }
         return valuePairs;
     }
+
+
+
 }
