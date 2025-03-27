@@ -25,6 +25,7 @@ public class Main extends Application {
         launch(args);
         // close the application to see
         eulerErrorDefault();
+
     }
 }
 

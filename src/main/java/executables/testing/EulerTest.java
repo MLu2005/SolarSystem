@@ -1,6 +1,6 @@
 package executables.testing;
 
-import executables.solvers.firstOrder;
+import executables.solvers.FirstDimension;
 import java.util.function.BiFunction;
 
 public class EulerTest {
@@ -16,14 +16,14 @@ public class EulerTest {
         for (double h : stepSizes) {
             int steps = (int) ((xEnd - x0) / h);
 
-            double[][] result = firstOrder.euler(f, x0, y0, h, steps);
+            double[][] result = FirstDimension.euler1st(f, x0, y0, h, steps);
 
             double maxError = 0.0;
             double sumError = 0.0;
 
-            for (int i = 0; i < result.length; i++) {
-                double x = result[i][0];
-                double y_euler = result[i][1];
+            for (double[] doubles : result) {
+                double x = doubles[0];
+                double y_euler = doubles[1];
                 double y_exact = Math.exp(x);
                 double error = Math.abs(y_euler - y_exact);
 
@@ -52,14 +52,14 @@ public class EulerTest {
         for (double h : stepSizes) {
             int steps = (int) ((xEnd - x0) / h);
 
-            double[][] result = firstOrder.euler(f, x0, y0, h, steps);
+            double[][] result = FirstDimension.euler1st(f, x0, y0, h, steps);
 
             double maxError = 0.0;
             double sumError = 0.0;
 
-            for (int i = 0; i < result.length; i++) {
-                double x = result[i][0];
-                double y_euler = result[i][1];
+            for (double[] doubles : result) {
+                double x = doubles[0];
+                double y_euler = doubles[1];
                 double y_exact = Math.exp(x);
                 double error = Math.abs(y_euler - y_exact);
 

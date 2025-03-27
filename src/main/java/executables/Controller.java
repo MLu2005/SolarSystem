@@ -4,7 +4,7 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;import javafx.scene.chart.LineChart;
 import javafx.scene.layout.StackPane;
-import executables.solvers.firstOrder;
+import executables.solvers.FirstDimension;
 import executables.testing.plotter;
 import java.util.function.BiFunction;
 
@@ -31,7 +31,7 @@ public class Controller {
         BiFunction<Double, Double, Double> f = (x, y) -> x + y;
 
 
-        double[][] solution = firstOrder.euler(f, 0, 1, 0.1, 100);
+        double[][] solution = FirstDimension.euler1st(f, 0, 1, 0.1, 100);
 
 
         LineChart<Number, Number> chart = plotter.plotSolution(solution, "Euler", "x", "y(x)");
