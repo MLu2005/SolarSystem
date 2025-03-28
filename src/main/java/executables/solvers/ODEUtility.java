@@ -1,8 +1,13 @@
 package executables.solvers;
 
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
+
+import java.util.function.BiFunction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 
 import static executables.solvers.Constants.*;
@@ -130,6 +135,35 @@ public class ODEUtility {
             result[i] = scalar * v[i];
         }
         return result;
+    }
+
+
+    // reference: https://www.baeldung.com/java-evaluate-math-expression-string
+    public static BiFunction<Double, Double[], Double[]> textToFunction() {
+        return (t, state) -> {
+            Double[] results = new Double[equations.length];
+
+            for (int i = 0; i < equations.length; i++) {
+                Expression expr = new ExpressionBuilder(equations[i]).variables(variables).variable("t").build();
+
+                // Assign values to variables
+                for (int j = 0; j < variables.length; j++) {
+                    expr.setVariable(variables[j], state[j]);
+                }
+                expr.setVariable("t", t);
+
+                results[i] = expr.evaluate();
+            }
+            return results;
+        };
+    }
+
+    public static String[] equations;
+    public static String[] variables;
+
+    public static void setEquations(String[] eqs, String[] vars) {
+        equations = eqs;
+        variables = vars;
     }
 
 }
