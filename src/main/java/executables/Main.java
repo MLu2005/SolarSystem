@@ -1,6 +1,6 @@
 package executables;
 
-import static executables.testing.EulerTest.*;
+import static executables.testing.EulerTest_analytical.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
