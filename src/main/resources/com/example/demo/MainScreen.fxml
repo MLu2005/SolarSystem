@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="473.0" prefWidth="809.0" snapToPixel="false" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.Controller">
@@ -47,11 +48,16 @@
                                 <ListView fx:id="resultListView" layoutX="24.0" layoutY="89.0" prefHeight="300.0" prefWidth="369.0" />
 
                                 <!-- Radio buttons for method selection -->
-                                <RadioButton fx:id="rk4MethodRadio" layoutX="561.0" layoutY="62.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="127.0" text="Higher Dimension" />
-                                <RadioButton fx:id="eulerMethodRadio" layoutX="698.0" layoutY="62.0" mnemonicParsing="false" text="First Dimension" />
+                                <RadioButton fx:id="rk4MethodRadio" layoutX="561.0" layoutY="62.0" mnemonicParsing="false" onAction="#initialize" prefHeight="17.0" prefWidth="127.0" text="Higher Dimension" />
+                                <RadioButton fx:id="eulerMethodRadio" layoutX="698.0" layoutY="62.0" mnemonicParsing="false" onAction="#initialize" text="First Dimension" />
 
                                 <!-- Button to visualize the ODE -->
-                                <Button fx:id="vODE" layoutX="634.0" layoutY="409.0" mnemonicParsing="false" onAction="#visualizeODE" prefHeight="26.0" prefWidth="92.0" text="Visualize" />
+                                <Button fx:id="ODEvisualize" layoutX="634.0" layoutY="409.0" mnemonicParsing="false" onAction="#visualizeODE" prefHeight="26.0" prefWidth="92.0" text="Visualize" />
+                        <Label layoutX="24.0" layoutY="54.0" prefHeight="17.0" prefWidth="251.0" text="Results:">
+                           <font>
+                              <Font name="Berlin Sans FB Bold" size="27.0" />
+                           </font>
+                        </Label>
                             </children>
                         </AnchorPane>
                     </content>
