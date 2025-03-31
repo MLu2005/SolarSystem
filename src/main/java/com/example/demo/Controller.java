@@ -1,11 +1,13 @@
 package com.example.demo;
 import javafx.application.Platform;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 
 import java.util.Arrays;
 import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
 
 import java.util.function.BiFunction;
@@ -79,6 +81,12 @@ public class Controller {
 
     @FXML
     private ListView<String> resultListView;
+
+    @FXML
+    private Button vODE;
+
+    @FXML
+    private Pane chartContainer;
 
     @FXML
     private Button solveButton;
@@ -206,4 +214,62 @@ public class Controller {
             resultListView.getItems().add(message);
         });
     }
-   }
+
+    plotter plot = new plotter();
+
+    @FXML
+    public void visualizeODE() {
+        try {
+
+            double x0 = Double.parseDouble(initialConditionsInput.getText().split(",")[0].trim());
+            double stepSize = Double.parseDouble(stepSizeInput.getText().trim());
+            int steps = Integer.parseInt(stepsInput.getText().trim());
+
+
+            String[] equations = equationInput.getText().split("\n");
+            String[] variables = variablesInput.getText().split(",");
+
+            for (int i = 0; i < variables.length; i++) {
+                variables[i] = variables[i].trim();
+            }
+
+
+            ODEUtility.setEquations(equations, variables);
+            BiFunction<Double, double[], double[]> odeFunction = ODEUtility.textToFunction();
+
+
+            int stateSize = variables.length;
+            double[] initialState = new double[stateSize];
+
+            String[] initialValues = initialConditionsInput.getText().split(",");
+            if (initialValues.length != stateSize + 1) {
+                fightError("Initial conditions do not match the number of variables.");
+                return;
+            }
+
+            for (int i = 1; i < initialValues.length; i++) {
+                initialState[i - 1] = Double.parseDouble(initialValues[i].trim());
+            }
+
+
+            double[][] solution = FirstDimension.euler1st(odeFunction, x0, initialState, stepSize, steps);
+
+
+            LineChart<Number, Number> chart = plot.plotSolution(solution, "Euler Method", "x", "y(x)");
+
+
+            Platform.runLater(() -> {
+                chartContainer.getChildren().clear();
+                chartContainer.getChildren().add(chart);
+            });
+
+        } catch (NumberFormatException ex) {
+            fightError("Invalid input. Make sure to enter valid numbers.");
+        } catch (Exception ex) {
+            fightError("Error: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+}
+

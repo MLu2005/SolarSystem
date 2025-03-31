@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="473.0" prefWidth="809.0" snapToPixel="false" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.Controller">
@@ -25,25 +24,34 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="703.0">
                             <children>
+                                <!-- This is the container for the chart -->
                                 <StackPane fx:id="chartContainer" layoutX="50.0" layoutY="200.0" prefHeight="300.0" prefWidth="500.0" />
+
+                                <!-- Rectangle with settings background -->
                                 <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bee0ff" height="444.0" layoutX="551.0" stroke="#bee0ff" strokeType="INSIDE" width="259.0" />
                                 <Text layoutX="561.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" wrappingWidth="93.98307228088379" />
+
                                 <Label layoutX="655.0" layoutY="31.0" prefHeight="18.0" prefWidth="72.0" text="Dimensions" />
-                                <Button fx:id="solveButton" layoutX="634.0" layoutY="376.0" mnemonicParsing="false" onAction="#initialize" prefHeight="26.0" prefWidth="92.0" text="Solve" />
-                        <TextField fx:id="initialConditionsInput" layoutX="564.0" layoutY="233.0" prefHeight="25.0" prefWidth="210.0" text="initialValuesForInputs" />
-                        <Label layoutX="27.0" layoutY="48.0" text="Results:">
-                           <font>
-                              <Font name="Bookman Old Style Bold" size="23.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="stepSizeInput" layoutX="681.0" layoutY="275.0" prefHeight="25.0" prefWidth="95.0" text="stepsSize" />
-                        <TextField fx:id="stepsInput" layoutX="566.0" layoutY="275.0" prefHeight="25.0" prefWidth="95.0" text="stepsInput" />
-                        <TextField fx:id="variablesInput" layoutX="566.0" layoutY="314.0" prefHeight="25.0" prefWidth="95.0" text="variablesInput" />
-                        <TextArea fx:id="equationInput" layoutX="566.0" layoutY="89.0" prefHeight="133.0" prefWidth="229.0" text="ODE&#10;&#10;&#10;" />
-                        <ListView fx:id="resultListView" layoutX="24.0" layoutY="89.0" prefHeight="300.0" prefWidth="369.0" />
-                        <RadioButton fx:id="rk4MethodRadio" layoutX="561.0" layoutY="62.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="127.0" text="Higher Dimension" />
-                        <RadioButton fx:id="eulerMethodRadio" layoutX="698.0" layoutY="62.0" mnemonicParsing="false" text="First Dimension" />
-                        <Button layoutX="634.0" layoutY="409.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="92.0" text="Visualize" />
+
+                                <!-- Solve button with correct onAction method -->
+                                <Button fx:id="solveButton" layoutX="634.0" layoutY="376.0" mnemonicParsing="false" onAction="#solveODE" prefHeight="26.0" prefWidth="92.0" text="Solve" />
+
+                                <!-- Various input fields for initial conditions, step size, etc. -->
+                                <TextField fx:id="initialConditionsInput" layoutX="564.0" layoutY="233.0" prefHeight="25.0" prefWidth="210.0" text="initialValuesForInputs" />
+                                <TextField fx:id="stepSizeInput" layoutX="681.0" layoutY="275.0" prefHeight="25.0" prefWidth="95.0" text="stepsSize" />
+                                <TextField fx:id="stepsInput" layoutX="566.0" layoutY="275.0" prefHeight="25.0" prefWidth="95.0" text="stepsInput" />
+                                <TextField fx:id="variablesInput" layoutX="566.0" layoutY="314.0" prefHeight="25.0" prefWidth="95.0" text="variablesInput" />
+                                <TextArea fx:id="equationInput" layoutX="566.0" layoutY="89.0" prefHeight="133.0" prefWidth="229.0" text="ODE&#10;&#10;&#10;" />
+
+                                <!-- Result ListView -->
+                                <ListView fx:id="resultListView" layoutX="24.0" layoutY="89.0" prefHeight="300.0" prefWidth="369.0" />
+
+                                <!-- Radio buttons for method selection -->
+                                <RadioButton fx:id="rk4MethodRadio" layoutX="561.0" layoutY="62.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="127.0" text="Higher Dimension" />
+                                <RadioButton fx:id="eulerMethodRadio" layoutX="698.0" layoutY="62.0" mnemonicParsing="false" text="First Dimension" />
+
+                                <!-- Button to visualize the ODE -->
+                                <Button fx:id="vODE" layoutX="634.0" layoutY="409.0" mnemonicParsing="false" onAction="#visualizeODE" prefHeight="26.0" prefWidth="92.0" text="Visualize" />
                             </children>
                         </AnchorPane>
                     </content>
