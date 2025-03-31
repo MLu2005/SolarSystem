@@ -29,7 +29,7 @@
                                 <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bee0ff" height="444.0" layoutX="551.0" stroke="#bee0ff" strokeType="INSIDE" width="259.0" />
                                 <Text layoutX="561.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" wrappingWidth="93.98307228088379" />
                                 <Label layoutX="655.0" layoutY="31.0" prefHeight="18.0" prefWidth="72.0" text="Dimensions" />
-                                <Button fx:id="solveButton" layoutX="635.0" layoutY="392.0" mnemonicParsing="false" onAction="#initialize" prefHeight="26.0" prefWidth="92.0" text="Solve" />
+                                <Button fx:id="solveButton" layoutX="634.0" layoutY="376.0" mnemonicParsing="false" onAction="#initialize" prefHeight="26.0" prefWidth="92.0" text="Solve" />
                         <TextField fx:id="initialConditionsInput" layoutX="564.0" layoutY="233.0" prefHeight="25.0" prefWidth="210.0" text="initialValuesForInputs" />
                         <Label layoutX="27.0" layoutY="48.0" text="Results:">
                            <font>
@@ -43,6 +43,7 @@
                         <ListView fx:id="resultListView" layoutX="24.0" layoutY="89.0" prefHeight="300.0" prefWidth="369.0" />
                         <RadioButton fx:id="rk4MethodRadio" layoutX="561.0" layoutY="62.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="127.0" text="Higher Dimension" />
                         <RadioButton fx:id="eulerMethodRadio" layoutX="698.0" layoutY="62.0" mnemonicParsing="false" text="First Dimension" />
+                        <Button layoutX="634.0" layoutY="409.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="92.0" text="Visualize" />
                             </children>
                         </AnchorPane>
                     </content>
