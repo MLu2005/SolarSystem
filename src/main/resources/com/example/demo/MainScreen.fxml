@@ -48,8 +48,8 @@
                                 <ListView fx:id="resultListView" layoutX="24.0" layoutY="89.0" prefHeight="300.0" prefWidth="369.0" />
 
                                 <!-- Radio buttons for method selection -->
-                                <RadioButton fx:id="rk4MethodRadio" layoutX="561.0" layoutY="62.0" mnemonicParsing="false" onAction="#initialize" prefHeight="17.0" prefWidth="127.0" text="Higher Dimension" />
-                                <RadioButton fx:id="eulerMethodRadio" layoutX="698.0" layoutY="62.0" mnemonicParsing="false" onAction="#initialize" text="First Dimension" />
+                                <RadioButton fx:id="rk4MethodRadio" layoutX="561.0" layoutY="62.0" mnemonicParsing="false" onAction="#initialize" prefHeight="17.0" prefWidth="127.0" text="Runge-Kutta 4" />
+                                <RadioButton fx:id="eulerMethodRadio" layoutX="698.0" layoutY="62.0" mnemonicParsing="false" onAction="#initialize" text="Euler Method" />
 
                                 <!-- Button to visualize the ODE -->
                                 <Button fx:id="ODEvisualize" layoutX="634.0" layoutY="409.0" mnemonicParsing="false" onAction="#visualizeODE" prefHeight="26.0" prefWidth="92.0" text="Visualize" />
