@@ -14,15 +14,6 @@ import static executables.solvers.Constants.*;
 
 // rewrote all methods to support nth Dimension ODE results
 // All are highly inefficient and should not be finally submitted
-import net.objecthunter.exp4j.Expression;
-import net.objecthunter.exp4j.ExpressionBuilder;
-
-import java.util.function.BiFunction;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-
-
 public class ODEUtility {
 
     private static String[] equations;
@@ -70,7 +61,7 @@ public class ODEUtility {
     }
 
     public static double[] getValueAt(double[][] valuePairs, double val) {
-        if (valuePairs == null || valuePairs.length == 0) return null;
+        if (valuePairs == null) return null;
 
         for (double[] e : valuePairs) {
             if (Math.abs(e[0] - val) < TOLERANCE) {

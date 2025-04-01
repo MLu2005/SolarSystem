@@ -6,9 +6,6 @@ import java.util.function.BiFunction;
 import static executables.solvers.ODEUtility.addVectors;
 import static executables.solvers.ODEUtility.scaleVector;
 
-import java.util.Arrays;
-import java.util.function.BiFunction;
-
 
 public class NthDimension {
 
