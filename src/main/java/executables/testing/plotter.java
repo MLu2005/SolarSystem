@@ -5,6 +5,11 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 
 
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+
+
 public class plotter {
 
     public static LineChart<Number, Number> plotSolution(
@@ -25,11 +30,16 @@ public class plotter {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName(solverName);
 
-        for (double[] point : solution) {
-            series.getData().add(new XYChart.Data<>(point[0], point[1]));
+        // Assuming the first dimension is time (t), and we want to plot the first dependent variable (y1)
+        for (int i = 0; i < solution.length; i++) {
+            // solution[i][0] is the time value, solution[i][1] is the first dependent variable
+            series.getData().add(new XYChart.Data<>(solution[i][0], solution[i][1]));
         }
 
         lineChart.getData().add(series);
         return lineChart;
     }
+
 }
+
+

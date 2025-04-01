@@ -11,18 +11,18 @@ public class EulerTest_realistic {
 
         double a = 1, b = 0.2, c = 0.2, d = 0.1;
 
-        BiFunction<Double, Double[], Double[]> f = (t, Y) -> {
+        BiFunction<Double, double[], double[]> f = (t, Y) -> {
             double x = Y[0];
             double y = Y[1];
 
             double dx = a * x - b * x * y;
             double dy = -c * y + d * x * y;
 
-            return new Double[]{dx, dy};
+            return new double[]{dx, dy};
         };
 
         double t0 = 0.0;
-        Double[] y0 = {10.0, 5.0};
+        double[] y0 = {10.0, 5.0};
         double stepSize = 0.01;
         int steps = 1000;
 

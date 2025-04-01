@@ -14,7 +14,7 @@ public class FirstDimension {
 
         double[][] list = euler1st(testEquation, 0, 1, 1, 100);
 
-        Double[] val = ODEUtility.getValueAt(list, 1.5);
+        double[] val = ODEUtility.getValueAt(list, 1.5);
         System.out.println(Arrays.toString(val));
     }
 

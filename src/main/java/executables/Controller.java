@@ -1,52 +1,51 @@
 package executables;
-
+import executables.solvers.*;
 import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;
-import javafx.scene.layout.AnchorPane;import javafx.scene.chart.LineChart;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.chart.LineChart;
 import javafx.scene.layout.StackPane;
 import executables.solvers.FirstDimension;
 import executables.testing.plotter;
 import java.util.function.BiFunction;
 
 
+import javafx.application.Platform;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+
+import javafx.scene.control.*;
+
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
+
+import java.util.function.BiFunction;
+
 
 public class Controller {
 
-    @FXML private AnchorPane root;
-    @FXML private AnchorPane sun;
-    @FXML private AnchorPane venus;
-    @FXML private AnchorPane mercury;
-    @FXML private AnchorPane earth;
-    @FXML private AnchorPane mars;
-    @FXML private AnchorPane jupiter;
-    @FXML private AnchorPane saturn;
-
-
     @FXML
-    private StackPane chartContainer;
-
+    private AnchorPane root;
     @FXML
-    public void initialize() {
-
-        BiFunction<Double, Double, Double> f = (x, y) -> x + y;
-
-
-        double[][] solution = FirstDimension.euler1st(f, 0, 1, 0.1, 100);
-
-
-        LineChart<Number, Number> chart = plotter.plotSolution(solution, "Euler", "x", "y(x)");
-
-
-        chartContainer.getChildren().add(chart);
-
-        bindPlanetPositions();
-
-    }
+    private AnchorPane sun;
+    @FXML
+    private AnchorPane venus;
+    @FXML
+    private AnchorPane mercury;
+    @FXML
+    private AnchorPane earth;
+    @FXML
+    private AnchorPane mars;
+    @FXML
+    private AnchorPane jupiter;
+    @FXML
+    private AnchorPane saturn;
 
 
     private void bindPlanetPositions() {
 
-        // Positioning based on relative width and height of the root pane.
+
         DoubleBinding sunLayoutX = root.widthProperty().multiply(0.1);
         sun.layoutXProperty().bind(sunLayoutX);
         sun.layoutYProperty().bind(root.heightProperty().multiply(0.1));
@@ -75,4 +74,194 @@ public class Controller {
         saturn.layoutXProperty().bind(saturnLayoutX);
         saturn.layoutYProperty().bind(root.heightProperty().multiply(0.7));
     }
+
+    @FXML
+    private TextField stepSizeInput;
+
+    @FXML
+    private TextField stepsInput;
+
+    @FXML
+    private TextField initialConditionsInput;
+
+    @FXML
+    private TextArea equationInput;
+
+    @FXML
+    private TextField variablesInput;
+
+    @FXML
+    private ListView<String> resultListView;
+
+    @FXML
+    private Button ODEvisualize;
+
+    @FXML
+    private Pane chartContainer;
+
+    @FXML
+    private Button solveButton;
+
+    @FXML
+    private RadioButton rk4MethodRadio;
+
+    @FXML
+    private RadioButton eulerMethodRadio;
+
+    private ToggleGroup toggleGroup;
+
+    @FXML
+    public void initialize() {
+        toggleGroup = new ToggleGroup();
+        eulerMethodRadio.setToggleGroup(toggleGroup);
+        rk4MethodRadio.setToggleGroup(toggleGroup);
+
+        // * Setting eulermethod class as default
+        eulerMethodRadio.setSelected(true);
+
+        eulerMethodRadio.setOnAction(event -> System.out.println("Euler method selected"));
+        rk4MethodRadio.setOnAction(event -> System.out.println("Runge-Kutta 4 selected"));
+
+        solveButton.setOnAction(e -> solveODE());
+    }
+
+    @FXML
+    public void solveODE() {
+        try {
+            // * Var(x0) represents the independent variable it's set to zero by default but the user can explicitly put it as a different number.
+            // * and i parsed them because they're initially strings in the GUI just to make my life easier.
+            double x0 = Double.parseDouble(initialConditionsInput.getText().split(",")[0].trim());
+            double stepSize = Double.parseDouble(stepSizeInput.getText().trim());
+            int steps = Integer.parseInt(stepsInput.getText().trim());
+
+            String[] equations = equationInput.getText().split("\n");
+            String[] variables = variablesInput.getText().split(",");
+
+            for (int i = 0; i < variables.length; i++) {
+                variables[i] = variables[i].trim();
+            }
+
+            if (variables.length == 0 || variables[0].isEmpty()) {
+                System.out.println("??, Forgot to input the variables.");
+            }
+
+            ODEUtility.setEquations(equations, variables); // ODEUTILITY CLASS
+            BiFunction<Double, double[], double[]> odeFunction = ODEUtility.textToFunction(); // ODEUTILITY CLASS
+            int stateSize = variables.length;
+            double[] initialState = new double[stateSize];
+
+            String[] initialValues = initialConditionsInput.getText().split(",");
+
+            // *  checking if the initial conditions match the number of state variables (EXCLUDING X0)!
+            if (initialValues.length != stateSize + 1) {
+                System.out.println("initial conditions do not match the number of variables.");
+            }
+
+            for (int i = 1; i < initialValues.length; i++) {
+                initialState[i - 1] = Double.parseDouble(initialValues[i].trim());
+            }
+
+            // * cool radiobuttons to choose from higher dimension and first dimension can be applied by the user.
+            double[][] result;
+            if (eulerMethodRadio.isSelected()) {
+                System.out.println("You're using Euler Method");
+                result = NthDimension.eulerNth(odeFunction::apply, x0, initialState, stepSize, steps);
+            } else {
+                System.out.println("You're using Runge-Kutta 4 Method");
+                result = NthDimension.rungeKutta4(odeFunction, x0, initialState, stepSize, steps);
+            }
+
+            // * the part below is responsible for displaying the results in the viewlist
+            StringBuilder output = new StringBuilder("t"); // t is our initial.
+            for (String var : variables) {
+                output.append("\t").append(var);
+            }
+            output.append("\n");
+
+            Platform.runLater(() -> {
+                resultListView.getItems().clear();
+                resultListView.getItems().add(output.toString());
+
+                for (double[] row : result) {
+                    StringBuilder rowText = new StringBuilder("t = " + row[0]);
+                    for (int i = 1; i < row.length; i++) {
+                        rowText.append(", ").append(variables[i - 1]).append(" = ").append(row[i]);
+                    }
+                    resultListView.getItems().add(rowText.toString());
+                }
+            });
+
+        } catch (NumberFormatException ex) {
+            fightError("???Your input is invalid, make sure you enter valid numbers.???");
+        } catch (IllegalArgumentException ex) {
+            fightError(ex.getMessage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fightError("Unknown error?" + ex.getMessage());
+        }
+    }
+
+    private void fightError(String message) {
+        System.err.println(message);
+        Platform.runLater(() -> {
+            resultListView.getItems().clear();
+            resultListView.getItems().add(message);
+        });
+    }
+
+    @FXML
+    public void visualizeODE() {
+        try {
+            // * reusing what i did in ODESolver method again
+            double x0 = Double.parseDouble(initialConditionsInput.getText().split(",")[0].trim());
+            double stepSize = Double.parseDouble(stepSizeInput.getText().trim());
+            int steps = Integer.parseInt(stepsInput.getText().trim());
+
+            String[] equations = equationInput.getText().split("\n");
+            String[] variables = variablesInput.getText().split(",");
+
+            for (int i = 0; i < variables.length; i++) {
+                variables[i] = variables[i].trim();
+            }
+
+            ODEUtility.setEquations(equations, variables);
+            BiFunction<Double, double[], double[]> odeFunction = ODEUtility.textToFunction();
+
+            int stateSize = variables.length;
+            double[] initialState = new double[stateSize];
+
+            String[] initialValues = initialConditionsInput.getText().split(",");
+
+            // * error fighter exception
+            if (initialValues.length != stateSize + 1) {
+                fightError("???initial conditions do not match the number of variables.???");
+                return;
+            }
+
+            for (int i = 1; i < initialValues.length; i++) {
+                initialState[i - 1] = Double.parseDouble(initialValues[i].trim());
+            }
+
+            double[][] solution = NthDimension.eulerNth(odeFunction, x0, initialState, stepSize, steps);
+
+            LineChart<Number, Number> chart = plotter.plotSolution(solution, "Euler Method", "t", "y(t)");
+
+            // * make a new popup window (Stage) to display the chart
+            Stage chartStage = new Stage();
+            chartStage.setTitle("ODE Visualization");
+
+
+            Scene chartScene = new Scene(new Group(chart), 600, 400);
+            chartStage.setScene(chartScene);
+
+            chartStage.show();
+
+        } catch (NumberFormatException ex) {
+            fightError("??invalid input, Make sure to enter valid numbers.??");
+        } catch (Exception ex) {
+            fightError("UKNOWN ERROR?!: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
 }
+
