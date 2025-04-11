@@ -1,6 +1,6 @@
 package executables.solar_system;
 
-public class Moons extends SpaceObject{
+public class Moon extends SpaceObject{
     private SpaceObject MoonOf;
 
 }
