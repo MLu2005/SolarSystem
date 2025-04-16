@@ -4,34 +4,46 @@ import executables.solvers.NthDimension;
 import java.util.List;
 import java.util.function.BiFunction;
 
+/**
+ * This class runs a console-based test of the solar system simulation using the Runge-Kutta 4 solver.
+ * It loads initial data, runs the simulation for one Earth year (365 days),
+ * and prints positions of celestial bodies every 30 days.
+ */
 public class SolarSystemTest {
 
+    /**
+     * Main method for running the simulation in console mode.
+     * It prints the solar system state every 30 days for 1 year.
+     */
     public static void main(String[] args) {
-        // 1. Wczytanie danych
-        String filePath = "src/main/java/executables/solar_system/IC.csv";  // ← dostosuj ścieżkę
+        // 1. Load celestial body data from CSV
+        String filePath = "src/main/java/executables/solar_system/IC.csv";  // ← Adjust path if needed
         List<CelestialBody> bodies = DataLoader.loadBodiesFromCSV(filePath);
 
-        // 2. Tworzenie solvera RK4
+        // 2. Create the ODE system using Newtonian gravity
         double[] initialState = StateUtils.extractStateVector(bodies);
         BiFunction<Double, double[], double[]> ode = SolarSystemODE.generateODE(bodies);
 
-        // 3. Parametry
-        double stepSize = 86400;  // 1 dzień (w sekundach)
-        int steps = 365;          // 1 rok
+        // 3. Simulation parameters
+        double stepSize = 86400; // one day in seconds
+        int steps = 365;         // simulate 1 year
 
-        // 4. Uruchomienie solvera
+        // 4. Run RK4 solver
         double[][] result = NthDimension.rungeKutta4(ode, 0, initialState, stepSize, steps);
 
-        // 5. Wypisz co 30 dni
+        // 5. Output system state every 30 days
         int interval = 30;
         for (int i = 0; i < result.length; i += interval) {
             System.out.printf("Day %d:\n", i);
             StateUtils.applyStateVector(result[i], bodies);
-            for (CelestialBody body : bodies) {
+
+            for (int j = 0; j < bodies.size(); j++) {
+                CelestialBody body = bodies.get(j);
                 Vector3D pos = body.getPosition();
                 System.out.printf("  %s → x: %.2e, y: %.2e, z: %.2e\n",
                         body.getName(), pos.x, pos.y, pos.z);
             }
+
             System.out.println();
         }
     }

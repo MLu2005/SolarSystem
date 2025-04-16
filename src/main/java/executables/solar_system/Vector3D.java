@@ -1,60 +1,85 @@
 package executables.solar_system;
 
+/**
+ * Vector3D represents a 3-dimensional vector used for positions, velocities, and accelerations
+ * in the solar system simulation. Includes common vector operations like addition, normalization, and dot product.
+ */
 public class Vector3D {
-
 
     public double x, y, z;
 
-    // Konstruktor
+    /**
+     * Constructs a new 3D vector with specified x, y, and z values.
+     */
     public Vector3D(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    // Wektor zerowy
+    /**
+     * Returns the zero vector (0, 0, 0).
+     */
     public static Vector3D zero() {
         return new Vector3D(0, 0, 0);
     }
 
-    // Dodawanie wektorów
+    /**
+     * Returns a new vector that is the sum of this vector and another vector.
+     */
     public Vector3D add(Vector3D other) {
         return new Vector3D(this.x + other.x, this.y + other.y, this.z + other.z);
     }
 
-    // Odejmowanie
+    /**
+     * Returns a new vector that is the difference between this vector and another vector.
+     */
     public Vector3D subtract(Vector3D other) {
         return new Vector3D(this.x - other.x, this.y - other.y, this.z - other.z);
     }
 
-    // Mnożenie przez skalar
+    /**
+     * Returns a new vector that is this vector scaled by a scalar value.
+     */
     public Vector3D scale(double scalar) {
         return new Vector3D(this.x * scalar, this.y * scalar, this.z * scalar);
     }
 
-    // Długość (moduł) wektora
+    /**
+     * Returns the magnitude (length) of the vector.
+     */
     public double magnitude() {
         return Math.sqrt(x * x + y * y + z * z);
     }
 
-    // Dystans między dwoma wektorami
+    /**
+     * Computes the Euclidean distance between this vector and another vector.
+     */
     public double distanceTo(Vector3D other) {
         return this.subtract(other).magnitude();
     }
 
-    // Normalizacja (jednostkowy wektor)
+    /**
+     * Returns a unit vector (vector of length 1) in the direction of this vector.
+     * If the vector has zero magnitude, returns the zero vector.
+     */
     public Vector3D normalize() {
         double mag = magnitude();
         if (mag == 0) return Vector3D.zero();
         return scale(1.0 / mag);
     }
 
-    // Iloczyn skalarny
+    /**
+     * Computes the dot product (scalar product) of this vector with another vector.
+     */
     public double dot(Vector3D other) {
         return this.x * other.x + this.y * other.y + this.z * other.z;
     }
 
-    // Iloczyn wektorowy
+    /**
+     * Computes the cross product of this vector with another vector.
+     * Returns a new vector that is perpendicular to both.
+     */
     public Vector3D cross(Vector3D other) {
         return new Vector3D(
                 this.y * other.z - this.z * other.y,
@@ -63,10 +88,11 @@ public class Vector3D {
         );
     }
 
+    /**
+     * Returns the string representation of the vector in the format (x, y, z).
+     */
     @Override
     public String toString() {
         return String.format("(%.6f, %.6f, %.6f)", x, y, z);
     }
 }
-
-

@@ -5,20 +5,28 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DataLoader reads celestial body data from a CSV file.
+ * It returns a list of CelestialBody objects containing names, mass, position, and velocity.
+ */
 public class DataLoader {
 
+    /**
+     * Loads celestial bodies from a semicolon-delimited CSV file.
+     * Expects the columns: name, x, y, z, vx, vy, vz, mass.
+     */
     public static List<CelestialBody> loadBodiesFromCSV(String filePath) {
         List<CelestialBody> bodies = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line = reader.readLine(); // pomiń nagłówki
+            String line = reader.readLine(); // skip headers
 
             while ((line = reader.readLine()) != null) {
-                if (line.trim().isEmpty()) continue; // pomiń puste linie
+                if (line.trim().isEmpty()) continue; // skip empty lines
 
                 String[] tokens = line.split(";");
                 if (tokens.length < 8) {
-                    System.err.println("⚠️ Pominięto wiersz zbyt krótki: " + line);
+                    System.err.println("Skipped line (too short): " + line);
                     continue;
                 }
 
@@ -40,17 +48,15 @@ public class DataLoader {
                     CelestialBody body = new CelestialBody(name, mass, position, velocity);
                     bodies.add(body);
                 } catch (NumberFormatException e) {
-                    System.err.println("⚠️ Błąd parsowania liczby w wierszu: " + line);
+                    System.err.println("Number parsing error in line: " + line);
                 }
-
             }
 
         } catch (Exception e) {
-            System.err.println("❌ Błąd ładowania CSV: " + e.getMessage());
+            System.err.println("Failed to load CSV: " + e.getMessage());
             e.printStackTrace();
         }
 
         return bodies;
     }
-
 }

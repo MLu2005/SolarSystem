@@ -2,10 +2,19 @@ package executables.solar_system;
 
 import java.util.List;
 
+/**
+ * StateUtils provides utility methods to convert between a list of celestial bodies
+ * and a flat state vector used by numerical solvers.
+ * It supports extracting and applying position and velocity data.
+ */
 public class StateUtils {
 
     /**
-     * Konwertuje listę ciał niebieskich do wektora stanu (pozycje i prędkości).
+     * Converts a list of celestial bodies into a flat state vector.
+     * Each body contributes 6 values: x, y, z for position and x, y, z for velocity.
+     *
+     * @param bodies list of celestial bodies
+     * @return a double array representing the simulation state
      */
     public static double[] extractStateVector(List<CelestialBody> bodies) {
         int n = bodies.size();
@@ -27,7 +36,11 @@ public class StateUtils {
     }
 
     /**
-     * Aktualizuje pozycje i prędkości w liście ciał na podstawie wektora stanu.
+     * Applies a state vector to a list of celestial bodies, updating their position and velocity.
+     * This is typically used after each step of a numerical integrator.
+     *
+     * @param state flat array of positions and velocities
+     * @param bodies list of celestial bodies to update
      */
     public static void applyStateVector(double[] state, List<CelestialBody> bodies) {
         int n = bodies.size();
