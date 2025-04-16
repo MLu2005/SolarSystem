@@ -1,6 +1,6 @@
 package executables.testing;
 
-import executables.solvers.NthDimension;
+import executables.solvers.*;
 
 import java.util.function.BiFunction;
 
@@ -16,7 +16,8 @@ public class RK4_Test_analytical {
         for (double h : stepSizes) {
             int steps = (int) ((xEnd - x0) / h);
 
-            double[][] result = NthDimension.rungeKutta4(f, x0, y0.clone(), h, steps);
+            RK4Solver rk4 = new RK4Solver();
+            double[][] result = rk4.solve(f, x0, y0.clone(), h, steps, null);
 
             double maxError = 0.0;
             double sumError = 0.0;

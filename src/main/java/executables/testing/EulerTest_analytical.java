@@ -1,6 +1,7 @@
 package executables.testing;
 
-import executables.solvers.FirstDimension;
+import executables.solvers.EulerSolver;
+
 import java.util.function.BiFunction;
 
 public class EulerTest_analytical {
@@ -16,19 +17,22 @@ public class EulerTest_analytical {
      * @param f Function representing dy/dx.
      * @param stepSizes Array of step sizes to test.
      */
-    public static void eulerError(BiFunction<Double, Double, Double> f, double[] stepSizes) {
+    public static void eulerError(BiFunction<Double, double[], double[]> f, double[] stepSizes) {
 
-        double x0 = 0.0;
-        double y0 = 1.0;
+        double x0 = 0;
+        double[] y0 = new double[1];
         double xEnd = 1.0;
+
+
+        y0[0] = 1.00;
 
         System.out.printf("%-10s %-15s %-15s\n", "StepSize", "Max Error", "Avg Error");
 
         for (double h : stepSizes) {
             int steps = (int) ((xEnd - x0) / h);
 
-            double[][] result = FirstDimension.euler1st(f, x0, y0, h, steps);
-
+            EulerSolver euler = new EulerSolver();
+            double[][] result = euler.solve(f, x0, y0, h, steps, null);
             double maxError = 0.0;
             double sumError = 0.0;
 
@@ -52,18 +56,21 @@ public class EulerTest_analytical {
 
     public static void eulerErrorDefault() {
 
-        BiFunction<Double, Double, Double> f = (x, y) -> y;
+        BiFunction<Double, double[], double[]> f = (x, y) -> y;
         double x0 = 0.0;
-        double y0 = 1.0;
+        double[] y0 = new double[1];
         double xEnd = 1.0;
         double[] stepSizes = {1.0, 0.5, 0.1, 0.01};
+
+        y0[0] = 1.00;
 
         System.out.printf("%-10s %-15s %-15s\n", "StepSize", "Max Error", "Avg Error");
 
         for (double h : stepSizes) {
             int steps = (int) ((xEnd - x0) / h);
 
-            double[][] result = FirstDimension.euler1st(f, x0, y0, h, steps);
+            EulerSolver euler = new EulerSolver();
+            double[][] result = euler.solve(f, x0, y0, h, steps, null);
 
             double maxError = 0.0;
             double sumError = 0.0;

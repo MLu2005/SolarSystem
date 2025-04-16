@@ -1,6 +1,8 @@
 package executables.testing;
 
-import executables.solvers.NthDimension;
+
+import executables.solvers.RK4Solver;
+
 import java.util.function.BiFunction;
 
 public class RK4_Test_realistic {
@@ -26,7 +28,9 @@ public class RK4_Test_realistic {
         double h = 0.01;
         int steps = 1000;
 
-        double[][] result = NthDimension.rungeKutta4(f, t0, y0, h, steps);
+        RK4Solver rk4 = new RK4Solver();
+        double[][] result = rk4.solve(f, t0, y0, h, steps, null);
+
 
 
         System.out.printf("%-10s %-15s %-15s\n", "t", "Prey (x)", "Predator (y)");

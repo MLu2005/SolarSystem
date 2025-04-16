@@ -1,6 +1,6 @@
 package executables.testing;
 
-import executables.solvers.NthDimension;
+import executables.solvers.*;
 import java.util.function.BiFunction;
 
 
@@ -26,7 +26,10 @@ public class EulerTest_realistic {
         double stepSize = 0.01;
         int steps = 1000;
 
-        double[][] result = NthDimension.eulerNth(f, t0, y0, stepSize, steps);
+        EulerSolver euler = new EulerSolver();
+
+        double[][] result = euler.solve(f, t0, y0, stepSize, steps, null);
+
 
         System.out.printf("%-10s %-15s %-15s\n", "t", "x (prey)", "y (predators)");
 
