@@ -46,7 +46,7 @@ public class ODEUtility {
                     }
                     expr.setVariable("t", t);
 
-                    // Evaluate expression
+
                     results[i] = expr.evaluate();
                 } catch (Exception e) {
                     throw new RuntimeException("Error evaluating equation '" + equations[i] + "': " + e.getMessage(), e);
