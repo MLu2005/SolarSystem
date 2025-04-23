@@ -25,7 +25,6 @@ import java.util.function.BiFunction;
 public class SolarSystemApp extends Application {
 
     private static final int SCALE = 250000;
-
     private final List<Sphere> planetSpheres = new ArrayList<>();
     private List<CelestialBody> bodies;
     private double[] currentState;
