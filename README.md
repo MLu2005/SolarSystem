@@ -3,8 +3,6 @@
 ##
 background info for differential equations:
 
-- differential equations: https://www.youtube.com/watch?v=-_POEWfygmU&list=PL96AE8D9C68FEB902
-
 ##  Picture Links
 Include relevant images or diagrams to illustrate the project.
 - background image, starry sky background.jpg [https://www.freepik.com/free-vector/night-time-sky-background-with-glittering-stars_87925569.htm]
