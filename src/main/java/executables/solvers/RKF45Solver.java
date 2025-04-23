@@ -99,10 +99,8 @@ public class RKF45Solver implements ODESolver {
                 }
                 i++;
             }
-
             optimal_step_size *= s;
         }
         return values;
     }
-
 }
