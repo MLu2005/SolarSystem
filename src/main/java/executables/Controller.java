@@ -170,7 +170,6 @@ public class Controller {
                 System.out.println("You're using Runge-Kutta 4 Method");
                 RK4Solver rk4 = new RK4Solver();
                 result = rk4.solve(odeFunction, x0, initialState, stepSize, steps, null);
-
             }
 
             // * the part below is responsible for displaying the results in the viewlist

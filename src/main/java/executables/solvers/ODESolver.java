@@ -10,6 +10,6 @@ public interface ODESolver {
             double[] y0,
             double stepSize,
             int steps,
-            BiFunction<Double, double[], Boolean> stopCondition // optional for some solvers
+            BiFunction<Double, double[], Boolean> stopCondition
     );
 }
