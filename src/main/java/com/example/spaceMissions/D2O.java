@@ -10,10 +10,12 @@ public class D2O {
     private String name;
     private Vector3D object1;
     private Vector3D object2;
+    private double distance;
 
     public D2O (Vector3D object1, Vector3D object2) {
         this.object1 = object1;
         this.object2 = object2;
+        this.distance = getDistance(object1, object2);
 
     }
     public Vector3D getObject1() {
@@ -47,8 +49,7 @@ public class D2O {
         double zDistance = Math.abs(object1.z - object2.z);
 
         double sDD = xDistance * xDistance + yDistance * yDistance;
-        double distance = Math.sqrt(sDD + Math.pow(zDistance, 2));
 
-        return distance;
+        return Math.sqrt(sDD + Math.pow(zDistance, 2));
     }
 }
