@@ -37,8 +37,43 @@ public class plotter {
         }
 
         lineChart.getData().add(series);
+
         return lineChart;
     }
+
+
+    public static LineChart<Number, Number> plotLogLog(
+            double[][] data,
+            String seriesName,
+            String xLabel,
+            String yLabel
+    ) {
+
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("log10(" + xLabel + ")");
+        yAxis.setLabel("log10(" + yLabel + ")");
+
+        LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
+        chart.setCreateSymbols(true);
+        chart.setTitle(seriesName + " (log–log)");
+
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName(seriesName);
+
+        for (double[] row : data) {
+            double x = row[0];
+            double y = row[1];
+            if (x > 0 && y > 0) {
+                series.getData().add(
+                        new XYChart.Data<>(Math.log10(x), Math.log10(y))
+                );
+            }
+        }
+        chart.getData().add(series);
+        return chart;
+    }
+
 
 }
 

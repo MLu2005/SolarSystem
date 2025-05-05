@@ -1,6 +1,8 @@
 package com.example.solarSystem;
 
 import com.example.demo.NthDimension;
+import executables.solvers.RKF45Solver;
+
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -29,7 +31,8 @@ public class SolarSystemTest {
         int steps = 365;         // simulate 1 year
 
         // 4. Run RK4 solver
-        double[][] result = NthDimension.rungeKutta4(ode, 0, initialState, stepSize, steps);
+        RKF45Solver rkf45 = new RKF45Solver();
+        double[][] result = rkf45.solve(ode, 0, initialState, stepSize, steps, null);
 
         // 5. Output system state every 30 days
         int interval = 30;
