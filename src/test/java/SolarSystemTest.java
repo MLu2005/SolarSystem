@@ -1,6 +1,5 @@
-package com.example.solarSystem;
 
-import com.example.demo.NthDimension;
+import com.example.solarSystem.*;
 import executables.solvers.RKF45Solver;
 
 import java.util.List;
