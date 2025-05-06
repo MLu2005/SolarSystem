@@ -1,6 +1,5 @@
 package executables.solvers;
 
-
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
