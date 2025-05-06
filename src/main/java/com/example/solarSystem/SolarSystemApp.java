@@ -24,11 +24,14 @@ import java.util.function.BiFunction;
 
 public class SolarSystemApp extends Application {
 
-    private static final int SCALE = 250000;
+    private static final int SCALE = 200000;
     private final List<Sphere> planetSpheres = new ArrayList<>();
     private List<CelestialBody> bodies;
     private double[] currentState;
     private BiFunction<Double, double[], double[]> ode;
+
+    private final double G = 6.67430e-20; // km^3 / kg / s^2
+    private final double EARTH_MATH = 5.972e24; // kg
 
     private double anchorX, anchorY;
     private double anchorAngleX = 45;
@@ -53,8 +56,6 @@ public class SolarSystemApp extends Application {
 
         if (earth != null && moon != null) {
 
-            double G = 6.67430e-20; // km^3 / kg / s^2
-            double earthMass = 5.972e24; // kg
             double earthRadius = getScaledRadius("earth") * SCALE;
             double moonRadius = getScaledRadius("moon") * SCALE;
 
@@ -63,7 +64,7 @@ public class SolarSystemApp extends Application {
 
             // --- PHYSICS VALUES ---
             double moonPhysicsDistance = 384_400; // km (real physics orbital radius)
-            double moonSpeed = Math.sqrt(G * earthMass / moonPhysicsDistance); // ~1.022 km/s
+            double moonSpeed = Math.sqrt(G * EARTH_MATH / moonPhysicsDistance); // ~1.022 km/s
 
             double visualBuffer = 8 * SCALE;
 
@@ -130,7 +131,7 @@ public class SolarSystemApp extends Application {
 
             double visualScale = SCALE;
             if (!INNER_PLANETS.contains(name) && !name.equals("moon")) {
-                visualScale = SCALE * 4.5;
+                visualScale = SCALE * 1;
             }
 
 
@@ -217,6 +218,8 @@ public class SolarSystemApp extends Application {
         });
         scene.setOnKeyReleased(e -> activeKeys.remove(e.getCode()));
 
+        double moveSpeed = 3500; // Adjust movement speed for smoother transitions
+
         AnimationTimer movementTimer = new AnimationTimer() {
             private long lastTime = -1;
 
@@ -226,35 +229,44 @@ public class SolarSystemApp extends Application {
                     lastTime = now;
                     return;
                 }
-                double deltaTime = (now - lastTime) / 1_000_000_000.0; //in seconds
+                double deltaTime = (now - lastTime) / 1_000_000_000.0; // Time difference in seconds
                 lastTime = now;
 
-                double moveSpeed = 3000.0;
+                // Directions for movement
                 double dx = 0, dy = 0, dz = 0;
 
-                if (activeKeys.contains(KeyCode.W)) dz += moveSpeed * deltaTime;
-                if (activeKeys.contains(KeyCode.S)) dz -= moveSpeed * deltaTime;
-                if (activeKeys.contains(KeyCode.A)) dx -= moveSpeed * deltaTime;
-                if (activeKeys.contains(KeyCode.D)) dx += moveSpeed * deltaTime;
-                if (activeKeys.contains(KeyCode.CONTROL)) dy -= moveSpeed * deltaTime;
-                if (activeKeys.contains(KeyCode.SPACE)) dy += moveSpeed * deltaTime;
+                // Control movement based on active keys
+                if (activeKeys.contains(KeyCode.W)) dz += moveSpeed * deltaTime;  // Forward
+                if (activeKeys.contains(KeyCode.S)) dz -= moveSpeed * deltaTime;  // Backward
+                if (activeKeys.contains(KeyCode.A)) dx -= moveSpeed * deltaTime;  // Left
+                if (activeKeys.contains(KeyCode.D)) dx += moveSpeed * deltaTime;  // Right
 
+                // Swap Space and Ctrl actions for vertical movement
+                if (activeKeys.contains(KeyCode.CONTROL)) dy += moveSpeed * deltaTime; // DOWN (Ctrl moves down now)
+                if (activeKeys.contains(KeyCode.SPACE)) dy -= moveSpeed * deltaTime; // UP (Space moves up now)
 
-                Point3D forward = camera.localToParentTransformProperty()
-                        .get().deltaTransform(0, 0, 1).normalize();
+                // Get the camera's yaw (rotation around the Y-axis) and pitch (rotation around the X-axis)
+                double yaw = Math.toRadians(cameraY.getRotate()); // Yaw controls left-right (horizontal)
+                double pitch = Math.toRadians(cameraX.getRotate()); // Pitch controls up-down (vertical)
 
-                Point3D right = camera.localToParentTransformProperty()
-                        .get().deltaTransform(1, 0, 0).normalize();
+                // Calculate the direction vectors
+                // Forward direction: (sin(yaw), 0, cos(yaw)) - This handles horizontal movement
+                // Right direction: (cos(yaw), 0, -sin(yaw)) - This handles left-right movement
+                // Up direction: (0, 1, 0) - This handles up-down movement
 
-                Point3D up = camera.localToParentTransformProperty()
-                        .get().deltaTransform(0, -1, 0).normalize();
+                double forwardX = Math.sin(yaw);
+                double forwardZ = Math.cos(yaw);
+                double rightX = Math.cos(yaw);
+                double rightZ = -Math.sin(yaw);
 
-                camera.setTranslateX(camera.getTranslateX() + dx * right.getX() + dy * up.getX() + dz * forward.getX());
-                camera.setTranslateY(camera.getTranslateY() + dx * right.getY() + dy * up.getY() + dz * forward.getY());
-                camera.setTranslateZ(camera.getTranslateZ() + dx * right.getZ() + dy * up.getZ() + dz * forward.getZ());
+                // Move the camera
+                camera.setTranslateX(camera.getTranslateX() + (dx * rightX + dz * forwardX));
+                camera.setTranslateY(camera.getTranslateY() + dy);  // Vertical movement (Up/Down)
+                camera.setTranslateZ(camera.getTranslateZ() + (dx * rightZ + dz * forwardZ));
             }
         };
         movementTimer.start();
+
 
 
         scene.setOnMousePressed(e -> {
@@ -320,10 +332,8 @@ public class SolarSystemApp extends Application {
                 String name = body.getName().toLowerCase();
 
                 double visualScale = SCALE;
-
-
                 if (!INNER_PLANETS.contains(name) && !name.equals("moon")) {
-                    visualScale = SCALE * 4.5;
+                    visualScale = SCALE * 1;
                 }
 
                 if (name.equals("moon")) {
@@ -343,6 +353,20 @@ public class SolarSystemApp extends Application {
             }
         }
     };
+
+    private double getScaledOrbitRadius(String name) {
+        return switch (name.toLowerCase()) {
+            case "mercury" -> 57.9e6 / SCALE;
+            case "venus"   -> 108.2e6 / SCALE;
+            case "earth"   -> 149.6e6 / SCALE;
+            case "mars"    -> 227.9e6 / SCALE;
+            case "jupiter" -> 778.3e6 / SCALE;
+            case "saturn"  -> 1427.0e6 / SCALE;
+            case "uranus"  -> 2871.0e6 / SCALE;
+            case "neptune" -> 4497.1e6 / SCALE;
+            default        -> -1; // For moon, titan, etc.
+        };
+    }
 
 
 

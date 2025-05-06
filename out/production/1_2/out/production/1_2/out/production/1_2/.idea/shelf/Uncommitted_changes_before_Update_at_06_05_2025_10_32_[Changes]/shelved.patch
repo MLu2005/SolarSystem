@@ -1,0 +1,495 @@
+Index: target/classes/com/example/demo/MainScreen.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.geometry.Insets?>\r\n<?import javafx.scene.Group?>\r\n<?import javafx.scene.control.Button?>\r\n<?import javafx.scene.control.Label?>\r\n<?import javafx.scene.control.ListView?>\r\n<?import javafx.scene.control.RadioButton?>\r\n<?import javafx.scene.control.Tab?>\r\n<?import javafx.scene.control.TabPane?>\r\n<?import javafx.scene.control.TextArea?>\r\n<?import javafx.scene.control.TextField?>\r\n<?import javafx.scene.layout.AnchorPane?>\r\n<?import javafx.scene.layout.HBox?>\r\n<?import javafx.scene.layout.StackPane?>\r\n<?import javafx.scene.shape.Rectangle?>\r\n<?import javafx.scene.text.Font?>\r\n<?import javafx.scene.text.Text?>\r\n\r\n<AnchorPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"473.0\" prefWidth=\"809.0\" snapToPixel=\"false\" xmlns=\"http://javafx.com/javafx/23.0.1\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"com.example.demo.Controller\">\r\n    <children>\r\n        <TabPane prefHeight=\"200.0\" prefWidth=\"724.0\" tabClosingPolicy=\"UNAVAILABLE\" AnchorPane.bottomAnchor=\"0.0\" AnchorPane.leftAnchor=\"0.0\" AnchorPane.rightAnchor=\"0.0\" AnchorPane.topAnchor=\"0.0\">\r\n            <tabs>\r\n                <Tab text=\"ODE Solver\">\r\n                    <content>\r\n                        <AnchorPane minHeight=\"0.0\" minWidth=\"0.0\" prefHeight=\"400.0\" prefWidth=\"703.0\">\r\n                            <children>\r\n                                <StackPane fx:id=\"chartContainer\" layoutX=\"50.0\" layoutY=\"200.0\" prefHeight=\"300.0\" prefWidth=\"500.0\" />\r\n                                <Rectangle arcHeight=\"5.0\" arcWidth=\"5.0\" fill=\"#bee0ff\" height=\"444.0\" layoutX=\"551.0\" stroke=\"#bee0ff\" strokeType=\"INSIDE\" width=\"259.0\" />\r\n                                <Text layoutX=\"561.0\" layoutY=\"27.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"Settings\" wrappingWidth=\"93.98307228088379\" />\r\n                                <Label layoutX=\"655.0\" layoutY=\"31.0\" prefHeight=\"18.0\" prefWidth=\"72.0\" text=\"Dimensions\" />\r\n                                <Button fx:id=\"solveButton\" layoutX=\"635.0\" layoutY=\"392.0\" mnemonicParsing=\"false\" onAction=\"#initialize\" prefHeight=\"26.0\" prefWidth=\"92.0\" text=\"Solve\" />\r\n                        <TextField fx:id=\"initialConditionsInput\" layoutX=\"564.0\" layoutY=\"233.0\" prefHeight=\"25.0\" prefWidth=\"210.0\" text=\"initialValuesForInputs\" />\r\n                        <Label layoutX=\"27.0\" layoutY=\"48.0\" text=\"Results:\">\r\n                           <font>\r\n                              <Font name=\"Bookman Old Style Bold\" size=\"23.0\" />\r\n                           </font>\r\n                        </Label>\r\n                        <TextField fx:id=\"stepSizeInput\" layoutX=\"681.0\" layoutY=\"275.0\" prefHeight=\"25.0\" prefWidth=\"95.0\" text=\"stepsSize\" />\r\n                        <TextField fx:id=\"stepsInput\" layoutX=\"566.0\" layoutY=\"275.0\" prefHeight=\"25.0\" prefWidth=\"95.0\" text=\"stepsInput\" />\r\n                        <TextField fx:id=\"variablesInput\" layoutX=\"566.0\" layoutY=\"314.0\" prefHeight=\"25.0\" prefWidth=\"95.0\" text=\"variablesInput\" />\r\n                        <TextArea fx:id=\"equationInput\" layoutX=\"566.0\" layoutY=\"89.0\" prefHeight=\"133.0\" prefWidth=\"229.0\" text=\"ODE&#10;&#10;&#10;\" />\r\n                        <ListView fx:id=\"resultListView\" layoutX=\"24.0\" layoutY=\"89.0\" prefHeight=\"300.0\" prefWidth=\"369.0\" />\r\n                        <RadioButton fx:id=\"rk4MethodRadio\" layoutX=\"561.0\" layoutY=\"62.0\" mnemonicParsing=\"false\" prefHeight=\"17.0\" prefWidth=\"127.0\" text=\"Higher Dimension\" />\r\n                        <RadioButton fx:id=\"eulerMethodRadio\" layoutX=\"698.0\" layoutY=\"62.0\" mnemonicParsing=\"false\" text=\"First Dimension\" />\r\n                            </children>\r\n                        </AnchorPane>\r\n                    </content>\r\n                </Tab>\r\n                <Tab text=\"Solar System\">\r\n                    <content>\r\n                        <AnchorPane fx:id=\"root\" style=\"-fx-background-image: url('images/background.jpg'); -fx-background-size: cover;\" xmlns=\"http://javafx.com/javafx/21.0.6\" xmlns:fx=\"http://javafx.com/fxml/1\">\r\n                            <Group fx:id=\"planetsGroup\" layoutX=\"-29.0\" layoutY=\"-9.0\" rotate=\"-58.6\">\r\n                                <!-- Planets -->\r\n                                <AnchorPane fx:id=\"sun\" layoutX=\"100\" layoutY=\"100\" prefHeight=\"69.0\" prefWidth=\"83.0\" style=\"-fx-background-image: url('images/sun.jpg'); -fx-background-size: cover;\" />\r\n                                <AnchorPane fx:id=\"venus\" layoutX=\"150\" layoutY=\"150\" prefHeight=\"78.0\" prefWidth=\"91.0\" rotate=\"175.0\" style=\"-fx-background-image: url('images/venus.png'); -fx-background-size: cover;\" />\r\n                                <AnchorPane fx:id=\"mercury\" layoutX=\"200\" layoutY=\"200\" prefHeight=\"83.0\" prefWidth=\"89.0\" style=\"-fx-background-image: url('images/mercury.png'); -fx-background-size: cover;\" />\r\n                                <AnchorPane fx:id=\"earth\" layoutX=\"250\" layoutY=\"250\" prefHeight=\"81.0\" prefWidth=\"92.0\" style=\"-fx-background-image: url('images/Earth.png'); -fx-background-size: cover;\" />\r\n                                <AnchorPane fx:id=\"mars\" layoutX=\"300\" layoutY=\"300\" prefHeight=\"83.0\" prefWidth=\"82.0\" style=\"-fx-background-image: url('images/mars.png'); -fx-background-size: cover;\" />\r\n                                <AnchorPane fx:id=\"jupiter\" layoutX=\"350\" layoutY=\"350\" prefHeight=\"105.0\" prefWidth=\"97.0\" style=\"-fx-background-image: url('images/jupiter.png'); -fx-background-size: cover;\" />\r\n                                <AnchorPane fx:id=\"saturn\" layoutX=\"400\" layoutY=\"400\" prefHeight=\"90.0\" prefWidth=\"99.0\" style=\"-fx-background-image: url('images/saturn.png'); -fx-background-size: cover;\" />\r\n                            </Group>\r\n                            <HBox layoutY=\"-12.0\" prefHeight=\"100.0\" prefWidth=\"600.0\">\r\n                                <children>\r\n                                    <Button mnemonicParsing=\"false\" text=\"Button\">\r\n                                        <HBox.margin>\r\n                                            <Insets top=\"30.0\" />\r\n                                        </HBox.margin>\r\n                                    </Button>\r\n                                    <Button mnemonicParsing=\"false\" text=\"Button\">\r\n                                        <HBox.margin>\r\n                                            <Insets top=\"30.0\" />\r\n                                        </HBox.margin>\r\n                                    </Button>\r\n                                    <Button mnemonicParsing=\"false\" text=\"Button\">\r\n                                        <HBox.margin>\r\n                                            <Insets top=\"30.0\" />\r\n                                        </HBox.margin>\r\n                                    </Button>\r\n                                </children>\r\n                            </HBox>\r\n                        </AnchorPane>\r\n                    </content>\r\n                </Tab>\r\n            </tabs>\r\n        </TabPane>\r\n    </children>\r\n</AnchorPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/target/classes/com/example/demo/MainScreen.fxml b/target/classes/com/example/demo/MainScreen.fxml
+--- a/target/classes/com/example/demo/MainScreen.fxml	(revision c9f499d30134955436cf4d84ea6789571beb200c)
++++ b/target/classes/com/example/demo/MainScreen.fxml	(date 1745409757133)
+@@ -25,24 +25,39 @@
+                     <content>
+                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="703.0">
+                             <children>
++                                <!-- This is the container for the chart -->
+                                 <StackPane fx:id="chartContainer" layoutX="50.0" layoutY="200.0" prefHeight="300.0" prefWidth="500.0" />
++
++                                <!-- Rectangle with settings background -->
+                                 <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bee0ff" height="444.0" layoutX="551.0" stroke="#bee0ff" strokeType="INSIDE" width="259.0" />
+                                 <Text layoutX="561.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" wrappingWidth="93.98307228088379" />
++
+                                 <Label layoutX="655.0" layoutY="31.0" prefHeight="18.0" prefWidth="72.0" text="Dimensions" />
+-                                <Button fx:id="solveButton" layoutX="635.0" layoutY="392.0" mnemonicParsing="false" onAction="#initialize" prefHeight="26.0" prefWidth="92.0" text="Solve" />
+-                        <TextField fx:id="initialConditionsInput" layoutX="564.0" layoutY="233.0" prefHeight="25.0" prefWidth="210.0" text="initialValuesForInputs" />
+-                        <Label layoutX="27.0" layoutY="48.0" text="Results:">
+-                           <font>
+-                              <Font name="Bookman Old Style Bold" size="23.0" />
+-                           </font>
+-                        </Label>
+-                        <TextField fx:id="stepSizeInput" layoutX="681.0" layoutY="275.0" prefHeight="25.0" prefWidth="95.0" text="stepsSize" />
+-                        <TextField fx:id="stepsInput" layoutX="566.0" layoutY="275.0" prefHeight="25.0" prefWidth="95.0" text="stepsInput" />
+-                        <TextField fx:id="variablesInput" layoutX="566.0" layoutY="314.0" prefHeight="25.0" prefWidth="95.0" text="variablesInput" />
+-                        <TextArea fx:id="equationInput" layoutX="566.0" layoutY="89.0" prefHeight="133.0" prefWidth="229.0" text="ODE&#10;&#10;&#10;" />
+-                        <ListView fx:id="resultListView" layoutX="24.0" layoutY="89.0" prefHeight="300.0" prefWidth="369.0" />
+-                        <RadioButton fx:id="rk4MethodRadio" layoutX="561.0" layoutY="62.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="127.0" text="Higher Dimension" />
+-                        <RadioButton fx:id="eulerMethodRadio" layoutX="698.0" layoutY="62.0" mnemonicParsing="false" text="First Dimension" />
++
++                                <!-- Solve button with correct onAction method -->
++                                <Button fx:id="solveButton" layoutX="634.0" layoutY="376.0" mnemonicParsing="false" onAction="#solveODE" prefHeight="26.0" prefWidth="92.0" text="Solve" />
++
++                                <!-- Various input fields for initial conditions, step size, etc. -->
++                                <TextField fx:id="initialConditionsInput" layoutX="564.0" layoutY="233.0" prefHeight="25.0" prefWidth="210.0" text="initialValuesForInputs" />
++                                <TextField fx:id="stepSizeInput" layoutX="681.0" layoutY="275.0" prefHeight="25.0" prefWidth="95.0" text="stepsSize" />
++                                <TextField fx:id="stepsInput" layoutX="566.0" layoutY="275.0" prefHeight="25.0" prefWidth="95.0" text="stepsInput" />
++                                <TextField fx:id="variablesInput" layoutX="566.0" layoutY="314.0" prefHeight="25.0" prefWidth="95.0" text="variablesInput" />
++                                <TextArea fx:id="equationInput" layoutX="566.0" layoutY="89.0" prefHeight="133.0" prefWidth="229.0" text="ODE&#10;&#10;&#10;" />
++
++                                <!-- Result ListView -->
++                                <ListView fx:id="resultListView" layoutX="24.0" layoutY="89.0" prefHeight="300.0" prefWidth="369.0" />
++
++                                <!-- Radio buttons for method selection -->
++                                <RadioButton fx:id="rk4MethodRadio" layoutX="561.0" layoutY="62.0" mnemonicParsing="false" onAction="#initialize" prefHeight="17.0" prefWidth="127.0" text="Runge-Kutta 4" />
++                                <RadioButton fx:id="eulerMethodRadio" layoutX="698.0" layoutY="62.0" mnemonicParsing="false" onAction="#initialize" text="Euler Method" />
++
++                                <!-- Button to visualize the ODE -->
++                                <Button fx:id="ODEvisualize" layoutX="634.0" layoutY="409.0" mnemonicParsing="false" onAction="#visualizeODE" prefHeight="26.0" prefWidth="92.0" text="Visualize" />
++                        <Label layoutX="24.0" layoutY="54.0" prefHeight="17.0" prefWidth="251.0" text="Results:">
++                           <font>
++                              <Font name="Berlin Sans FB Bold" size="27.0" />
++                           </font>
++                        </Label>
+                             </children>
+                         </AnchorPane>
+                     </content>
+Index: out/production/1_2/README.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># Group Project, group 15\r\n\r\n\r\n##  Picture Links\r\nInclude relevant images or diagrams to illustrate the project.\r\n- background image, starry sky background.jpg [https://www.freepik.com/free-vector/night-time-sky-background-with-glittering-stars_87925569.htm]\r\n- sun image, sun.jpg [https://images.pexels.com/photos/87611/sun-fireball-solar-flare-sunlight-87611.jpeg]\r\n- saturn - https://commons.wikimedia.org/wiki/File:Saturn_-_April_25_2016_(37612580000).png\r\n- venus - https://commons.wikimedia.org/wiki/File:Venus_Blender_2.png\r\n- mercury - https://commons.wikimedia.org/wiki/File:Mercury_-_accurate_colour.png\r\n- earth - https://commons.wikimedia.org/wiki/File:Africa_and_Europe_from_a_Million_Miles_Away.png\r\n- mars - https://commons.wikimedia.org/wiki/File:Mars_accurate_colour.png\r\n- saturn -https://commons.wikimedia.org/wiki/File:Jupiter_OPAL_2024.png
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/out/production/1_2/README.md b/out/production/1_2/README.md
+--- a/out/production/1_2/README.md	(revision c9f499d30134955436cf4d84ea6789571beb200c)
++++ b/out/production/1_2/README.md	(date 1746520138799)
+@@ -1,5 +1,7 @@
+ # Group Project, group 15
+ 
++##
++background info for differential equations:
+ 
+ ##  Picture Links
+ Include relevant images or diagrams to illustrate the project.
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"0af759b3-09eb-40f3-a9a8-09c949b01c08\" name=\"Changes\" comment=\"help\" />\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"package.json\" />\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"ez\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitLabMergeRequestFiltersHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPENED&quot;,\r\n    &quot;assignee&quot;: {\r\n      &quot;type&quot;: &quot;org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAssigneeFilterValue&quot;,\r\n      &quot;username&quot;: &quot;I6382223&quot;,\r\n      &quot;fullname&quot;: &quot;Shokry, Moaaz (Stud. DACS)&quot;\r\n    }\r\n  }\r\n}</component>\r\n  <component name=\"GitLabMergeRequestsSettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;first&quot;: &quot;https://gitlab.maastrichtuniversity.nl/group-15-1_2/1_2.git&quot;,\r\n    &quot;second&quot;: &quot;7a684688-38b6-4e56-a819-b310fe75f050&quot;\r\n  }\r\n}</component>\r\n  <component name=\"MavenImportPreferences\">\r\n    <option name=\"generalSettings\">\r\n      <MavenGeneralSettings>\r\n        <option name=\"mavenHomeTypeForPersistence\" value=\"WRAPPER\" />\r\n      </MavenGeneralSettings>\r\n    </option>\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 8\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2uvF3oLv5KYUtuddnPVhk0VyJ1R\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Application.Main.executor\": \"Run\",\r\n    \"JUnit.All in GUIWork (1).executor\": \"Run\",\r\n    \"JUnit.All in demo (1).executor\": \"Run\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_opened_file_path\": \"C:/Users/iikxq/OneDrive/Desktop/Study/Project2/javafx-sdk-21.0.6/lib\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"project.structure.last.edited\": \"Libraries\",\r\n    \"project.structure.proportion\": \"0.0\",\r\n    \"project.structure.side.proportion\": \"0.2\",\r\n    \"settings.editor.selected.configurable\": \"reference.settings.project.maven.repository.indices\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\iikxq\\OneDrive\\Desktop\\Study\\Project2\\demo\\src\\main\\java\" />\r\n    </key>\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\iikxq\\OneDrive\\Desktop\\Study\\Project2\\demo\\src\\main\\resources\\com\\example\\demo\" />\r\n      <recent name=\"C:\\Users\\iikxq\\OneDrive\\Desktop\\Study\\Project2\\demo\\src\\main\\resources\" />\r\n      <recent name=\"C:\\Users\\iikxq\\OneDrive\\Desktop\\Study\\Project2\\demo\\src\\main\\resources\\lol\" />\r\n    </key>\r\n    <key name=\"MoveClassesOrPackagesDialog.RECENTS_KEY\">\r\n      <recent name=\"com.example.demo\" />\r\n      <recent name=\"\" />\r\n      <recent name=\"ree\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Application.Main\">\r\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.example.demo.Main\" />\r\n      <module name=\"GUIWork\" />\r\n      <option name=\"VM_PARAMETERS\" value=\"--module-path &quot;C:\\Users\\iikxq\\OneDrive\\Desktop\\Study\\Project2\\javafx-sdk-21.0.6\\lib&quot; --add-modules javafx.controls,javafx.fxml\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.example.demo.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"All in GUIWork\" type=\"JUnit\" factoryName=\"JUnit\" nameIsGenerated=\"true\">\r\n      <module name=\"GUIWork\" />\r\n      <option name=\"PACKAGE_NAME\" value=\"\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"\" />\r\n      <option name=\"METHOD_NAME\" value=\"\" />\r\n      <option name=\"TEST_OBJECT\" value=\"package\" />\r\n      <option name=\"VM_PARAMETERS\" value=\"--module-path &quot;C:\\Users\\iikxq\\OneDrive\\Desktop\\Study\\Project2\\javafx-sdk-21.0.6\\lib&quot; --add-modules javafx.controls,javafx.fxml\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"All in GUIWork\" type=\"JUnit\" factoryName=\"JUnit\" nameIsGenerated=\"true\">\r\n      <module name=\"GUIWork\" />\r\n      <option name=\"PACKAGE_NAME\" value=\"\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"\" />\r\n      <option name=\"METHOD_NAME\" value=\"\" />\r\n      <option name=\"TEST_OBJECT\" value=\"package\" />\r\n      <option name=\"VM_PARAMETERS\" value=\"--module-path &quot;C:\\Users\\iikxq\\OneDrive\\Desktop\\Study\\Project2\\javafx-sdk-21.0.6\\lib&quot; --add-modules javafx.controls,javafx.fxml\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"All in GUIWork\" type=\"JUnit\" factoryName=\"JUnit\" nameIsGenerated=\"true\">\r\n      <module name=\"GUIWork\" />\r\n      <option name=\"PACKAGE_NAME\" value=\"\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"\" />\r\n      <option name=\"METHOD_NAME\" value=\"\" />\r\n      <option name=\"TEST_OBJECT\" value=\"package\" />\r\n      <option name=\"VM_PARAMETERS\" value=\"--module-path &quot;C:\\Users\\iikxq\\OneDrive\\Desktop\\Study\\Project2\\javafx-sdk-21.0.6\\lib&quot; --add-modules javafx.controls,javafx.fxml\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"All in GUIWork\" type=\"JUnit\" factoryName=\"JUnit\" nameIsGenerated=\"true\">\r\n      <module name=\"GUIWork\" />\r\n      <option name=\"PACKAGE_NAME\" value=\"\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"\" />\r\n      <option name=\"METHOD_NAME\" value=\"\" />\r\n      <option name=\"TEST_OBJECT\" value=\"package\" />\r\n      <option name=\"VM_PARAMETERS\" value=\"--module-path &quot;C:\\Users\\iikxq\\OneDrive\\Desktop\\Study\\Project2\\javafx-sdk-21.0.6\\lib&quot; --add-modules javafx.controls,javafx.fxml\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"All in GUIWork\" type=\"JUnit\" factoryName=\"JUnit\" nameIsGenerated=\"true\">\r\n      <module name=\"GUIWork\" />\r\n      <option name=\"PACKAGE_NAME\" value=\"\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"\" />\r\n      <option name=\"METHOD_NAME\" value=\"\" />\r\n      <option name=\"TEST_OBJECT\" value=\"package\" />\r\n      <option name=\"VM_PARAMETERS\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"All in demo\" type=\"JUnit\" factoryName=\"JUnit\" nameIsGenerated=\"true\">\r\n      <module name=\"demo\" />\r\n      <option name=\"PACKAGE_NAME\" value=\"\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"\" />\r\n      <option name=\"METHOD_NAME\" value=\"\" />\r\n      <option name=\"TEST_OBJECT\" value=\"package\" />\r\n      <option name=\"VM_PARAMETERS\" value=\"--module-path &quot;C:\\Users\\iikxq\\OneDrive\\Desktop\\Study\\Project2\\javafx-sdk-21.0.6\\lib&quot; --add-modules javafx.controls,javafx.fxml\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"All in demo\" type=\"JUnit\" factoryName=\"JUnit\" nameIsGenerated=\"true\">\r\n      <module name=\"demo\" />\r\n      <option name=\"PACKAGE_NAME\" value=\"\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"\" />\r\n      <option name=\"METHOD_NAME\" value=\"\" />\r\n      <option name=\"TEST_OBJECT\" value=\"package\" />\r\n      <option name=\"VM_PARAMETERS\" value=\"--module-path &quot;C:\\Users\\iikxq\\OneDrive\\Desktop\\Study\\Project2\\javafx-sdk-24\\lib&quot; --add-modules javafx.controls,javafx.fxml\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.Main\" />\r\n        <item itemvalue=\"Application.Main\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26053.27\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26053.27\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"0af759b3-09eb-40f3-a9a8-09c949b01c08\" name=\"Changes\" comment=\"\" />\r\n      <created>1743120945112</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1743120945112</updated>\r\n      <workItem from=\"1743120946344\" duration=\"294000\" />\r\n      <workItem from=\"1743121314810\" duration=\"249000\" />\r\n      <workItem from=\"1743121595561\" duration=\"982000\" />\r\n      <workItem from=\"1743122731078\" duration=\"477000\" />\r\n      <workItem from=\"1743123343241\" duration=\"141000\" />\r\n      <workItem from=\"1743123518577\" duration=\"631000\" />\r\n      <workItem from=\"1743124968099\" duration=\"212000\" />\r\n      <workItem from=\"1743207708557\" duration=\"604000\" />\r\n      <workItem from=\"1743284749125\" duration=\"2451000\" />\r\n      <workItem from=\"1743287232821\" duration=\"7885000\" />\r\n      <workItem from=\"1743299219880\" duration=\"1994000\" />\r\n      <workItem from=\"1743331518058\" duration=\"8550000\" />\r\n      <workItem from=\"1743375496631\" duration=\"143000\" />\r\n      <workItem from=\"1743375653636\" duration=\"146000\" />\r\n      <workItem from=\"1743376864160\" duration=\"3000\" />\r\n      <workItem from=\"1743448584947\" duration=\"1302000\" />\r\n      <workItem from=\"1743455158555\" duration=\"850000\" />\r\n      <workItem from=\"1743456370515\" duration=\"37000\" />\r\n      <workItem from=\"1743456454776\" duration=\"2000\" />\r\n      <workItem from=\"1743456951300\" duration=\"20000\" />\r\n      <workItem from=\"1743457212711\" duration=\"1347000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"help\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1743449076710</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1743449076710</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"help\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"help\" />\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/demo$Main.ic\" NAME=\"Main Coverage Results\" MODIFIED=\"1743122113731\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>com.example.demo.*</FILTER>\r\n    </SUITE>\r\n    <SUITE FILE_PATH=\"coverage/GUIWork$Main.ic\" NAME=\"Main Coverage Results\" MODIFIED=\"1743124454182\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"true\">\r\n      <FILTER>com.example.demo.*</FILTER>\r\n    </SUITE>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision c9f499d30134955436cf4d84ea6789571beb200c)
++++ b/.idea/workspace.xml	(date 1746520213687)
+@@ -4,7 +4,9 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="0af759b3-09eb-40f3-a9a8-09c949b01c08" name="Changes" comment="help" />
++    <list default="true" id="0af759b3-09eb-40f3-a9a8-09c949b01c08" name="Changes" comment="help">
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -62,10 +64,12 @@
+   <component name="PropertiesComponent"><![CDATA[{
+   "keyToString": {
+     "Application.Main.executor": "Run",
++    "Application.SolarSystemApp.executor": "Run",
+     "JUnit.All in GUIWork (1).executor": "Run",
+     "JUnit.All in demo (1).executor": "Run",
+     "RunOnceActivity.ShowReadmeOnStart": "true",
+     "RunOnceActivity.git.unshallow": "true",
++    "git-widget-placeholder": "main",
+     "kotlin-language-version-configured": "true",
+     "last_opened_file_path": "C:/Users/iikxq/OneDrive/Desktop/Study/Project2/javafx-sdk-21.0.6/lib",
+     "node.js.detected.package.eslint": "true",
+@@ -95,7 +99,7 @@
+       <recent name="ree" />
+     </key>
+   </component>
+-  <component name="RunManager" selected="Application.Main">
++  <component name="RunManager" selected="Application.SolarSystemTest">
+     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+       <option name="MAIN_CLASS_NAME" value="com.example.demo.Main" />
+       <module name="GUIWork" />
+@@ -110,6 +114,34 @@
+         <option name="Make" enabled="true" />
+       </method>
+     </configuration>
++    <configuration name="SolarSystemApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
++      <option name="MAIN_CLASS_NAME" value="com.example.solarSystem.SolarSystemApp" />
++      <module name="project-1-2" />
++      <option name="VM_PARAMETERS" value="com.example.solarSystem.SolarSystemApp--module-path &quot;C:\Users\iikxq\OneDrive\Desktop\Study\Project2\javafx-sdk-21.0.6\lib&quot; --add-modules javafx.controls,javafx.fxml " />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="com.example.solarSystem.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <configuration name="SolarSystemTest" type="Application" factoryName="Application" nameIsGenerated="true">
++      <option name="MAIN_CLASS_NAME" value="com.example.solarSystem.SolarSystemTest" />
++      <module name="project-1-2" />
++      <option name="VM_PARAMETERS" value="com.example.solarSystem.SolarSystemApp--module-path &quot;C:\Users\iikxq\OneDrive\Desktop\Study\Project2\javafx-sdk-21.0.6\lib&quot; --add-modules javafx.controls,javafx.fxml " />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="com.example.solarSystem.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
+     <configuration name="All in GUIWork" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+       <module name="GUIWork" />
+       <option name="PACKAGE_NAME" value="" />
+@@ -189,6 +221,7 @@
+     </configuration>
+     <recent_temporary>
+       <list>
++        <item itemvalue="Application.SolarSystemApp" />
+         <item itemvalue="Application.Main" />
+         <item itemvalue="Application.Main" />
+       </list>
+Index: out/production/1_2/mvnw
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#!/bin/sh\r\n# ----------------------------------------------------------------------------\r\n# Licensed to the Apache Software Foundation (ASF) under one\r\n# or more contributor license agreements.  See the NOTICE file\r\n# distributed with this work for additional information\r\n# regarding copyright ownership.  The ASF licenses this file\r\n# to you under the Apache License, Version 2.0 (the\r\n# \"License\"); you may not use this file except in compliance\r\n# with the License.  You may obtain a copy of the License at\r\n#\r\n#    https://www.apache.org/licenses/LICENSE-2.0\r\n#\r\n# Unless required by applicable law or agreed to in writing,\r\n# software distributed under the License is distributed on an\r\n# \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY\r\n# KIND, either express or implied.  See the License for the\r\n# specific language governing permissions and limitations\r\n# under the License.\r\n# ----------------------------------------------------------------------------\r\n\r\n# ----------------------------------------------------------------------------\r\n# Maven Start Up Batch script\r\n#\r\n# Required ENV vars:\r\n# ------------------\r\n#   JAVA_HOME - location of a JDK home dir\r\n#\r\n# Optional ENV vars\r\n# -----------------\r\n#   M2_HOME - location of maven2's installed home dir\r\n#   MAVEN_OPTS - parameters passed to the Java VM when running Maven\r\n#     e.g. to debug Maven itself, use\r\n#       set MAVEN_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000\r\n#   MAVEN_SKIP_RC - flag to disable loading of mavenrc files\r\n# ----------------------------------------------------------------------------\r\n\r\nif [ -z \"$MAVEN_SKIP_RC\" ] ; then\r\n\r\n  if [ -f /usr/local/etc/mavenrc ] ; then\r\n    . /usr/local/etc/mavenrc\r\n  fi\r\n\r\n  if [ -f /etc/mavenrc ] ; then\r\n    . /etc/mavenrc\r\n  fi\r\n\r\n  if [ -f \"$HOME/.mavenrc\" ] ; then\r\n    . \"$HOME/.mavenrc\"\r\n  fi\r\n\r\nfi\r\n\r\n# OS specific support.  $var _must_ be set to either true or false.\r\ncygwin=false;\r\ndarwin=false;\r\nmingw=false\r\ncase \"`uname`\" in\r\n  CYGWIN*) cygwin=true ;;\r\n  MINGW*) mingw=true;;\r\n  Darwin*) darwin=true\r\n    # Use /usr/libexec/java_home if available, otherwise fall back to /Library/Java/Home\r\n    # See https://developer.apple.com/library/mac/qa/qa1170/_index.html\r\n    if [ -z \"$JAVA_HOME\" ]; then\r\n      if [ -x \"/usr/libexec/java_home\" ]; then\r\n        export JAVA_HOME=\"`/usr/libexec/java_home`\"\r\n      else\r\n        export JAVA_HOME=\"/Library/Java/Home\"\r\n      fi\r\n    fi\r\n    ;;\r\nesac\r\n\r\nif [ -z \"$JAVA_HOME\" ] ; then\r\n  if [ -r /etc/gentoo-release ] ; then\r\n    JAVA_HOME=`java-config --jre-home`\r\n  fi\r\nfi\r\n\r\nif [ -z \"$M2_HOME\" ] ; then\r\n  ## resolve links - $0 may be a link to maven's home\r\n  PRG=\"$0\"\r\n\r\n  # need this for relative symlinks\r\n  while [ -h \"$PRG\" ] ; do\r\n    ls=`ls -ld \"$PRG\"`\r\n    link=`expr \"$ls\" : '.*-> \\(.*\\)$'`\r\n    if expr \"$link\" : '/.*' > /dev/null; then\r\n      PRG=\"$link\"\r\n    else\r\n      PRG=\"`dirname \"$PRG\"`/$link\"\r\n    fi\r\n  done\r\n\r\n  saveddir=`pwd`\r\n\r\n  M2_HOME=`dirname \"$PRG\"`/..\r\n\r\n  # make it fully qualified\r\n  M2_HOME=`cd \"$M2_HOME\" && pwd`\r\n\r\n  cd \"$saveddir\"\r\n  # echo Using m2 at $M2_HOME\r\nfi\r\n\r\n# For Cygwin, ensure paths are in UNIX format before anything is touched\r\nif $cygwin ; then\r\n  [ -n \"$M2_HOME\" ] &&\r\n    M2_HOME=`cygpath --unix \"$M2_HOME\"`\r\n  [ -n \"$JAVA_HOME\" ] &&\r\n    JAVA_HOME=`cygpath --unix \"$JAVA_HOME\"`\r\n  [ -n \"$CLASSPATH\" ] &&\r\n    CLASSPATH=`cygpath --path --unix \"$CLASSPATH\"`\r\nfi\r\n\r\n# For Mingw, ensure paths are in UNIX format before anything is touched\r\nif $mingw ; then\r\n  [ -n \"$M2_HOME\" ] &&\r\n    M2_HOME=\"`(cd \"$M2_HOME\"; pwd)`\"\r\n  [ -n \"$JAVA_HOME\" ] &&\r\n    JAVA_HOME=\"`(cd \"$JAVA_HOME\"; pwd)`\"\r\nfi\r\n\r\nif [ -z \"$JAVA_HOME\" ]; then\r\n  javaExecutable=\"`which javac`\"\r\n  if [ -n \"$javaExecutable\" ] && ! [ \"`expr \\\"$javaExecutable\\\" : '\\([^ ]*\\)'`\" = \"no\" ]; then\r\n    # readlink(1) is not available as standard on Solaris 10.\r\n    readLink=`which readlink`\r\n    if [ ! `expr \"$readLink\" : '\\([^ ]*\\)'` = \"no\" ]; then\r\n      if $darwin ; then\r\n        javaHome=\"`dirname \\\"$javaExecutable\\\"`\"\r\n        javaExecutable=\"`cd \\\"$javaHome\\\" && pwd -P`/javac\"\r\n      else\r\n        javaExecutable=\"`readlink -f \\\"$javaExecutable\\\"`\"\r\n      fi\r\n      javaHome=\"`dirname \\\"$javaExecutable\\\"`\"\r\n      javaHome=`expr \"$javaHome\" : '\\(.*\\)/bin'`\r\n      JAVA_HOME=\"$javaHome\"\r\n      export JAVA_HOME\r\n    fi\r\n  fi\r\nfi\r\n\r\nif [ -z \"$JAVACMD\" ] ; then\r\n  if [ -n \"$JAVA_HOME\"  ] ; then\r\n    if [ -x \"$JAVA_HOME/jre/sh/java\" ] ; then\r\n      # IBM's JDK on AIX uses strange locations for the executables\r\n      JAVACMD=\"$JAVA_HOME/jre/sh/java\"\r\n    else\r\n      JAVACMD=\"$JAVA_HOME/bin/java\"\r\n    fi\r\n  else\r\n    JAVACMD=\"`\\\\unset -f command; \\\\command -v java`\"\r\n  fi\r\nfi\r\n\r\nif [ ! -x \"$JAVACMD\" ] ; then\r\n  echo \"Error: JAVA_HOME is not defined correctly.\" >&2\r\n  echo \"  We cannot execute $JAVACMD\" >&2\r\n  exit 1\r\nfi\r\n\r\nif [ -z \"$JAVA_HOME\" ] ; then\r\n  echo \"Warning: JAVA_HOME environment variable is not set.\"\r\nfi\r\n\r\nCLASSWORLDS_LAUNCHER=org.codehaus.plexus.classworlds.launcher.Launcher\r\n\r\n# traverses directory structure from process work directory to filesystem root\r\n# first directory with .mvn subdirectory is considered project base directory\r\nfind_maven_basedir() {\r\n\r\n  if [ -z \"$1\" ]\r\n  then\r\n    echo \"Path not specified to find_maven_basedir\"\r\n    return 1\r\n  fi\r\n\r\n  basedir=\"$1\"\r\n  wdir=\"$1\"\r\n  while [ \"$wdir\" != '/' ] ; do\r\n    if [ -d \"$wdir\"/.mvn ] ; then\r\n      basedir=$wdir\r\n      break\r\n    fi\r\n    # workaround for JBEAP-8937 (on Solaris 10/Sparc)\r\n    if [ -d \"${wdir}\" ]; then\r\n      wdir=`cd \"$wdir/..\"; pwd`\r\n    fi\r\n    # end of workaround\r\n  done\r\n  echo \"${basedir}\"\r\n}\r\n\r\n# concatenates all lines of a file\r\nconcat_lines() {\r\n  if [ -f \"$1\" ]; then\r\n    echo \"$(tr -s '\\n' ' ' < \"$1\")\"\r\n  fi\r\n}\r\n\r\nBASE_DIR=`find_maven_basedir \"$(pwd)\"`\r\nif [ -z \"$BASE_DIR\" ]; then\r\n  exit 1;\r\nfi\r\n\r\n##########################################################################################\r\n# Extension to allow automatically downloading the maven-wrapper.jar from Maven-central\r\n# This allows using the maven wrapper in projects that prohibit checking in binary data.\r\n##########################################################################################\r\nif [ -r \"$BASE_DIR/.mvn/wrapper/maven-wrapper.jar\" ]; then\r\n    if [ \"$MVNW_VERBOSE\" = true ]; then\r\n      echo \"Found .mvn/wrapper/maven-wrapper.jar\"\r\n    fi\r\nelse\r\n    if [ \"$MVNW_VERBOSE\" = true ]; then\r\n      echo \"Couldn't find .mvn/wrapper/maven-wrapper.jar, downloading it ...\"\r\n    fi\r\n    if [ -n \"$MVNW_REPOURL\" ]; then\r\n      jarUrl=\"$MVNW_REPOURL/org/apache/maven/wrapper/maven-wrapper/3.1.0/maven-wrapper-3.1.0.jar\"\r\n    else\r\n      jarUrl=\"https://repo.maven.apache.org/maven2/org/apache/maven/wrapper/maven-wrapper/3.1.0/maven-wrapper-3.1.0.jar\"\r\n    fi\r\n    while IFS=\"=\" read key value; do\r\n      case \"$key\" in (wrapperUrl) jarUrl=\"$value\"; break ;;\r\n      esac\r\n    done < \"$BASE_DIR/.mvn/wrapper/maven-wrapper.properties\"\r\n    if [ \"$MVNW_VERBOSE\" = true ]; then\r\n      echo \"Downloading from: $jarUrl\"\r\n    fi\r\n    wrapperJarPath=\"$BASE_DIR/.mvn/wrapper/maven-wrapper.jar\"\r\n    if $cygwin; then\r\n      wrapperJarPath=`cygpath --path --windows \"$wrapperJarPath\"`\r\n    fi\r\n\r\n    if command -v wget > /dev/null; then\r\n        if [ \"$MVNW_VERBOSE\" = true ]; then\r\n          echo \"Found wget ... using wget\"\r\n        fi\r\n        if [ -z \"$MVNW_USERNAME\" ] || [ -z \"$MVNW_PASSWORD\" ]; then\r\n            wget \"$jarUrl\" -O \"$wrapperJarPath\" || rm -f \"$wrapperJarPath\"\r\n        else\r\n            wget --http-user=$MVNW_USERNAME --http-password=$MVNW_PASSWORD \"$jarUrl\" -O \"$wrapperJarPath\" || rm -f \"$wrapperJarPath\"\r\n        fi\r\n    elif command -v curl > /dev/null; then\r\n        if [ \"$MVNW_VERBOSE\" = true ]; then\r\n          echo \"Found curl ... using curl\"\r\n        fi\r\n        if [ -z \"$MVNW_USERNAME\" ] || [ -z \"$MVNW_PASSWORD\" ]; then\r\n            curl -o \"$wrapperJarPath\" \"$jarUrl\" -f\r\n        else\r\n            curl --user $MVNW_USERNAME:$MVNW_PASSWORD -o \"$wrapperJarPath\" \"$jarUrl\" -f\r\n        fi\r\n\r\n    else\r\n        if [ \"$MVNW_VERBOSE\" = true ]; then\r\n          echo \"Falling back to using Java to download\"\r\n        fi\r\n        javaClass=\"$BASE_DIR/.mvn/wrapper/MavenWrapperDownloader.java\"\r\n        # For Cygwin, switch paths to Windows format before running javac\r\n        if $cygwin; then\r\n          javaClass=`cygpath --path --windows \"$javaClass\"`\r\n        fi\r\n        if [ -e \"$javaClass\" ]; then\r\n            if [ ! -e \"$BASE_DIR/.mvn/wrapper/MavenWrapperDownloader.class\" ]; then\r\n                if [ \"$MVNW_VERBOSE\" = true ]; then\r\n                  echo \" - Compiling MavenWrapperDownloader.java ...\"\r\n                fi\r\n                # Compiling the Java class\r\n                (\"$JAVA_HOME/bin/javac\" \"$javaClass\")\r\n            fi\r\n            if [ -e \"$BASE_DIR/.mvn/wrapper/MavenWrapperDownloader.class\" ]; then\r\n                # Running the downloader\r\n                if [ \"$MVNW_VERBOSE\" = true ]; then\r\n                  echo \" - Running MavenWrapperDownloader.java ...\"\r\n                fi\r\n                (\"$JAVA_HOME/bin/java\" -cp .mvn/wrapper MavenWrapperDownloader \"$MAVEN_PROJECTBASEDIR\")\r\n            fi\r\n        fi\r\n    fi\r\nfi\r\n##########################################################################################\r\n# End of extension\r\n##########################################################################################\r\n\r\nexport MAVEN_PROJECTBASEDIR=${MAVEN_BASEDIR:-\"$BASE_DIR\"}\r\nif [ \"$MVNW_VERBOSE\" = true ]; then\r\n  echo $MAVEN_PROJECTBASEDIR\r\nfi\r\nMAVEN_OPTS=\"$(concat_lines \"$MAVEN_PROJECTBASEDIR/.mvn/jvm.config\") $MAVEN_OPTS\"\r\n\r\n# For Cygwin, switch paths to Windows format before running java\r\nif $cygwin; then\r\n  [ -n \"$M2_HOME\" ] &&\r\n    M2_HOME=`cygpath --path --windows \"$M2_HOME\"`\r\n  [ -n \"$JAVA_HOME\" ] &&\r\n    JAVA_HOME=`cygpath --path --windows \"$JAVA_HOME\"`\r\n  [ -n \"$CLASSPATH\" ] &&\r\n    CLASSPATH=`cygpath --path --windows \"$CLASSPATH\"`\r\n  [ -n \"$MAVEN_PROJECTBASEDIR\" ] &&\r\n    MAVEN_PROJECTBASEDIR=`cygpath --path --windows \"$MAVEN_PROJECTBASEDIR\"`\r\nfi\r\n\r\n# Provide a \"standardized\" way to retrieve the CLI args that will\r\n# work with both Windows and non-Windows executions.\r\nMAVEN_CMD_LINE_ARGS=\"$MAVEN_CONFIG $@\"\r\nexport MAVEN_CMD_LINE_ARGS\r\n\r\nWRAPPER_LAUNCHER=org.apache.maven.wrapper.MavenWrapperMain\r\n\r\nexec \"$JAVACMD\" \\\r\n  $MAVEN_OPTS \\\r\n  $MAVEN_DEBUG_OPTS \\\r\n  -classpath \"$MAVEN_PROJECTBASEDIR/.mvn/wrapper/maven-wrapper.jar\" \\\r\n  \"-Dmaven.home=${M2_HOME}\" \\\r\n  \"-Dmaven.multiModuleProjectDirectory=${MAVEN_PROJECTBASEDIR}\" \\\r\n  ${WRAPPER_LAUNCHER} $MAVEN_CONFIG \"$@\"\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/out/production/1_2/mvnw b/out/production/1_2/mvnw
+--- a/out/production/1_2/mvnw	(revision c9f499d30134955436cf4d84ea6789571beb200c)
++++ b/out/production/1_2/mvnw	(date 1746520138799)
+@@ -1,316 +1,0 @@
+-#!/bin/sh
+-# ----------------------------------------------------------------------------
+-# Licensed to the Apache Software Foundation (ASF) under one
+-# or more contributor license agreements.  See the NOTICE file
+-# distributed with this work for additional information
+-# regarding copyright ownership.  The ASF licenses this file
+-# to you under the Apache License, Version 2.0 (the
+-# "License"); you may not use this file except in compliance
+-# with the License.  You may obtain a copy of the License at
+-#
+-#    https://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing,
+-# software distributed under the License is distributed on an
+-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+-# KIND, either express or implied.  See the License for the
+-# specific language governing permissions and limitations
+-# under the License.
+-# ----------------------------------------------------------------------------
+-
+-# ----------------------------------------------------------------------------
+-# Maven Start Up Batch script
+-#
+-# Required ENV vars:
+-# ------------------
+-#   JAVA_HOME - location of a JDK home dir
+-#
+-# Optional ENV vars
+-# -----------------
+-#   M2_HOME - location of maven2's installed home dir
+-#   MAVEN_OPTS - parameters passed to the Java VM when running Maven
+-#     e.g. to debug Maven itself, use
+-#       set MAVEN_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000
+-#   MAVEN_SKIP_RC - flag to disable loading of mavenrc files
+-# ----------------------------------------------------------------------------
+-
+-if [ -z "$MAVEN_SKIP_RC" ] ; then
+-
+-  if [ -f /usr/local/etc/mavenrc ] ; then
+-    . /usr/local/etc/mavenrc
+-  fi
+-
+-  if [ -f /etc/mavenrc ] ; then
+-    . /etc/mavenrc
+-  fi
+-
+-  if [ -f "$HOME/.mavenrc" ] ; then
+-    . "$HOME/.mavenrc"
+-  fi
+-
+-fi
+-
+-# OS specific support.  $var _must_ be set to either true or false.
+-cygwin=false;
+-darwin=false;
+-mingw=false
+-case "`uname`" in
+-  CYGWIN*) cygwin=true ;;
+-  MINGW*) mingw=true;;
+-  Darwin*) darwin=true
+-    # Use /usr/libexec/java_home if available, otherwise fall back to /Library/Java/Home
+-    # See https://developer.apple.com/library/mac/qa/qa1170/_index.html
+-    if [ -z "$JAVA_HOME" ]; then
+-      if [ -x "/usr/libexec/java_home" ]; then
+-        export JAVA_HOME="`/usr/libexec/java_home`"
+-      else
+-        export JAVA_HOME="/Library/Java/Home"
+-      fi
+-    fi
+-    ;;
+-esac
+-
+-if [ -z "$JAVA_HOME" ] ; then
+-  if [ -r /etc/gentoo-release ] ; then
+-    JAVA_HOME=`java-config --jre-home`
+-  fi
+-fi
+-
+-if [ -z "$M2_HOME" ] ; then
+-  ## resolve links - $0 may be a link to maven's home
+-  PRG="$0"
+-
+-  # need this for relative symlinks
+-  while [ -h "$PRG" ] ; do
+-    ls=`ls -ld "$PRG"`
+-    link=`expr "$ls" : '.*-> \(.*\)$'`
+-    if expr "$link" : '/.*' > /dev/null; then
+-      PRG="$link"
+-    else
+-      PRG="`dirname "$PRG"`/$link"
+-    fi
+-  done
+-
+-  saveddir=`pwd`
+-
+-  M2_HOME=`dirname "$PRG"`/..
+-
+-  # make it fully qualified
+-  M2_HOME=`cd "$M2_HOME" && pwd`
+-
+-  cd "$saveddir"
+-  # echo Using m2 at $M2_HOME
+-fi
+-
+-# For Cygwin, ensure paths are in UNIX format before anything is touched
+-if $cygwin ; then
+-  [ -n "$M2_HOME" ] &&
+-    M2_HOME=`cygpath --unix "$M2_HOME"`
+-  [ -n "$JAVA_HOME" ] &&
+-    JAVA_HOME=`cygpath --unix "$JAVA_HOME"`
+-  [ -n "$CLASSPATH" ] &&
+-    CLASSPATH=`cygpath --path --unix "$CLASSPATH"`
+-fi
+-
+-# For Mingw, ensure paths are in UNIX format before anything is touched
+-if $mingw ; then
+-  [ -n "$M2_HOME" ] &&
+-    M2_HOME="`(cd "$M2_HOME"; pwd)`"
+-  [ -n "$JAVA_HOME" ] &&
+-    JAVA_HOME="`(cd "$JAVA_HOME"; pwd)`"
+-fi
+-
+-if [ -z "$JAVA_HOME" ]; then
+-  javaExecutable="`which javac`"
+-  if [ -n "$javaExecutable" ] && ! [ "`expr \"$javaExecutable\" : '\([^ ]*\)'`" = "no" ]; then
+-    # readlink(1) is not available as standard on Solaris 10.
+-    readLink=`which readlink`
+-    if [ ! `expr "$readLink" : '\([^ ]*\)'` = "no" ]; then
+-      if $darwin ; then
+-        javaHome="`dirname \"$javaExecutable\"`"
+-        javaExecutable="`cd \"$javaHome\" && pwd -P`/javac"
+-      else
+-        javaExecutable="`readlink -f \"$javaExecutable\"`"
+-      fi
+-      javaHome="`dirname \"$javaExecutable\"`"
+-      javaHome=`expr "$javaHome" : '\(.*\)/bin'`
+-      JAVA_HOME="$javaHome"
+-      export JAVA_HOME
+-    fi
+-  fi
+-fi
+-
+-if [ -z "$JAVACMD" ] ; then
+-  if [ -n "$JAVA_HOME"  ] ; then
+-    if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
+-      # IBM's JDK on AIX uses strange locations for the executables
+-      JAVACMD="$JAVA_HOME/jre/sh/java"
+-    else
+-      JAVACMD="$JAVA_HOME/bin/java"
+-    fi
+-  else
+-    JAVACMD="`\\unset -f command; \\command -v java`"
+-  fi
+-fi
+-
+-if [ ! -x "$JAVACMD" ] ; then
+-  echo "Error: JAVA_HOME is not defined correctly." >&2
+-  echo "  We cannot execute $JAVACMD" >&2
+-  exit 1
+-fi
+-
+-if [ -z "$JAVA_HOME" ] ; then
+-  echo "Warning: JAVA_HOME environment variable is not set."
+-fi
+-
+-CLASSWORLDS_LAUNCHER=org.codehaus.plexus.classworlds.launcher.Launcher
+-
+-# traverses directory structure from process work directory to filesystem root
+-# first directory with .mvn subdirectory is considered project base directory
+-find_maven_basedir() {
+-
+-  if [ -z "$1" ]
+-  then
+-    echo "Path not specified to find_maven_basedir"
+-    return 1
+-  fi
+-
+-  basedir="$1"
+-  wdir="$1"
+-  while [ "$wdir" != '/' ] ; do
+-    if [ -d "$wdir"/.mvn ] ; then
+-      basedir=$wdir
+-      break
+-    fi
+-    # workaround for JBEAP-8937 (on Solaris 10/Sparc)
+-    if [ -d "${wdir}" ]; then
+-      wdir=`cd "$wdir/.."; pwd`
+-    fi
+-    # end of workaround
+-  done
+-  echo "${basedir}"
+-}
+-
+-# concatenates all lines of a file
+-concat_lines() {
+-  if [ -f "$1" ]; then
+-    echo "$(tr -s '\n' ' ' < "$1")"
+-  fi
+-}
+-
+-BASE_DIR=`find_maven_basedir "$(pwd)"`
+-if [ -z "$BASE_DIR" ]; then
+-  exit 1;
+-fi
+-
+-##########################################################################################
+-# Extension to allow automatically downloading the maven-wrapper.jar from Maven-central
+-# This allows using the maven wrapper in projects that prohibit checking in binary data.
+-##########################################################################################
+-if [ -r "$BASE_DIR/.mvn/wrapper/maven-wrapper.jar" ]; then
+-    if [ "$MVNW_VERBOSE" = true ]; then
+-      echo "Found .mvn/wrapper/maven-wrapper.jar"
+-    fi
+-else
+-    if [ "$MVNW_VERBOSE" = true ]; then
+-      echo "Couldn't find .mvn/wrapper/maven-wrapper.jar, downloading it ..."
+-    fi
+-    if [ -n "$MVNW_REPOURL" ]; then
+-      jarUrl="$MVNW_REPOURL/org/apache/maven/wrapper/maven-wrapper/3.1.0/maven-wrapper-3.1.0.jar"
+-    else
+-      jarUrl="https://repo.maven.apache.org/maven2/org/apache/maven/wrapper/maven-wrapper/3.1.0/maven-wrapper-3.1.0.jar"
+-    fi
+-    while IFS="=" read key value; do
+-      case "$key" in (wrapperUrl) jarUrl="$value"; break ;;
+-      esac
+-    done < "$BASE_DIR/.mvn/wrapper/maven-wrapper.properties"
+-    if [ "$MVNW_VERBOSE" = true ]; then
+-      echo "Downloading from: $jarUrl"
+-    fi
+-    wrapperJarPath="$BASE_DIR/.mvn/wrapper/maven-wrapper.jar"
+-    if $cygwin; then
+-      wrapperJarPath=`cygpath --path --windows "$wrapperJarPath"`
+-    fi
+-
+-    if command -v wget > /dev/null; then
+-        if [ "$MVNW_VERBOSE" = true ]; then
+-          echo "Found wget ... using wget"
+-        fi
+-        if [ -z "$MVNW_USERNAME" ] || [ -z "$MVNW_PASSWORD" ]; then
+-            wget "$jarUrl" -O "$wrapperJarPath" || rm -f "$wrapperJarPath"
+-        else
+-            wget --http-user=$MVNW_USERNAME --http-password=$MVNW_PASSWORD "$jarUrl" -O "$wrapperJarPath" || rm -f "$wrapperJarPath"
+-        fi
+-    elif command -v curl > /dev/null; then
+-        if [ "$MVNW_VERBOSE" = true ]; then
+-          echo "Found curl ... using curl"
+-        fi
+-        if [ -z "$MVNW_USERNAME" ] || [ -z "$MVNW_PASSWORD" ]; then
+-            curl -o "$wrapperJarPath" "$jarUrl" -f
+-        else
+-            curl --user $MVNW_USERNAME:$MVNW_PASSWORD -o "$wrapperJarPath" "$jarUrl" -f
+-        fi
+-
+-    else
+-        if [ "$MVNW_VERBOSE" = true ]; then
+-          echo "Falling back to using Java to download"
+-        fi
+-        javaClass="$BASE_DIR/.mvn/wrapper/MavenWrapperDownloader.java"
+-        # For Cygwin, switch paths to Windows format before running javac
+-        if $cygwin; then
+-          javaClass=`cygpath --path --windows "$javaClass"`
+-        fi
+-        if [ -e "$javaClass" ]; then
+-            if [ ! -e "$BASE_DIR/.mvn/wrapper/MavenWrapperDownloader.class" ]; then
+-                if [ "$MVNW_VERBOSE" = true ]; then
+-                  echo " - Compiling MavenWrapperDownloader.java ..."
+-                fi
+-                # Compiling the Java class
+-                ("$JAVA_HOME/bin/javac" "$javaClass")
+-            fi
+-            if [ -e "$BASE_DIR/.mvn/wrapper/MavenWrapperDownloader.class" ]; then
+-                # Running the downloader
+-                if [ "$MVNW_VERBOSE" = true ]; then
+-                  echo " - Running MavenWrapperDownloader.java ..."
+-                fi
+-                ("$JAVA_HOME/bin/java" -cp .mvn/wrapper MavenWrapperDownloader "$MAVEN_PROJECTBASEDIR")
+-            fi
+-        fi
+-    fi
+-fi
+-##########################################################################################
+-# End of extension
+-##########################################################################################
+-
+-export MAVEN_PROJECTBASEDIR=${MAVEN_BASEDIR:-"$BASE_DIR"}
+-if [ "$MVNW_VERBOSE" = true ]; then
+-  echo $MAVEN_PROJECTBASEDIR
+-fi
+-MAVEN_OPTS="$(concat_lines "$MAVEN_PROJECTBASEDIR/.mvn/jvm.config") $MAVEN_OPTS"
+-
+-# For Cygwin, switch paths to Windows format before running java
+-if $cygwin; then
+-  [ -n "$M2_HOME" ] &&
+-    M2_HOME=`cygpath --path --windows "$M2_HOME"`
+-  [ -n "$JAVA_HOME" ] &&
+-    JAVA_HOME=`cygpath --path --windows "$JAVA_HOME"`
+-  [ -n "$CLASSPATH" ] &&
+-    CLASSPATH=`cygpath --path --windows "$CLASSPATH"`
+-  [ -n "$MAVEN_PROJECTBASEDIR" ] &&
+-    MAVEN_PROJECTBASEDIR=`cygpath --path --windows "$MAVEN_PROJECTBASEDIR"`
+-fi
+-
+-# Provide a "standardized" way to retrieve the CLI args that will
+-# work with both Windows and non-Windows executions.
+-MAVEN_CMD_LINE_ARGS="$MAVEN_CONFIG $@"
+-export MAVEN_CMD_LINE_ARGS
+-
+-WRAPPER_LAUNCHER=org.apache.maven.wrapper.MavenWrapperMain
+-
+-exec "$JAVACMD" \
+-  $MAVEN_OPTS \
+-  $MAVEN_DEBUG_OPTS \
+-  -classpath "$MAVEN_PROJECTBASEDIR/.mvn/wrapper/maven-wrapper.jar" \
+-  "-Dmaven.home=${M2_HOME}" \
+-  "-Dmaven.multiModuleProjectDirectory=${MAVEN_PROJECTBASEDIR}" \
+-  ${WRAPPER_LAUNCHER} $MAVEN_CONFIG "$@"
