@@ -36,7 +36,6 @@ public class Controller {
     @FXML
     private AnchorPane saturn;
 
-
     private void bindPlanetPositions() {
 
 

@@ -79,9 +79,6 @@ public class SolarSystemApp extends Application {
 
         }
 
-
-
-
         double[] state0 = StateUtils.extractStateVector(bodies);
         System.out.println("Earth pos: " + earth.getPosition());
         System.out.println("Moon pos: " + moon.getPosition());
