@@ -1,4 +1,6 @@
 package com.example.demo;
+import executables.solvers.EulerSolver;
+import executables.solvers.RK4Solver;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -35,6 +37,7 @@ public class Controller {
     private AnchorPane jupiter;
     @FXML
     private AnchorPane saturn;
+
 
     private void bindPlanetPositions() {
 
@@ -158,10 +161,13 @@ public class Controller {
                 double[][] result;
                 if (eulerMethodRadio.isSelected()) {
                     System.out.println("You're using Euler Method");
-                    result = NthDimension.eulerNth(odeFunction::apply, x0, initialState, stepSize, steps);
+
+                    EulerSolver euler = new EulerSolver();
+                    result = euler.solve(odeFunction::apply, x0, initialState, stepSize, steps, null);
                 } else {
                     System.out.println("You're using Runge-Kutta 4 Method");
-                    result = NthDimension.rungeKutta4(odeFunction, x0, initialState, stepSize, steps);
+                    RK4Solver rk4 = new RK4Solver();
+                    result = rk4.solve(odeFunction, x0, initialState, stepSize, steps, null);
                 }
 
                 // * the part below is responsible for displaying the results in the viewlist
@@ -234,8 +240,8 @@ public class Controller {
             for (int i = 1; i < initialValues.length; i++) {
                 initialState[i - 1] = Double.parseDouble(initialValues[i].trim());
             }
-
-            double[][] solution = FirstDimension.euler1st(odeFunction, x0, initialState, stepSize, steps);
+            EulerSolver euler = new EulerSolver();
+            double[][] solution = euler.solve(odeFunction, x0, initialState, stepSize, steps, null);
 
             LineChart<Number, Number> chart = plotter.plotSolution(solution, "Euler Method", "t", "y(t)");
 
