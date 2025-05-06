@@ -17,6 +17,18 @@ public class Vector3D {
         this.z = z;
     }
 
+    public double getX(){
+        return this.x;
+    }
+
+    public double getY(){
+        return this.y;
+    }
+
+    public double getZ(){
+        return this.z;
+    }
+
     /**
      * Returns the zero vector (0, 0, 0).
      */
