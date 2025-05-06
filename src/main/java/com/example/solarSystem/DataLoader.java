@@ -26,7 +26,7 @@ public class DataLoader {
 
                 String[] tokens = line.split(";");
                 if (tokens.length < 8) {
-                    System.err.println("Skipped line (too short): " + line);
+
                     continue;
                 }
 
@@ -47,9 +47,6 @@ public class DataLoader {
                     Vector3D velocity = new Vector3D(vx, vy, vz);
                     CelestialBody body = new CelestialBody(name, mass, position, velocity);
                     bodies.add(body);
-
-                    // Debug log to confirm it worked
-                    System.out.println("Loaded: " + name);
 
                 } catch (NumberFormatException e) {
                     System.err.println("Number parsing error in line: " + line);

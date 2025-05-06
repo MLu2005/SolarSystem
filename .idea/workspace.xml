@@ -5,7 +5,64 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0af759b3-09eb-40f3-a9a8-09c949b01c08" name="Changes" comment="help">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/spaceMissions/Individual.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/spaceMissions/ProbeGeneticAlgorithm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/1_2/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/1_2/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/.idea/material_theme_project_new.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/.idea/shelf/Uncommitted_changes_before_Update_at_06_05_2025_10_32_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/.idea/shelf/Uncommitted_changes_before_Update_at_06_05_2025_10_32__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/MainScreen.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/Earth.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/background.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/jupiter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/mars.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/mercury.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/saturn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/sun.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/venus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/MainScreen.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/java/com/example/solarSystem/IC.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/Earth.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/background.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/background.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/com/example/demo/MainScreen.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/com/example/demo/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/jupiter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/mars.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/mercury.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/saturn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/sun.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/venus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/Earth.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/background.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/jupiter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/mars.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/mercury.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/saturn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/sun.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/venus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/background.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/com/example/demo/MainScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/1_2/src/main/resources/com/example/demo/MainScreen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/DataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/DataLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/IC.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/IC.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/SolarSystemApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/SolarSystemApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/Vector3D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/Vector3D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/spaceMissions/FlightPathCalculator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/Controller.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/MainScreen.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/styles.css" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,10 +80,11 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="ez" />
+        <entry key="$PROJECT_DIR$" value="Rocket2" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="GitLabMergeRequestFiltersHistory">{
   &quot;lastFilter&quot;: {
@@ -41,7 +99,7 @@
   <component name="GitLabMergeRequestsSettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;first&quot;: &quot;https://gitlab.maastrichtuniversity.nl/group-15-1_2/1_2.git&quot;,
-    &quot;second&quot;: &quot;7a684688-38b6-4e56-a819-b310fe75f050&quot;
+    &quot;second&quot;: &quot;88eec65e-6584-4af8-9384-335df52e9a6a&quot;
   }
 }</component>
   <component name="MavenImportPreferences">
@@ -61,29 +119,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.SolarSystemApp.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.All in GUIWork (1).executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.All in demo (1).executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/iikxq/OneDrive/Desktop/Study/Project2/javafx-sdk-21.0.6/lib&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.GravityAssistSimulator.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Application.ProbeGeneticAlgorithm.executor": "Run",
+    "Application.RocketCMAESOptimizer.executor": "Run",
+    "Application.RocketHillClimber.executor": "Run",
+    "Application.RocketToTitanSimulator.executor": "Run",
+    "Application.SolarSystemApp.executor": "Debug",
+    "Application.TrajectoryChartApp.executor": "Run",
+    "JUnit.All in GUIWork (1).executor": "Run",
+    "JUnit.All in demo (1).executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/iikxq/OneDrive/Desktop/Study/Project2/javafx-sdk-21.0.6/lib",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\iikxq\OneDrive\Desktop\Study\Project2\demo\src\main\java" />
@@ -99,7 +163,7 @@
       <recent name="ree" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.SolarSystemApp">
+  <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.demo.Main" />
       <module name="GUIWork" />
@@ -128,16 +192,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SolarSystemTest" type="Application" factoryName="Application" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.example.solarSystem.SolarSystemTest" />
-      <module name="project-1-2" />
-      <option name="VM_PARAMETERS" value="com.example.solarSystem.SolarSystemApp--module-path &quot;C:\Users\iikxq\OneDrive\Desktop\Study\Project2\javafx-sdk-21.0.6\lib&quot; --add-modules javafx.controls,javafx.fxml " />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.example.solarSystem.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
+    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.solarSystem.SolarSystemApp" />
+      <option name="VM_PARAMETERS" value="&#9;--module-path &quot;C:\Users\Dell\IdeaProjects\javafx-sdk-23.0.1\lib&quot; --add-modules javafx.controls,javafx.fxml" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -219,19 +276,28 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Unnamed" />
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.SolarSystemApp" />
+      <item itemvalue="JUnit.All in GUIWork" />
+      <item itemvalue="JUnit.All in demo" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.SolarSystemApp" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.SolarSystemApp" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.SolarSystemApp" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26053.27" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26053.27" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
       </set>
     </attachedChunks>
   </component>
@@ -264,6 +330,10 @@
       <workItem from="1743456454776" duration="2000" />
       <workItem from="1743456951300" duration="20000" />
       <workItem from="1743457212711" duration="1347000" />
+      <workItem from="1746548939207" duration="1047000" />
+      <workItem from="1746550002850" duration="4080000" />
+      <workItem from="1746554369884" duration="4108000" />
+      <workItem from="1746561782985" duration="2321000" />
     </task>
     <task id="LOCAL-00001" summary="help">
       <option name="closed" value="true" />

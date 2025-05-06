@@ -53,6 +53,10 @@ public class SolarSystemApp extends Application {
             return;
         }
 
+
+
+
+
         CelestialBody earth = bodies.stream().filter(b -> b.getName().equalsIgnoreCase("earth")).findFirst().orElse(null);
         CelestialBody moon = bodies.stream().filter(b -> b.getName().equalsIgnoreCase("moon")).findFirst().orElse(null);
 
@@ -78,6 +82,7 @@ public class SolarSystemApp extends Application {
             Vector3D moonPhysicsVel = earth.getVelocity().add(orbitalVel);
             moon.setPosition(moonPhysicsPos);
             moon.setVelocity(moonPhysicsVel);
+
 
 
         }
