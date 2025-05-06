@@ -1,6 +1,8 @@
 package com.example.solarSystem;
 
 import com.example.demo.NthDimension;
+import executables.solvers.RK4Solver;
+import executables.solvers.RKF45Solver;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Point3D;
@@ -221,48 +223,9 @@ public class SolarSystemApp extends Application {
         double moveSpeed = 3500; // Adjust movement speed for smoother transitions
 
         AnimationTimer movementTimer = new AnimationTimer() {
-            private long lastTime = -1;
-
             @Override
             public void handle(long now) {
-                if (lastTime < 0) {
-                    lastTime = now;
-                    return;
-                }
-                double deltaTime = (now - lastTime) / 1_000_000_000.0; // Time difference in seconds
-                lastTime = now;
-
-                // Directions for movement
-                double dx = 0, dy = 0, dz = 0;
-
-                // Control movement based on active keys
-                if (activeKeys.contains(KeyCode.W)) dz += moveSpeed * deltaTime;  // Forward
-                if (activeKeys.contains(KeyCode.S)) dz -= moveSpeed * deltaTime;  // Backward
-                if (activeKeys.contains(KeyCode.A)) dx -= moveSpeed * deltaTime;  // Left
-                if (activeKeys.contains(KeyCode.D)) dx += moveSpeed * deltaTime;  // Right
-
-                // Swap Space and Ctrl actions for vertical movement
-                if (activeKeys.contains(KeyCode.CONTROL)) dy += moveSpeed * deltaTime; // DOWN (Ctrl moves down now)
-                if (activeKeys.contains(KeyCode.SPACE)) dy -= moveSpeed * deltaTime; // UP (Space moves up now)
-
-                // Get the camera's yaw (rotation around the Y-axis) and pitch (rotation around the X-axis)
-                double yaw = Math.toRadians(cameraY.getRotate()); // Yaw controls left-right (horizontal)
-                double pitch = Math.toRadians(cameraX.getRotate()); // Pitch controls up-down (vertical)
-
-                // Calculate the direction vectors
-                // Forward direction: (sin(yaw), 0, cos(yaw)) - This handles horizontal movement
-                // Right direction: (cos(yaw), 0, -sin(yaw)) - This handles left-right movement
-                // Up direction: (0, 1, 0) - This handles up-down movement
-
-                double forwardX = Math.sin(yaw);
-                double forwardZ = Math.cos(yaw);
-                double rightX = Math.cos(yaw);
-                double rightZ = -Math.sin(yaw);
-
-                // Move the camera
-                camera.setTranslateX(camera.getTranslateX() + (dx * rightX + dz * forwardX));
-                camera.setTranslateY(camera.getTranslateY() + dy);  // Vertical movement (Up/Down)
-                camera.setTranslateZ(camera.getTranslateZ() + (dx * rightZ + dz * forwardZ));
+                handle_rkf45(now);
             }
         };
         movementTimer.start();
@@ -323,7 +286,8 @@ public class SolarSystemApp extends Application {
         public void handle(long now) {
             double step = 1350; // simulate one hour per frame
 
-            currentState = NthDimension.rungeKutta4Step(ode, 0, currentState, step);
+            RK4Solver rk4 = new RK4Solver();
+            currentState = rk4.solveStep(ode, 0, currentState, step);
             StateUtils.applyStateVector(currentState, bodies);
 
             for (int i = 0; i < bodies.size(); i++) {
@@ -407,6 +371,55 @@ public class SolarSystemApp extends Application {
 
 
 
+    public void handle_rkf45(long now) {
+
+        double step = 3_600;            // 3 600 s = 1 h
+
+
+        RKF45Solver rkf45 = new RKF45Solver();
+    /*  We integrate a *single* step and keep only the 5-th-order solution
+        that RKF45 returns in the last row.  Column 0 is the time stamp,
+        columns 1…N are the state vector.                                     */
+        double[][] traj   = rkf45.solve(ode,
+                0.0,
+                currentState,
+                step,
+                1,
+                null);
+
+        double[] nextState = new double[currentState.length];
+        System.arraycopy(traj[traj.length - 1], 1, nextState, 0, nextState.length);
+        currentState = nextState;
+
+
+        StateUtils.applyStateVector(currentState, bodies);
+
+        for (int i = 0; i < bodies.size(); i++) {
+            CelestialBody body = bodies.get(i);
+            Vector3D pos      = body.getPosition();
+            String   name     = body.getName().toLowerCase();
+
+            double visualScale = SCALE;
+            if (!INNER_PLANETS.contains(name) && !name.equals("moon")) {
+                visualScale = SCALE * 1;
+            }
+
+            if (name.equals("moon")) {
+                Vector3D earthPos = bodies.stream()
+                        .filter(b -> b.getName().equalsIgnoreCase("earth"))
+                        .findFirst()
+                        .map(CelestialBody::getPosition)
+                        .orElse(new Vector3D(0, 0, 0));
+
+                Vector3D directionFromEarth = pos.subtract(earthPos).normalize();
+                pos = pos.add(directionFromEarth.scale(15 * SCALE));
+            }
+
+            planetSpheres.get(i).setTranslateX(pos.x / visualScale);
+            planetSpheres.get(i).setTranslateY(pos.z / visualScale);
+            planetSpheres.get(i).setTranslateZ(pos.y / visualScale);
+        }
+    }
 
 
     public static void main(String[] args) {
