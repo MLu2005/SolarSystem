@@ -8,6 +8,7 @@ module com.example.project {
     requires java.compiler;
     requires java.desktop;
     requires exp4j;
+    requires annotations;
 
     opens executables to javafx.fxml;
     exports executables;
