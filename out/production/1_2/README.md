@@ -1,5 +1,7 @@
 # Group Project, group 15
 
+##
+background info for differential equations:
 
 ##  Picture Links
 Include relevant images or diagrams to illustrate the project.
