@@ -32,7 +32,6 @@ public class PlanetPositionCalculator {
         this.bodyMasses = new double[initialBodies.size()];
         this.initialStateVector = new double[initialBodies.size() * 6];
 
-        // Populate masses and state vector from each body's properties
         for (int bodyIndex = 0; bodyIndex < initialBodies.size(); bodyIndex++) {
             CelestialBody body = initialBodies.get(bodyIndex);
             bodyMasses[bodyIndex] = body.getMass();
@@ -49,33 +48,25 @@ public class PlanetPositionCalculator {
     }
 
     /**
-     * Propagates all bodies from the J2000 epoch to the specified UTC date/time.
+     * Propagates all bodies from the J2000 epoch to the specified UTC date.
      * After propagation, each CelestialBody in the original list is updated in-place.
      *
      * @param targetDateTimeUtc the target date/time in UTC
      */
     public void propagateTo(LocalDateTime targetDateTimeUtc) {
-        // Start time is zero seconds since J2000 epoch
         double startTimeSeconds = 0.0;
-        // Convert the target UTC date/time to a Julian Date
         double targetJulianDate = convertLocalDateTimeToJulianDate(targetDateTimeUtc);
-        // Compute the offset in seconds from J2000 epoch
         double targetTimeOffsetSeconds = (targetJulianDate - J2000_EPOCH_JULIAN_DATE) * SECONDS_PER_DAY;
 
-        // Determine integration direction
         boolean integrateForwardInTime = targetTimeOffsetSeconds >= 0;
-        // Stop condition: stop when current time passes the target in the correct direction
         BiFunction<Double, double[], Boolean> stopCondition = (currentTimeSeconds, stateVector) ->
             integrateForwardInTime
                 ? (currentTimeSeconds >= targetTimeOffsetSeconds)
                 : (currentTimeSeconds <= targetTimeOffsetSeconds);
 
-        // Initial step size: one hour in seconds
         double initialStepSizeSeconds = 3600.0;
-        // Maximum number of solver steps: rough bound based on 24 steps per day plus margin
         int maximumNumberOfSteps = (int) (Math.ceil(Math.abs(targetTimeOffsetSeconds) / SECONDS_PER_DAY) * 24) + 1000;
 
-        // Perform the ODE integration
         double[][] solutionMatrix = odeSolver.solve(
             (currentTime, stateVector) -> computeStateDerivatives(currentTime, stateVector),
             startTimeSeconds,
@@ -85,10 +76,8 @@ public class PlanetPositionCalculator {
             stopCondition
         );
 
-        // Extract the final state (last row of the solution matrix)
         double[] finalStateVector = solutionMatrix[solutionMatrix.length - 1];
 
-        // Update each body's position and velocity from the final state vector
         int numberOfBodies = initialBodies.size();
         for (int bodyIndex = 0; bodyIndex < numberOfBodies; bodyIndex++) {
             int offset = bodyIndex * 6;
@@ -110,14 +99,12 @@ public class PlanetPositionCalculator {
 
     /**
      * Computes the derivative of the state vector at a given time.
-     * The state vector is [x0,y0,z0,vx0,vy0,vz0, ...] for each body.
      * Returns [vx0,vy0,vz0,ax0,ay0,az0, ...] where acceleration is from gravity.
      */
     private double[] computeStateDerivatives(double currentTimeSeconds, double[] stateVector) {
         int numberOfBodies = bodyMasses.length;
         double[] derivatives = new double[stateVector.length];
 
-        // Position derivatives are the velocities
         for (int bodyIndex = 0; bodyIndex < numberOfBodies; bodyIndex++) {
             int offset = bodyIndex * 6;
             derivatives[offset]     = stateVector[offset + 3];
@@ -125,7 +112,6 @@ public class PlanetPositionCalculator {
             derivatives[offset + 2] = stateVector[offset + 5];
         }
 
-        // Velocity derivatives (accelerations) from gravitational forces
         for (int targetIndex = 0; targetIndex < numberOfBodies; targetIndex++) {
             int baseOffset = targetIndex * 6;
             double posX = stateVector[baseOffset];
@@ -135,7 +121,6 @@ public class PlanetPositionCalculator {
             double accelerationY = 0.0;
             double accelerationZ = 0.0;
 
-            // Sum contributions from all other bodies
             for (int otherIndex = 0; otherIndex < numberOfBodies; otherIndex++) {
                 int otherOffset = otherIndex * 6;
                 double dx = stateVector[otherOffset]     - posX;
