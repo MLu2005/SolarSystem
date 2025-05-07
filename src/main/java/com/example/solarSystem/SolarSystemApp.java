@@ -289,7 +289,7 @@ public class SolarSystemApp extends Application {
     AnimationTimer orbitTimer = new AnimationTimer() {
         @Override
         public void handle(long now) {
-            double step = 1350; // simulate one hour per frame
+            double step = 4000; // simulate one hour per frame
 
             RK4Solver rk4 = new RK4Solver();
             currentState = rk4.solveStep(ode, 0, currentState, step);

@@ -5,64 +5,47 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0af759b3-09eb-40f3-a9a8-09c949b01c08" name="Changes" comment="help">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/spaceMissions/Individual.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/spaceMissions/ProbeGeneticAlgorithm.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/1_2/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/1_2/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/.idea/material_theme_project_new.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/.idea/shelf/Uncommitted_changes_before_Update_at_06_05_2025_10_32_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/.idea/shelf/Uncommitted_changes_before_Update_at_06_05_2025_10_32__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/MainScreen.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/Earth.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/background.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/jupiter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/mars.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/mercury.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/saturn.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/sun.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/out/production/1_2/src/main/resources/venus.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/MainScreen.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/java/com/example/solarSystem/IC.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/Earth.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/background.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/background.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/com/example/demo/MainScreen.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/com/example/demo/styles.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/jupiter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/mars.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/mercury.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/saturn.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/sun.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/main/resources/venus.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/Earth.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/background.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/jupiter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/mars.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/mercury.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/saturn.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/styles.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/sun.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/out/production/1_2/src/styles/venus.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/background.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/com/example/demo/MainScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/1_2/src/main/resources/com/example/demo/MainScreen.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/DataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/DataLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/IC.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/IC.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/Earth.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/background.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/jupiter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/mars.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/mercury.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/saturn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/sun.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/venus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/Earth.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/background.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/jupiter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/mars.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/mercury.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/saturn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/sun.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/venus.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/SolarSystemApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/SolarSystemApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/Vector3D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/Vector3D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/spaceMissions/FlightPathCalculator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/Controller.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/MainScreen.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/SolarSystemODE.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/SolarSystemODE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/StateUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/StateUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/Earth.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/background.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/jupiter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/mars.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/mercury.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/saturn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/sun.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/venus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/Earth.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/background.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/jupiter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/mars.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/mercury.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/saturn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/sun.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/venus.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +110,7 @@
     "Application.RocketCMAESOptimizer.executor": "Run",
     "Application.RocketHillClimber.executor": "Run",
     "Application.RocketToTitanSimulator.executor": "Run",
-    "Application.SolarSystemApp.executor": "Debug",
+    "Application.SolarSystemApp.executor": "Run",
     "Application.TrajectoryChartApp.executor": "Run",
     "JUnit.All in GUIWork (1).executor": "Run",
     "JUnit.All in demo (1).executor": "Run",
@@ -163,7 +146,7 @@
       <recent name="ree" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.SolarSystemApp">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.demo.Main" />
       <module name="GUIWork" />
@@ -194,7 +177,7 @@
     </configuration>
     <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.solarSystem.SolarSystemApp" />
-      <option name="VM_PARAMETERS" value="&#9;--module-path &quot;C:\Users\Dell\IdeaProjects\javafx-sdk-23.0.1\lib&quot; --add-modules javafx.controls,javafx.fxml" />
+      <option name="VM_PARAMETERS" value="&#9;--module-path &quot;C:\Users\iikxq\OneDrive\Desktop\Study\Project2\javafx-sdk-21.0.6\lib&quot; --add-modules javafx.controls,javafx.fxml" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
