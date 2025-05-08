@@ -107,8 +107,4 @@ public class Vector3D {
     public String toString() {
         return String.format("(%.6f, %.6f, %.6f)", x, y, z);
     }
-
-
-    
-
 }
