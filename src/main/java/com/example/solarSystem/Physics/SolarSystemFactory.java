@@ -52,9 +52,6 @@ public class SolarSystemFactory {
         system.add(new CelestialBody("Neptune", 1.0241E26,
                 new Vector3D(4.45444278098E9, -3.9150318139E8, -8.633703583E7),
                 new Vector3D(0.46, 5.41, -0.12)));
-        system.add(new CelestialBody("Pluto", 1.303E22,
-                new Vector3D(2.06759017176E9, -4.34460371416E9, -3.644156388E7),
-                new Vector3D(4.74, 0.61, -1.33)));
         system.add(new CelestialBody("Titan", 1.3452E23,
                 new Vector3D(1.34766797638E9, 2.253674319E7, -3.867191073E7),
                 new Vector3D(-0.45, 9.41, 0.17)));
