@@ -4,48 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0af759b3-09eb-40f3-a9a8-09c949b01c08" name="Changes" comment="help">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="0af759b3-09eb-40f3-a9a8-09c949b01c08" name="Changes" comment="getting rid of the useless stuff">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/Earth.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/background.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/jupiter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/mars.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/mercury.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/saturn.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/styles.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/sun.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/main/resources/images/venus.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/Earth.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/background.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/jupiter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/mars.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/mercury.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/saturn.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/styles.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/sun.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/1_2/src/styles/venus.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/SolarSystemApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/SolarSystemApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/SolarSystemODE.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/SolarSystemODE.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/StateUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/StateUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/Earth.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/background.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/jupiter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/mars.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/mercury.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/saturn.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/styles.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/sun.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/images/venus.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/Earth.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/background.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/jupiter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/mars.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/mercury.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/saturn.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/styles.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/sun.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/venus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/SolarSystemTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +44,7 @@
   <component name="GitLabMergeRequestsSettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;first&quot;: &quot;https://gitlab.maastrichtuniversity.nl/group-15-1_2/1_2.git&quot;,
-    &quot;second&quot;: &quot;88eec65e-6584-4af8-9384-335df52e9a6a&quot;
+    &quot;second&quot;: &quot;7a684688-38b6-4e56-a819-b310fe75f050&quot;
   }
 }</component>
   <component name="MavenImportPreferences">
@@ -102,35 +64,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.GravityAssistSimulator.executor": "Run",
-    "Application.Main.executor": "Run",
-    "Application.ProbeGeneticAlgorithm.executor": "Run",
-    "Application.RocketCMAESOptimizer.executor": "Run",
-    "Application.RocketHillClimber.executor": "Run",
-    "Application.RocketToTitanSimulator.executor": "Run",
-    "Application.SolarSystemApp.executor": "Run",
-    "Application.TrajectoryChartApp.executor": "Run",
-    "JUnit.All in GUIWork (1).executor": "Run",
-    "JUnit.All in demo (1).executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/iikxq/OneDrive/Desktop/Study/Project2/javafx-sdk-21.0.6/lib",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.GravityAssistSimulator.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ProbeGeneticAlgorithm.executor&quot;: &quot;Run&quot;,
+    &quot;Application.RocketCMAESOptimizer.executor&quot;: &quot;Run&quot;,
+    &quot;Application.RocketHillClimber.executor&quot;: &quot;Run&quot;,
+    &quot;Application.RocketToTitanSimulator.executor&quot;: &quot;Run&quot;,
+    &quot;Application.SolarSystemApp.executor&quot;: &quot;Run&quot;,
+    &quot;Application.TrajectoryChartApp.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in GUIWork (1).executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in demo (1).executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/iikxq/OneDrive/Desktop/Study/Project2/javafx-sdk-21.0.6/lib&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\iikxq\OneDrive\Desktop\Study\Project2\demo\src\main\java" />
@@ -279,8 +241,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26053.27" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26053.27" />
       </set>
     </attachedChunks>
   </component>
@@ -317,6 +279,9 @@
       <workItem from="1746550002850" duration="4080000" />
       <workItem from="1746554369884" duration="4108000" />
       <workItem from="1746561782985" duration="2321000" />
+      <workItem from="1746651556830" duration="6816000" />
+      <workItem from="1746662424924" duration="4583000" />
+      <workItem from="1746668505338" duration="646000" />
     </task>
     <task id="LOCAL-00001" summary="help">
       <option name="closed" value="true" />
@@ -326,7 +291,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743449076710</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="getting rid of the useless stuff">
+      <option name="closed" value="true" />
+      <created>1746615081374</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1746615081374</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -334,7 +307,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="help" />
-    <option name="LAST_COMMIT_MESSAGE" value="help" />
+    <MESSAGE value="getting rid of the useless stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="getting rid of the useless stuff" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/demo$Main.ic" NAME="Main Coverage Results" MODIFIED="1743122113731" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
