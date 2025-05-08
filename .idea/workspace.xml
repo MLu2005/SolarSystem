@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0af759b3-09eb-40f3-a9a8-09c949b01c08" name="Changes" comment="help">
+    <list default="true" id="0af759b3-09eb-40f3-a9a8-09c949b01c08" name="Changes" comment="getting rid of the useless stuff">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/SolarSystemApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/SolarSystemApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/SolarSystemTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,10 +25,11 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="ez" />
+        <entry key="$PROJECT_DIR$" value="Rocket2" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="GitLabMergeRequestFiltersHistory">{
   &quot;lastFilter&quot;: {
@@ -63,8 +66,14 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Application.GravityAssistSimulator.executor&quot;: &quot;Run&quot;,
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ProbeGeneticAlgorithm.executor&quot;: &quot;Run&quot;,
+    &quot;Application.RocketCMAESOptimizer.executor&quot;: &quot;Run&quot;,
+    &quot;Application.RocketHillClimber.executor&quot;: &quot;Run&quot;,
+    &quot;Application.RocketToTitanSimulator.executor&quot;: &quot;Run&quot;,
     &quot;Application.SolarSystemApp.executor&quot;: &quot;Run&quot;,
+    &quot;Application.TrajectoryChartApp.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.All in GUIWork (1).executor&quot;: &quot;Run&quot;,
     &quot;JUnit.All in demo (1).executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -128,16 +137,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SolarSystemTest" type="Application" factoryName="Application" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.example.solarSystem.SolarSystemTest" />
-      <module name="project-1-2" />
-      <option name="VM_PARAMETERS" value="com.example.solarSystem.SolarSystemApp--module-path &quot;C:\Users\iikxq\OneDrive\Desktop\Study\Project2\javafx-sdk-21.0.6\lib&quot; --add-modules javafx.controls,javafx.fxml " />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.example.solarSystem.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
+    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.solarSystem.SolarSystemApp" />
+      <option name="VM_PARAMETERS" value="&#9;--module-path &quot;C:\Users\iikxq\OneDrive\Desktop\Study\Project2\javafx-sdk-21.0.6\lib&quot; --add-modules javafx.controls,javafx.fxml" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -219,11 +221,20 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Unnamed" />
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.SolarSystemApp" />
+      <item itemvalue="JUnit.All in GUIWork" />
+      <item itemvalue="JUnit.All in demo" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.SolarSystemApp" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.SolarSystemApp" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.SolarSystemApp" />
       </list>
     </recent_temporary>
   </component>
@@ -264,6 +275,13 @@
       <workItem from="1743456454776" duration="2000" />
       <workItem from="1743456951300" duration="20000" />
       <workItem from="1743457212711" duration="1347000" />
+      <workItem from="1746548939207" duration="1047000" />
+      <workItem from="1746550002850" duration="4080000" />
+      <workItem from="1746554369884" duration="4108000" />
+      <workItem from="1746561782985" duration="2321000" />
+      <workItem from="1746651556830" duration="6816000" />
+      <workItem from="1746662424924" duration="4583000" />
+      <workItem from="1746668505338" duration="646000" />
     </task>
     <task id="LOCAL-00001" summary="help">
       <option name="closed" value="true" />
@@ -273,7 +291,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743449076710</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="getting rid of the useless stuff">
+      <option name="closed" value="true" />
+      <created>1746615081374</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1746615081374</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -281,7 +307,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="help" />
-    <option name="LAST_COMMIT_MESSAGE" value="help" />
+    <MESSAGE value="getting rid of the useless stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="getting rid of the useless stuff" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/demo$Main.ic" NAME="Main Coverage Results" MODIFIED="1743122113731" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">

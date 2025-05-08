@@ -1,11 +1,8 @@
 package com.example.solarSystem;
 
-import com.example.demo.NthDimension;
 import executables.solvers.RK4Solver;
-import executables.solvers.RKF45Solver;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -43,7 +40,6 @@ public class SolarSystemApp extends Application {
     private boolean orbitsVisible = true;
 
 
-    private final Map<KeyCode, Double> velocities = new HashMap<>();
     private final Set<KeyCode> activeKeys = new HashSet<>();
     @Override
     public void start(Stage primaryStage) {
@@ -53,24 +49,36 @@ public class SolarSystemApp extends Application {
             return;
         }
 
+        // * Binding both earth/moon - Saturn/titan to each other.
         CelestialBody earth = bodies.stream().filter(b -> b.getName().equalsIgnoreCase("earth")).findFirst().orElse(null);
         CelestialBody moon = bodies.stream().filter(b -> b.getName().equalsIgnoreCase("moon")).findFirst().orElse(null);
+        CelestialBody saturn = bodies.stream().filter(b -> b.getName().equalsIgnoreCase("saturn")).findFirst().orElse(null);
+        CelestialBody titan = bodies.stream().filter(b -> b.getName().equalsIgnoreCase("titan")).findFirst().orElse(null);
+
+        if (saturn != null && titan != null) {
+
+            // --- PHYSICS VALUES ---
+            double titanPhysicsDistance = 1_222_000; // km (average orbital radius of Titan)
+            double SATURN_MASS = 5.683e26; // kg (mass of Saturn)
+            double titanSpeed = Math.sqrt(G * SATURN_MASS / titanPhysicsDistance); // orbital speed
+
+            Vector3D r = new Vector3D(titanPhysicsDistance, 0, 0); // position offset from Saturn
+            Vector3D titanPhysicsPos = saturn.getPosition().add(r); // set Titan's position
+            Vector3D tangential = new Vector3D(0, 0, 1); // velocity direction
+            Vector3D orbitalVel = tangential.scale(titanSpeed);
+            Vector3D titanPhysicsVel = saturn.getVelocity().add(orbitalVel); // total velocity = Saturn's + orbital
+
+            titan.setPosition(titanPhysicsPos);
+            titan.setVelocity(titanPhysicsVel);
+        }
 
         if (earth != null && moon != null) {
-
-            double earthRadius = getScaledRadius("earth") * SCALE;
-            double moonRadius = getScaledRadius("moon") * SCALE;
-
-
-
 
             // --- PHYSICS VALUES ---
             double moonPhysicsDistance = 384_400; // km (real physics orbital radius)
             double moonSpeed = Math.sqrt(G * EARTH_MATH / moonPhysicsDistance); // ~1.022 km/s
 
-            double visualBuffer = 8 * SCALE;
 
-            double boostedDistance = moonPhysicsDistance + 20 * SCALE;
             Vector3D r = new Vector3D(moonPhysicsDistance, 0, 0);
             Vector3D moonPhysicsPos = earth.getPosition().add(r);
             Vector3D tangential = new Vector3D(0, 0, 1);
@@ -80,9 +88,10 @@ public class SolarSystemApp extends Application {
             moon.setVelocity(moonPhysicsVel);
 
 
-        }
 
+        }
         double[] state0 = StateUtils.extractStateVector(bodies);
+
         System.out.println("Earth pos: " + earth.getPosition());
         System.out.println("Moon pos: " + moon.getPosition());
         System.out.println("Distance: " + earth.getPosition().subtract(moon.getPosition()).magnitude());
@@ -132,9 +141,6 @@ public class SolarSystemApp extends Application {
 
 
             double visualScale = SCALE;
-            if (!INNER_PLANETS.contains(name) && !name.equals("moon")) {
-                visualScale = SCALE * 1;
-            }
 
 
             if (!name.equals("sun") && !name.equals("moon") && !name.equals("titan")) {
@@ -186,6 +192,7 @@ public class SolarSystemApp extends Application {
         Button showPositionBtn = new Button("Show Camera Location");
         Button resetBtn = new Button("Reset Camera");
         Button toggleOrbitsBtn = new Button("Toggle Orbits");
+        Button toggleFullScreen = new Button( "Toggle FullScreen");
         toggleOrbitsBtn.setOnAction(e -> {
             orbitsVisible = !orbitsVisible;
             orbitRingGroup.setVisible(orbitsVisible);
@@ -208,11 +215,20 @@ public class SolarSystemApp extends Application {
             cameraY.setRotate(6.2);
         });
 
-        uiOverlay.getChildren().addAll(showPositionBtn, resetBtn, toggleOrbitsBtn);
+        uiOverlay.getChildren().addAll(showPositionBtn, resetBtn, toggleOrbitsBtn, toggleFullScreen);
+        toggleFullScreen.setOnAction(e -> primaryStage.setFullScreen(!primaryStage.isFullScreen()));
 
         StackPane stackPane = new StackPane();
         stackPane.getChildren().addAll(subScene, uiOverlay);
-        Scene scene = new Scene(stackPane);
+        Scene scene = new Scene(stackPane, 800 , 600);
+        subScene.widthProperty().bind(scene.widthProperty());
+        subScene.heightProperty().bind(scene.heightProperty());
+
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Solar System Simulator");
+        primaryStage.setMinWidth(600);
+        primaryStage.setMinHeight(400);
+        primaryStage.show();
 
         scene.setOnKeyPressed(e -> {
             activeKeys.add(e.getCode());
@@ -223,9 +239,41 @@ public class SolarSystemApp extends Application {
         double moveSpeed = 3500; // Adjust movement speed for smoother transitions
 
         AnimationTimer movementTimer = new AnimationTimer() {
+            private long lastTime = -1;
+
             @Override
             public void handle(long now) {
-                handle_rkf45(now);
+                if (lastTime < 0) {
+                    lastTime = now;
+                    return;
+                }
+                double deltaTime = (now - lastTime) / 1_000_000_000.0;
+                lastTime = now;
+
+
+                double dx = 0, dy = 0, dz = 0;
+
+                if (activeKeys.contains(KeyCode.W)) dz += moveSpeed * deltaTime;  // Forward
+                if (activeKeys.contains(KeyCode.S)) dz -= moveSpeed * deltaTime;  // Backward
+                if (activeKeys.contains(KeyCode.A)) dx -= moveSpeed * deltaTime;  // Left
+                if (activeKeys.contains(KeyCode.D)) dx += moveSpeed * deltaTime;  // Right
+
+                if (activeKeys.contains(KeyCode.CONTROL)) dy += moveSpeed * deltaTime; // DOWN (Ctrl moves )
+                if (activeKeys.contains(KeyCode.SPACE)) dy -= moveSpeed * deltaTime; // UP (Space moves up )
+
+                double yaw = Math.toRadians(cameraY.getRotate()); // controls horizontal movement.
+
+
+
+                double forwardX = Math.sin(yaw);
+                double forwardZ = Math.cos(yaw);
+                double rightX = Math.cos(yaw);
+                double rightZ = -Math.sin(yaw);
+
+
+                camera.setTranslateX(camera.getTranslateX() + (dx * rightX + dz * forwardX));
+                camera.setTranslateY(camera.getTranslateY() + dy);
+                camera.setTranslateZ(camera.getTranslateZ() + (dx * rightZ + dz * forwardZ));
             }
         };
         movementTimer.start();
@@ -266,25 +314,21 @@ public class SolarSystemApp extends Application {
 
         scene.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-                System.out.printf("📷 Camera: Z=%.0f, rotX=%.1f, rotY=%.1f%n",
+                System.out.printf(" Camera: Z=%.0f, rotX=%.1f, rotY=%.1f%n",
                         camera.getTranslateZ(), cameraX.getRotate(), cameraY.getRotate());
             }
         });
 
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Solar System – Mouse Controlled View");
-        primaryStage.show();
 
         orbitTimer.start();
     }
 
     final Set<String> INNER_PLANETS = Set.of("mercury", "venus", "earth", "mars");
-    final long[] lastUpdate = {System.nanoTime()};
 
     AnimationTimer orbitTimer = new AnimationTimer() {
         @Override
         public void handle(long now) {
-            double step = 1350; // simulate one hour per frame
+            double step = 1800; // simulate one hour per frame
 
             RK4Solver rk4 = new RK4Solver();
             currentState = rk4.solveStep(ode, 0, currentState, step);
@@ -296,10 +340,9 @@ public class SolarSystemApp extends Application {
                 String name = body.getName().toLowerCase();
 
                 double visualScale = SCALE;
-                if (!INNER_PLANETS.contains(name) && !name.equals("moon")) {
-                    visualScale = SCALE * 1;
-                }
 
+
+                // * Assign moon to earth and visually pushing it out
                 if (name.equals("moon")) {
                     Vector3D earthPos = bodies.stream()
                             .filter(b -> b.getName().equalsIgnoreCase("earth"))
@@ -308,8 +351,22 @@ public class SolarSystemApp extends Application {
                             .orElse(new Vector3D(0, 0, 0));
 
                     Vector3D directionFromEarth = pos.subtract(earthPos).normalize();
-                    pos = pos.add(directionFromEarth.scale(15 * SCALE));  // visually push moon out from Earth
+                    pos = pos.add(directionFromEarth.scale( 15* SCALE));  // visually push moon out from Earth
                 }
+
+                // * Assign titan to saturn and visually pushing it out
+                if (name.equals("titan")) {
+                    Vector3D saturnPos = bodies.stream()
+                            .filter(b -> b.getName().equalsIgnoreCase("saturn"))
+                            .findFirst()
+                            .map(CelestialBody::getPosition)
+                            .orElse(new Vector3D(0, 0, 0));
+
+                    Vector3D directionFromSaturn = pos.subtract(saturnPos).normalize();
+                    pos = pos.add(directionFromSaturn.scale(55 * SCALE));  // visually push titan out from Saturn
+                }
+
+
 
                 planetSpheres.get(i).setTranslateX(pos.x / visualScale);
                 planetSpheres.get(i).setTranslateY(pos.z / visualScale);
@@ -317,22 +374,6 @@ public class SolarSystemApp extends Application {
             }
         }
     };
-
-    private double getScaledOrbitRadius(String name) {
-        return switch (name.toLowerCase()) {
-            case "mercury" -> 57.9e6 / SCALE;
-            case "venus"   -> 108.2e6 / SCALE;
-            case "earth"   -> 149.6e6 / SCALE;
-            case "mars"    -> 227.9e6 / SCALE;
-            case "jupiter" -> 778.3e6 / SCALE;
-            case "saturn"  -> 1427.0e6 / SCALE;
-            case "uranus"  -> 2871.0e6 / SCALE;
-            case "neptune" -> 4497.1e6 / SCALE;
-            default        -> -1; // For moon, titan, etc.
-        };
-    }
-
-
 
     private Color getColorForBody(String name) {
         return switch (name.toLowerCase()) {
@@ -354,72 +395,21 @@ public class SolarSystemApp extends Application {
     private double getScaledRadius(String name) {
             // * Sizes have been edited to make them as stable as possible.
             return switch (name.toLowerCase()) {
-                case "sun" -> 150.65;
+                case "sun" -> 190.65;
                 case "mercury" -> 4.0;
                 case "venus" -> 9.0;
                 case "earth" -> 10.0;
                 case "moon" -> 2.5;
                 case "mars" -> 5.5;
-                case "jupiter" -> 70.0;
-                case "saturn" -> 60.0;
-                case "titan" -> 4.0;
+                case "jupiter" -> 60.0;
+                case "saturn" -> 40.0;
+                case "titan" -> 6.0;
                 case "uranus" -> 26.0;
                 case "neptune" -> 23.0;
                 default -> 5.0;
             };
         }
 
-
-
-    public void handle_rkf45(long now) {
-
-        double step = 3_600;            // 3 600 s = 1 h
-
-
-        RKF45Solver rkf45 = new RKF45Solver();
-    /*  We integrate a *single* step and keep only the 5-th-order solution
-        that RKF45 returns in the last row.  Column 0 is the time stamp,
-        columns 1…N are the state vector.                                     */
-        double[][] traj   = rkf45.solve(ode,
-                0.0,
-                currentState,
-                step,
-                1,
-                null);
-
-        double[] nextState = new double[currentState.length];
-        System.arraycopy(traj[traj.length - 1], 1, nextState, 0, nextState.length);
-        currentState = nextState;
-
-
-        StateUtils.applyStateVector(currentState, bodies);
-
-        for (int i = 0; i < bodies.size(); i++) {
-            CelestialBody body = bodies.get(i);
-            Vector3D pos      = body.getPosition();
-            String   name     = body.getName().toLowerCase();
-
-            double visualScale = SCALE;
-            if (!INNER_PLANETS.contains(name) && !name.equals("moon")) {
-                visualScale = SCALE * 1;
-            }
-
-            if (name.equals("moon")) {
-                Vector3D earthPos = bodies.stream()
-                        .filter(b -> b.getName().equalsIgnoreCase("earth"))
-                        .findFirst()
-                        .map(CelestialBody::getPosition)
-                        .orElse(new Vector3D(0, 0, 0));
-
-                Vector3D directionFromEarth = pos.subtract(earthPos).normalize();
-                pos = pos.add(directionFromEarth.scale(15 * SCALE));
-            }
-
-            planetSpheres.get(i).setTranslateX(pos.x / visualScale);
-            planetSpheres.get(i).setTranslateY(pos.z / visualScale);
-            planetSpheres.get(i).setTranslateZ(pos.y / visualScale);
-        }
-    }
 
 
     public static void main(String[] args) {

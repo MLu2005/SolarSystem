@@ -1,5 +1,7 @@
 package com.example.solarSystem;
 
+import com.example.demo.RKF45Solver;
+
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -8,7 +10,7 @@ import java.util.function.BiFunction;
  * used by the RK4 solver to compute the motion of celestial bodies under mutual gravitational attraction.
  * The first body (usually the Sun) is fixed in place and does not move.
  */
-public class SolarSystemODE {
+public class SolarSystemODE extends RKF45Solver {
 
     public static final double G = 6.67430e-20; // Gravitational constant in km^3 / (kg * s^2)
 

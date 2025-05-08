@@ -54,6 +54,7 @@ public class StateUtils {
 
             body.setPosition(pos);
             body.setVelocity(vel);
+
         }
     }
 }
