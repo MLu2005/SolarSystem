@@ -51,7 +51,7 @@ public class SolarSystemApp extends Application {
         SubScene subScene = new SubScene(root, 1000, 800, true, SceneAntialiasing.BALANCED);
         subScene.setFill(Color.BLACK);
 
-        //* Setting the camera.
+        //* Setting the camera..
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.setNearClip(0.1);
         camera.setFarClip(100000);
