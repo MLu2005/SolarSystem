@@ -35,8 +35,8 @@ public class SolarSystemFactory {
                 new Vector3D(-1.474114613E8, -2.972578731E7, 27450.63),
                 new Vector3D(5.31, -29.35, 0.0)));
         system.add(new CelestialBody("Moon", 7.349E22,
-                new Vector3D(-1.4716601309E8, -2.946233624E7, 52891.08),
-                new Vector3D(4.53, -28.59, 0.07)));
+                new Vector3D(-1.470270613E8, -2.972578731E7, 27450.63),
+                new Vector3D(5.31, -28.328, 0.0)));
         system.add(new CelestialBody("Mars", 6.4171E23,
                 new Vector3D(-2.1526640622E8, -3.044089497E7, 4542807.19),
                 new Vector3D(2.65, -22.96, -0.41)));
@@ -53,8 +53,8 @@ public class SolarSystemFactory {
                 new Vector3D(4.45444278098E9, -3.9150318139E8, -8.633703583E7),
                 new Vector3D(0.46, 5.41, -0.12)));
         system.add(new CelestialBody("Titan", 1.3452E23,
-                new Vector3D(1.34766797638E9, 2.253674319E7, -3.867191073E7),
-                new Vector3D(-0.45, 9.41, 0.17)));
+                new Vector3D(1.31553474845E9, 2.054189449E7, -3.774477837E7),
+                new Vector3D(-0.36, 15.04, 0.0)));
 
         return system;
     }

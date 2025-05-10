@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0af759b3-09eb-40f3-a9a8-09c949b01c08" name="Changes" comment="Cleaned a bit of the SolarSystenApp&#10;&#10;+Added a fullScreen mode for better visulization.&#10;&#10;+Added titan and mounted it onto saturn">
+    <list default="true" id="0af759b3-09eb-40f3-a9a8-09c949b01c08" name="Changes" comment="%More cleaning to SolarSystemApp&#10;&#10;+Inserted Physics engine and initialized the planets with PlanetFactory&#10;&#10;+Then Passed currentState of the planets to Nick's RKF45 in  AnimationTimer.&#10;&#10;+Fixed Jupiter's orbit.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/Physics/SolarSystemFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/Physics/SolarSystemFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/SolarSystemApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/solarSystem/SolarSystemApp.java" afterDir="false" />
@@ -283,7 +283,14 @@
       <workItem from="1746662424924" duration="4583000" />
       <workItem from="1746668505338" duration="2228000" />
       <workItem from="1746730876406" duration="371000" />
-      <workItem from="1746731375807" duration="6860000" />
+      <workItem from="1746731375807" duration="7670000" />
+      <workItem from="1746747925931" duration="93000" />
+      <workItem from="1746782541021" duration="27000" />
+      <workItem from="1746794207770" duration="92000" />
+      <workItem from="1746811699307" duration="4118000" />
+      <workItem from="1746815962385" duration="4844000" />
+      <workItem from="1746838002536" duration="101000" />
+      <workItem from="1746882035523" duration="322000" />
     </task>
     <task id="LOCAL-00001" summary="help">
       <option name="closed" value="true" />
@@ -309,7 +316,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746669239610</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="%More cleaning to SolarSystemApp&#10;&#10;+Inserted Physics engine and initialized the planets with PlanetFactory&#10;&#10;+Then Passed currentState of the planets to Nick's RKF45 in  AnimationTimer.&#10;&#10;+Fixed Jupiter's orbit.">
+      <option name="closed" value="true" />
+      <created>1746741662881</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1746741662881</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -319,7 +334,8 @@
     <MESSAGE value="help" />
     <MESSAGE value="getting rid of the useless stuff" />
     <MESSAGE value="Cleaned a bit of the SolarSystenApp&#10;&#10;+Added a fullScreen mode for better visulization.&#10;&#10;+Added titan and mounted it onto saturn" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cleaned a bit of the SolarSystenApp&#10;&#10;+Added a fullScreen mode for better visulization.&#10;&#10;+Added titan and mounted it onto saturn" />
+    <MESSAGE value="%More cleaning to SolarSystemApp&#10;&#10;+Inserted Physics engine and initialized the planets with PlanetFactory&#10;&#10;+Then Passed currentState of the planets to Nick's RKF45 in  AnimationTimer.&#10;&#10;+Fixed Jupiter's orbit." />
+    <option name="LAST_COMMIT_MESSAGE" value="%More cleaning to SolarSystemApp&#10;&#10;+Inserted Physics engine and initialized the planets with PlanetFactory&#10;&#10;+Then Passed currentState of the planets to Nick's RKF45 in  AnimationTimer.&#10;&#10;+Fixed Jupiter's orbit." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/demo$Main.ic" NAME="Main Coverage Results" MODIFIED="1743122113731" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
