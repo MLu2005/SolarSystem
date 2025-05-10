@@ -13,4 +13,6 @@ module com.example.project {
     opens executables to javafx.fxml;
     exports executables;
     opens com.example.solarSystem to javafx.graphics;
+    opens com.example.solarSystem.GA to javafx.graphics;
+
 }
