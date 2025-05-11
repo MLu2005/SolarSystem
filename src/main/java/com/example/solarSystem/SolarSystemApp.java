@@ -42,7 +42,9 @@ public class SolarSystemApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         bodies = SolarSystemFactory.loadFromTable();
-        if (bodies == null || bodies.isEmpty()) {
+
+        //* Quick debug just in-case one of the planets is incorrectly called.
+        if (bodies.isEmpty()) {
             System.err.println("Failed to load celestial bodies!");
             return;
         }
@@ -51,7 +53,7 @@ public class SolarSystemApp extends Application {
         SubScene subScene = new SubScene(root, 1000, 800, true, SceneAntialiasing.BALANCED);
         subScene.setFill(Color.BLACK);
 
-        //* Setting the camera..
+        //* Setting the camera.
         PerspectiveCamera camera = new PerspectiveCamera(true);
         camera.setNearClip(0.1);
         camera.setFarClip(100000);
@@ -68,6 +70,7 @@ public class SolarSystemApp extends Application {
 
         subScene.setCamera(camera);
 
+        // * Lightning for the sun for better experience.
         PointLight light = new PointLight(Color.WHITE);
         light.setTranslateY(-1000);
         light.setTranslateZ(-500);
@@ -125,6 +128,7 @@ public class SolarSystemApp extends Application {
         uiOverlay.setTranslateY(20);
         uiOverlay.setPickOnBounds(false);
 
+        // * UI Buttons for Settings.
         Button showPositionBtn = new Button("Show Camera Location");
         Button resetBtn = new Button("Reset Camera");
         Button toggleOrbitsBtn = new Button("Toggle Orbits");
@@ -220,6 +224,15 @@ public class SolarSystemApp extends Application {
         orbitTimer.start();
     }
 
+    /**
+     * This method is responsible for the FREE 3D movement of the user,
+     * By using WASD for going around + CTRL , Space to go down and up respectively
+     * Zooming is used by scrolling.
+     *
+     * First better and smoother movements we get the derivative of the last movement we did and apply it to the next.
+     * And for rotation we use Math.radians for a circular movement to give better experience.
+     *
+     */
     @NotNull
     private AnimationTimer getAnimationTimer(Group cameraY, PerspectiveCamera camera) {
         double moveSpeed = 3150; // Adjust movement speed for smoother transitions
@@ -265,7 +278,10 @@ public class SolarSystemApp extends Application {
         return movementTimer;
     }
 
-
+    /**
+     * This method handles everything that moves in the solarSystem by feeding information to the PhysicsEngine
+     * The rocket will be used in this method as well but applied with RungeKF45.
+     */
     AnimationTimer orbitTimer = new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -341,6 +357,12 @@ public class SolarSystemApp extends Application {
         }
     };
 
+    /**
+     * This method assigns a color to each planet and moon.
+     *
+     * @param name of all the planets '' sun , mercury , venus .. etc ''
+     * @return The indicated color of choice.
+     */
     private Color getColorForBody(String name) {
         return switch (name.toLowerCase()) {
             case "sun" -> Color.GOLD;
@@ -358,6 +380,12 @@ public class SolarSystemApp extends Application {
         };
     }
 
+    /**
+     * SolarSystem size adjustor returns the size of the scaled planets.
+     *
+     * @param name of all the planets '' sun , mercury , venus .. etc ''
+     * @return their scaled value to appear on the solar system.
+     */
     private double getScaledRadius(String name) {
             // * Sizes have been edited to make them as stable as possible.
             return switch (name.toLowerCase()) {
