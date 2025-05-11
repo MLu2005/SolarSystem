@@ -69,6 +69,7 @@ public class RKF45Solver implements ODESolver {
                         (9.0/50.0)*k5[j] +
                         (2.0/55.0)*k6[j];
             }
+
             double err = 0;
             for (int j = 0; j < dim; j++) {
                 double e = zNext[j] - yNext[j];
