@@ -1,15 +1,12 @@
 package com.example.solarSystem.Physics;
 
-import com.example.solarSystem.SolarSystemODE;
 import com.example.solarSystem.Vector3D;
 import com.example.solarSystem.CelestialBody;
-import executables.solvers.RK4Solver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 
 /**
  * PhysicsEngine handles the gravitational interactions between celestial bodies
@@ -19,7 +16,6 @@ public class PhysicsEngine {
 
     private static final double G = 6.6743E-20; // Gravitational constant in km^3 kg^-1 s^-2
     private final List<CelestialBody> bodies = new ArrayList<>();
-    private double t = 0.0;
 
     public void addBody(CelestialBody body) {
         bodies.add(body);
@@ -40,41 +36,40 @@ public class PhysicsEngine {
     }
 
     /**
-     * Advances the simulation with the rk4 step function
+     * Advances the simulation by time step dt using a simple Verlet-like integration.
      */
     public void step(double dt) {
-        RK4Solver rk4 = new RK4Solver();
-        int n = bodies.size();
-
-        double[] y0 = new double[n * 6];
-        for (int i = 0; i < n; i++) {
-            CelestialBody b = bodies.get(i);
-            int k = i * 6;
-            Vector3D p = b.getPosition();
-            Vector3D v = b.getVelocity();
-            y0[k] = p.getX();
-            y0[k+ 1] = p.getY();
-            y0[k+2] = p.getZ();
-            y0[k +3] = v.getX();
-            y0[k+ 4] = v.getY();
-            y0[k+5] = v.getZ();
+        // First: update positions based on current velocity and acceleration
+        for (CelestialBody body : bodies) {
+            Vector3D displacement = body.getVelocity().scale(dt)
+                    .add(body.getAcceleration().scale(0.5 * dt * dt));
+            body.setPosition(body.getPosition().add(displacement));
         }
 
-        BiFunction<Double, double[], double[]> f =
-                SolarSystemODE.generateODE(bodies);
+        // Second: compute new forces (and thus new accelerations)
+        Map<CelestialBody, Vector3D> newForces = new HashMap<>();
+        for (CelestialBody body : bodies) {
+            newForces.put(body, Vector3D.zero());
+        }
 
-        double[] y1 = rk4.solveStep(f, t, y0, dt);
-        t += dt;
+        for (int i = 0; i < bodies.size(); i++) {
+            CelestialBody a = bodies.get(i);
+            for (int j = 0; j < bodies.size(); j++) {
+                if (i != j) {
+                    CelestialBody b = bodies.get(j);
+                    Vector3D force = computeGravitationalForce(a, b);
+                    newForces.put(a, newForces.get(a).add(force));
+                }
+            }
+        }
 
-        for (int i = 0; i < n; i++) {
-            CelestialBody b = bodies.get(i);
-            int k = i * 6;
-            b.getPosition().x = y1[k];
-            b.getPosition().y = y1[k+1];
-            b.getPosition().z = y1[k+2];
-            b.getVelocity().x = y1[k+3];
-            b.getVelocity().y = y1[k+4];
-            b.getVelocity().z = y1[k+ 5];
+        // Third: update velocities using average acceleration
+        for (CelestialBody body : bodies) {
+            Vector3D force = newForces.get(body);
+            Vector3D newAccel = force.scale(1.0 / body.getMass());
+            Vector3D avgAccel = body.getAcceleration().add(newAccel).scale(0.5);
+            body.setVelocity(body.getVelocity().add(avgAccel.scale(dt)));
+            body.setAcceleration(newAccel);
         }
     }
 }
