@@ -4,7 +4,7 @@ import com.example.solarSystem.CelestialBody;
 import com.example.solarSystem.Physics.SolarSystemFactory;
 import com.example.solarSystem.Vector3D;
 import com.example.solarSystem.Physics.PhysicsEngine;
-import executables.solvers.Constants;
+import executables.Constants;
 
 import java.util.List;
 import java.util.Random;

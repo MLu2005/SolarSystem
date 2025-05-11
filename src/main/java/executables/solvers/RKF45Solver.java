@@ -1,5 +1,7 @@
 package executables.solvers;
 
+import executables.Constants;
+
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
@@ -77,7 +79,7 @@ public class RKF45Solver implements ODESolver {
             }
             err = Math.sqrt(err / dim);
 
-            double stepSizeTol = optimal_step_size*Constants.TOLERANCE;
+            double stepSizeTol = optimal_step_size* Constants.TOLERANCE;
             double s;
 
             if (err == 0) {

@@ -9,8 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-
-import static executables.solvers.Constants.*;
+import static executables.Constants.TOLERANCE;
 
 // rewrote all methods to support nth Dimension ODE results
 // All are highly inefficient and should not be finally submitted

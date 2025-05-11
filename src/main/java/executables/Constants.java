@@ -1,4 +1,4 @@
-package executables.solvers;
+package executables;
 
 public class Constants {
 

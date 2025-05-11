@@ -6,6 +6,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
+import executables.testing.plotter;
+import executables.solvers.ODEUtility;
 
 import java.awt.event.ActionEvent;
 

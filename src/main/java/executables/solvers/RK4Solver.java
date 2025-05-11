@@ -3,8 +3,6 @@ package executables.solvers;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
-import static com.example.demo.ODEUtility.addVectors;
-import static com.example.demo.ODEUtility.scaleVector;
 import static executables.solvers.ODEUtility.*;
 
 public class RK4Solver implements ODESolver {
