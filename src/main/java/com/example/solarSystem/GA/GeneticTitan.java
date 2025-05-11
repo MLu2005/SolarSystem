@@ -85,22 +85,21 @@ public class GeneticTitan {
     }
 
     public static void writeToFile(Generation pop, int top_n) {
-        ArrayList<Individual> best = new ArrayList<>();
+        List<Individual> best = new ArrayList<>();
         for (int i = 0; i < top_n; i++) {
             best.add(pop.best(i));
         }
-        try {
-            FileWriter myWriter = new FileWriter("Best_individuals.txt");
+        try ( FileWriter myWriter = new FileWriter("Best_individuals.txt") ) {
             for (Individual ind : best) {
                 myWriter.write(ind.toString());
                 myWriter.write("\n");
             }
-            myWriter.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
+        } catch (Exception e) {
+            System.out.println("An error occurred writing best individuals: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 }
 
 
