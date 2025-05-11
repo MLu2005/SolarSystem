@@ -4,6 +4,10 @@ import com.example.solarSystem.CelestialBody;
 import com.example.solarSystem.Physics.SolarSystemFactory;
 import com.example.solarSystem.Vector3D;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,18 +43,18 @@ public class GeneticTitan {
         Generation pop = Generation.randomPopulation(POP_SIZE);
         int gen = 0;
 
-        while (gen < GENERATIONS && pop.best().getMinDistanceKm() > TARGET_KM) {
+        while (gen < GENERATIONS && pop.best(0).getMinDistanceKm() > TARGET_KM) {
             pop = pop.evolve(MUTATION_RATE, ELITES);
             gen++;
 
-            Individual best = pop.best();
+            Individual best = pop.best(0);
             System.out.printf("Gen %03d  fitness %.6f  dTitan %.1f km%n",
                     gen,
                     best.getFitness(),
                     best.getMinDistanceKm());
         }
 
-        Individual champ = pop.best();
+        Individual champ = pop.best(0);
         List<Double> g = champ.genes();
 
         double x  = g.get(0), y  = g.get(1), z  = g.get(2);   // km
@@ -74,9 +78,30 @@ public class GeneticTitan {
                 x, y, z,
                 vx, vy, vz
         );
-
         double dvRel = computeDvRel(vx, vy, vz);
         System.out.printf("%n  Launch velocity relative to Earth ..... %6.2f km/s%n", dvRel);
         System.out.println("(The launch mass is constant as given by the Manual! 50k kg)");
+        writeToFile(pop, ELITES);
+    }
+
+    public static void writeToFile(Generation pop, int top_n) {
+        ArrayList<Individual> best = new ArrayList<>();
+        for (int i = 0; i < top_n; i++) {
+            best.add(pop.best(i));
+        }
+        try {
+            FileWriter myWriter = new FileWriter("Best_individuals.txt");
+            for (Individual ind : best) {
+                myWriter.write(ind.toString());
+                myWriter.write("\n");
+            }
+            myWriter.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 }
+
+
+

@@ -23,7 +23,7 @@ class Generation {
         return g;
     }
 
-    public Individual best() { return individuals[0]; }
+    public Individual best(int n) { return individuals[n]; }
 
     public Generation evolve(int mutationRatePercent, int eliteCount) {
         Generation next = new Generation(individuals.length);

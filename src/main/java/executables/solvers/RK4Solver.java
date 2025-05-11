@@ -45,21 +45,49 @@ public class RK4Solver implements ODESolver {
         return values;
     }
 
+    /**
+     * I got really weird Abstract Pipeline errors, so I changed the code here to do everything it need to do.
+     * THis somehow seemed to fix it!
+     *
+     * @param f
+     * @param t
+     * @param y
+     * @param h
+     * @return
+     */
     public double[] solveStep(
             BiFunction<Double, double[], double[]> f,
             double t,
             double[] y,
-            double stepSize
+            double h
     ) {
+        int dim = y.length;
         double[] k1 = f.apply(t, y);
-        double[] k2 = f.apply(t + stepSize / 2.0, addVectors(y, scaleVector(k1, stepSize / 2.0)));
-        double[] k3 = f.apply(t + stepSize / 2.0, addVectors(y, scaleVector(k2, stepSize / 2.0)));
-        double[] k4 = f.apply(t + stepSize, addVectors(y, scaleVector(k3, stepSize)));
 
-        double[] nextY = new double[y.length];
-        for (int j = 0; j < y.length; j++) {
-            nextY[j] = y[j] + (stepSize / 6.0) * (k1[j] + 2 * k2[j] + 2 * k3[j] + k4[j]);
+        double[] yTemp = new double[dim];
+
+        for (int j = 0; j < dim; j++) {
+            yTemp[j] = y[j] + 0.5 * h * k1[j];
         }
+        double[] k2 = f.apply(t + 0.5 * h, yTemp);
+
+        for (int j = 0; j < dim; j++) {
+            yTemp[j] = y[j] + 0.5 * h * k2[j];
+        }
+        double[] k3 = f.apply(t + 0.5 * h, yTemp);
+
+        for (int j = 0; j < dim; j++) {
+            yTemp[j] = y[j] + h * k3[j];
+        }
+        double[] k4 = f.apply(t + h, yTemp);
+
+        double[] nextY = new double[dim];
+        double inv6 = h / 6.0;
+        for (int j = 0; j < dim; j++) {
+            nextY[j] = y[j]
+                    + inv6 * (k1[j] + 2 * k2[j] + 2 * k3[j] + k4[j]);
+        }
+
         return nextY;
     }
 
