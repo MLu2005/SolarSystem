@@ -44,7 +44,7 @@ class Individual {
                 saturn.getVelocity().add(vSatTitan));
     }
 
-    private final Vector<Double> gene;     // x,y,z,vx,vy,vz,m
+    private final Vector<Double> gene;     // x,y,z,vx,vy,vz,m (important to know, has to go in the readme.md)
     private double minDistanceTitanKm;
     private double fitness;
 
@@ -61,14 +61,14 @@ class Individual {
      * - mass of the probe (kg)
     */
     private static Vector<Double> randomGene() {
-        // constant launch site: sub-Titan point on Earth
+        // Lauching from the closest point of titan to Earth
         Vector3D earthPos = EARTH.getPosition();
         Vector3D titanPos = TITAN.getPosition();
 
         Vector3D dirToTitan = titanPos.subtract(earthPos).normalize();
         Vector3D surfaceOffset = dirToTitan.scale(EARTH_RADIUS);
 
-        Vector3D pos = earthPos.add(surfaceOffset);     // absolute launch position
+        Vector3D pos = earthPos.add(surfaceOffset); // absolute launch position
 
         // random velocity <= 60 km/s relative to Earth
         double thetaV= 2 * Math.PI * Constants.RNG.nextDouble();
@@ -85,7 +85,7 @@ class Individual {
     }
 
     void evaluate() {
-        // --- 1) Set up engine with all solar bodies + cloned Titan (no probe)
+        // Set up engine with all solar bodies + cloned Titan (no probe)
         PhysicsEngine engine = new PhysicsEngine();
         for (CelestialBody b : OBJECTS_IN_SPACE) {
             engine.addBody(cloneBody(b));
