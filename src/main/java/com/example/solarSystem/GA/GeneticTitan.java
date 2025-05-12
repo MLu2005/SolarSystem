@@ -4,9 +4,7 @@ import com.example.solarSystem.CelestialBody;
 import com.example.solarSystem.Physics.SolarSystemFactory;
 import com.example.solarSystem.Vector3D;
 
-import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +52,8 @@ public class GeneticTitan {
                     best.getMinDistanceKm());
         }
 
-        Individual champ = pop.best(0);
-        List<Double> g = champ.genes();
+        Individual winner_winner_chicken_dinner = pop.best(0);
+        List<Double> g = winner_winner_chicken_dinner.genes();
 
         double x  = g.get(0), y  = g.get(1), z  = g.get(2);   // km
         double vx = g.get(3), vy = g.get(4), vz = g.get(5);   // km s⁻¹
@@ -73,8 +71,8 @@ public class GeneticTitan {
                         "    vx = % .6f%n" +
                         "    vy = % .6f%n" +
                         "    vz = % .6f%n", +
-                champ.getFitness(),
-                champ.getMinDistanceKm(),
+                winner_winner_chicken_dinner.getFitness(),
+                winner_winner_chicken_dinner.getMinDistanceKm(),
                 x, y, z,
                 vx, vy, vz
         );
@@ -89,7 +87,7 @@ public class GeneticTitan {
         for (int i = 0; i < top_n; i++) {
             best.add(pop.best(i));
         }
-        try ( FileWriter myWriter = new FileWriter("Best_individuals.txt") ) {
+        try ( FileWriter myWriter = new FileWriter("src/main/java/com/example/solarSystem/GA/Best_individuals.txt") ) {
             for (Individual ind : best) {
                 myWriter.write(ind.toString());
                 myWriter.write("\n");

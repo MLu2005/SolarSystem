@@ -5,10 +5,13 @@ import com.example.solarSystem.Physics.SolarSystemFactory;
 import com.example.solarSystem.Vector3D;
 import com.example.solarSystem.Physics.PhysicsEngine;
 import executables.Constants;
+import executables.solvers.RK4Solver;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Vector;
+import java.util.function.BiFunction;
 
 class Individual {
 
@@ -68,9 +71,9 @@ class Individual {
         Vector3D pos = earthPos.add(surfaceOffset);     // absolute launch position
 
         // random velocity <= 60 km/s relative to Earth
-        double thetaV = 2 * Math.PI * Constants.RNG.nextDouble();
-        double phiV   = Math.acos(2 * Constants.RNG.nextDouble() - 1);
-        double speed  = MAX_DV * Constants.RNG.nextDouble();
+        double thetaV= 2 * Math.PI * Constants.RNG.nextDouble();
+        double phiV = Math.acos(2 * Constants.RNG.nextDouble() - 1);
+        double speed= MAX_DV * Constants.RNG.nextDouble();
         Vector3D dv = new Vector3D(speed * Math.sin(phiV) * Math.cos(thetaV),
                 speed * Math.sin(phiV) * Math.sin(thetaV),
                 speed * Math.cos(phiV));
@@ -82,37 +85,98 @@ class Individual {
     }
 
     void evaluate() {
+        // --- 1) Set up engine with all solar bodies + cloned Titan (no probe)
         PhysicsEngine engine = new PhysicsEngine();
-        for (CelestialBody b : OBJECTS_IN_SPACE)
+        for (CelestialBody b : OBJECTS_IN_SPACE) {
             engine.addBody(cloneBody(b));
-
-        // cloned titan, so we dont have to look for it again and again and we never get a null pointer
+        }
         CelestialBody titanClone = cloneBody(TITAN);
         engine.addBody(titanClone);
 
-        CelestialBody probe = new CelestialBody(
-                "Probe", PROBE_MASS,
-                new Vector3D(gene.get(0), gene.get(1), gene.get(2)),
-                new Vector3D(gene.get(3), gene.get(4), gene.get(5)));
-        engine.addBody(probe);
+        double[] yProbe = new double[6];
+        {
+            CelestialBody probe0 = new CelestialBody(
+                    "Probe",
+                    PROBE_MASS,
+                    new Vector3D(gene.get(0), gene.get(1), gene.get(2)),
+                    new Vector3D(gene.get(3), gene.get(4), gene.get(5))
+            );
+            yProbe[0] = probe0.getPosition().getX();
+            yProbe[1] = probe0.getPosition().getY();
+            yProbe[2] = probe0.getPosition().getZ();
+            yProbe[3] = probe0.getVelocity().getX();
+            yProbe[4] = probe0.getVelocity().getY();
+            yProbe[5] = probe0.getVelocity().getZ();
+        }
 
-        double dt       = 3600;
-        double SIM_LEN  = 365 * 86400;
-        double t        = 0.0;
+        final double G = Constants.G;
+        final double dt = 3600;
+        final double SIM_T  = Constants.SIM_LEN;
+        double t = 0.0;
 
         minDistanceTitanKm = Double.MAX_VALUE;
 
-        while (t <= SIM_LEN) {
-            double d = probe.getPosition()
-                    .subtract(titanClone.getPosition())
-                    .magnitude();
-            if (d < minDistanceTitanKm) minDistanceTitanKm = d;
+        RK4Solver rk4 = new RK4Solver();
+
+        while (t < SIM_T) {
+
+
+            List<Vector3D> posOld = new ArrayList<>();
+            for (CelestialBody b : engine.getBodies()) {
+                posOld.add(b.getPosition());
+            }
 
             engine.step(dt);
+
+            List<Vector3D> posNew = new ArrayList<>();
+            for (CelestialBody b : engine.getBodies()) {
+                posNew.add(b.getPosition());
+            }
+
+            // making sure that we can use the rk4 with the engine step and we can still
+            // do the solver step inside the same time interval as the world around it
+            BiFunction<Double,double[],double[]> f = (tOffset, y) -> {
+                double[] dy = new double[6];
+                // position derivatives
+                dy[0] = y[3];
+                dy[1] = y[4];
+                dy[2] = y[5];
+
+                double ax = 0, ay = 0, az = 0;
+                for (int i = 0; i < posOld.size(); i++) {
+                    Vector3D P0 = posOld.get(i), P1 = posNew.get(i);
+                    double alpha = tOffset / dt;
+                    Vector3D sysPos = P0.add(P1.subtract(P0).scale(alpha));
+
+                    double dx = sysPos.getX() - y[0];
+                    double dy1 = sysPos.getY() - y[1];
+                    double dz = sysPos.getZ() - y[2];
+                    double r2 = dx*dx + dy1*dy1 + dz*dz;
+                    double invR3 = 1.0 / (r2 * Math.sqrt(r2));
+                    double m  = engine.getBodies().get(i).getMass();
+
+                    ax += G * m * dx * invR3;
+                    ay += G * m * dy1 * invR3;
+                    az += G * m * dz * invR3;
+                }
+                dy[3] = ax;
+                dy[4] = ay;
+                dy[5] = az;
+                return dy;
+            };
+            yProbe = rk4.solveStep(f, 0.0, yProbe, dt);
+
+            Vector3D probePos = new Vector3D(yProbe[0], yProbe[1], yProbe[2]);
+            double d = probePos.subtract(titanClone.getPosition()).magnitude();
+            if (d < minDistanceTitanKm) {
+                minDistanceTitanKm = d;
+            }
+
             t += dt;
         }
-        fitness = 1e6 / (minDistanceTitanKm + 1_000);
+        fitness = 1e6 / (minDistanceTitanKm + 1000);
     }
+
 
     private CelestialBody cloneBody(CelestialBody b) {
         Vector3D p = b.getPosition();
@@ -124,13 +188,9 @@ class Individual {
                 new Vector3D(v.getX(), v.getY(), v.getZ()));
     }
 
-    private CelestialBody find(PhysicsEngine e, String name) {
-        return e.getBodies().stream().filter(b -> b.getName().equals(name)).findFirst().orElseThrow();
-    }
-
-    public double getMinDistanceKm() { return minDistanceTitanKm; }
-    public double getFitness()       { return fitness;          }
-    public Vector<Double> genes()    { return gene;            }
+    public double getMinDistanceKm() { return minDistanceTitanKm;}
+    public double getFitness()       { return fitness;}
+    public Vector<Double> genes()    { return gene;}
 
 
     /**
@@ -191,8 +251,13 @@ class Individual {
         return Individual.of(g);
     }
 
-    @Override public String toString() {
-        return String.format("fitness %.6f  dTitan %.1f km\nlaunch genes: %s",
-                fitness, minDistanceTitanKm, gene);
+    @Override
+    public String toString() {
+        return String.format(
+                "fitness %.6f  dTitan %.6f km%n" + "launch genes: %s%n",
+                fitness,
+                minDistanceTitanKm,
+                gene.toString()
+        );
     }
 }

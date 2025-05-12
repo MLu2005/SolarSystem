@@ -18,7 +18,6 @@ class Generation {
             g.individuals[i] = new Individual();
             g.individuals[i].evaluate();
         }
-
         g.sort();
         return g;
     }
