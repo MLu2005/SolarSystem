@@ -1,57 +1,46 @@
 package com.example.spaceMissions;
 
+import com.example.solarSystem.CelestialBody;
 import com.example.solarSystem.Vector3D;
 
-public class SpaceShip{
+public class SpaceShip extends CelestialBody {
 
-    private String name;
     private double thrust;
-    private Vector3D velocity;
-    private double mass;
-    private double fuel;
-    private Vector3D position;
+    private FuelTracker fuelTracker;
 
-    public SpaceShip (String Name, double Thrust, Vector3D Velocity, double Mass, double Fuel, Vector3D Position) {
-        name = Name;
-        thrust = Thrust;
-        velocity = Velocity;
-        mass = Mass;
-        fuel = Fuel;
-        position = Position;
+    public SpaceShip(String name, double thrust, Vector3D velocity, double mass, double initialFuel, Vector3D position) {
+        super(name, mass, position, velocity);
+        this.thrust = thrust;
+        this.fuelTracker = new FuelTracker(initialFuel);
     }
-    //getters
-    public String getName () {
-        return name;
-    }
-    public double getThrust () {
+
+    // --- Thrust ---
+    public double getThrust() {
         return thrust;
     }
-    public Vector3D getVelocity () {
-        return velocity;
+
+    public void setThrust(double newThrust) {
+        this.thrust = newThrust;
     }
-    public double getMass () {
-        return mass;
+
+    // --- Fuel ---
+    public void consumeFuel(double amount) {
+        fuelTracker.consume(amount);
     }
-    public double getFuel () {
-        return fuel;
+
+    public double getFuel() {
+        return fuelTracker.getRemaining();
     }
-    public Vector3D getPosition () {
-        return position;
+
+    public double getFuelUsed() {
+        return fuelTracker.getUsed();
     }
-    //setter
-    public void setName (String newName) {
-        name = newName;
+
+    public void resetFuel() {
+        fuelTracker.reset();
     }
-    public void setThrust (double newThrust) {
-        thrust = newThrust;
-    }
-    public void setVelocity (Vector3D newVelocity) {
-        velocity = newVelocity;
-    }
-    public void setFuel (double newFuel) {
-        fuel = newFuel;
-    }
-    public void setPosition (Vector3D newPosition) {
-        position = newPosition;
+
+    public FuelTracker getFuelTracker() {
+        return fuelTracker;
     }
 }
