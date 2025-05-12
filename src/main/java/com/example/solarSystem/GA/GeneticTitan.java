@@ -79,6 +79,7 @@ public class GeneticTitan {
         double dvRel = computeDvRel(vx, vy, vz);
         System.out.printf("%n  Launch velocity relative to Earth ..... %6.2f km/s%n", dvRel);
         System.out.println("(The launch mass is constant as given by the Manual! 50k kg)");
+        pop.sort();
         writeToFile(pop, ELITES);
     }
 

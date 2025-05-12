@@ -54,7 +54,7 @@ class Generation {
         }
         return best;
     }
-    private void sort() {
+    public void sort() {
         Arrays.sort(individuals, Comparator.comparingDouble(Individual::getFitness).reversed());
     }
 }
