@@ -20,6 +20,7 @@ import javafx.scene.control.*;
 
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 
 import java.util.function.BiFunction;
@@ -275,10 +276,10 @@ public class Controller {
      */
     public void compareSolverAccuracy() {
         try {
-            double[] stepSizes = { 0.2, 0.1, 0.05, 0.025, 0.0125};
+            double[] stepSizes = { 0.2, 0.1, 0.05, 0.025, 0.0125 };
             double x0   = 0.0;
             double tEnd = 1.0;
-            double[] y0 = {1.0};
+            double[] y0 = { 1.0 };
             BiFunction<Double, double[], double[]> ode = (t, y) -> new double[]{ -y[0] };
             double exactAtEnd = Math.exp(-tEnd);
 
@@ -289,20 +290,39 @@ public class Controller {
             };
             String[] solverId = { "Euler", "RK4", "RKF45" };
 
-            NumberAxis xAxis = new NumberAxis();
 
-            xAxis.setAutoRanging(false);
-            xAxis.setLowerBound(-2.0);
-            xAxis.setUpperBound(-0.5);
-            xAxis.setTickUnit(0.25);
+            NumberAxis xAxis = new NumberAxis(-2.0, -0.6, 0.4);
+            xAxis.setLabel("Step size h");
 
-            xAxis.setLabel("log10(step size h)");
+            xAxis.setMinorTickVisible(true);
+            xAxis.setMinorTickCount(15);
+
+            xAxis.setTickLabelFormatter(new StringConverter<Number>() {
+                @Override public String toString(Number object) {
+                    double h = Math.pow(10, object.doubleValue());
+                    return String.format("%.1e", h);
+                }
+                @Override public Number fromString(String string) { return null; }
+            });
+
             NumberAxis yAxis = new NumberAxis();
-            yAxis.setLabel("log10(error)");
+            yAxis.setLabel("Error");
+            yAxis.setAutoRanging(true);
+            yAxis.setTickLabelFormatter(new StringConverter<Number>() {
+                @Override
+                public String toString(Number object) {
+                    double errValue = Math.pow(10, object.doubleValue());
+                    return String.format("%.1e", errValue);
+                }
+                @Override
+                public Number fromString(String string) {
+                    return null;
+                }
+            });
+
             LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
             chart.setTitle("Solver Accuracy (log–log)");
             chart.setCreateSymbols(true);
-
 
             for (int s = 0; s < solvers.length; s++) {
                 double[] logHs = new double[stepSizes.length];
@@ -313,7 +333,7 @@ public class Controller {
 
                 for (int i = 0; i < stepSizes.length; i++) {
                     double h = stepSizes[i];
-                    int steps = (int)((tEnd - x0) / h);
+                    int steps = (int) ((tEnd - x0) / h);
 
                     double[][] result = solvers[s].solve(
                             ode,
@@ -335,7 +355,7 @@ public class Controller {
 
                 double slope = fitSlope(logHs, logEs);
                 series.setName(
-                        solverId[s] + String.format("  (slope around %.2f)", slope)
+                        solverId[s] + String.format(" (slope ≈ %.2f)", slope)
                 );
 
                 chart.getData().add(series);
