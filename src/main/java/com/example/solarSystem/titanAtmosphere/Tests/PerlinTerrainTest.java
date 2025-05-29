@@ -9,38 +9,39 @@ import com.example.solarSystem.titanAtmosphere.TerrainGenerator.PlanetSurfaceGri
 
 import java.util.List;
 
+
 /**
- * HeightGridRealTitanTest is a diagnostic test used to verify the mapping between
- * global 3D positions near Titan and their corresponding terrain height values
- * stored in the PlanetHeightGrid.
+ * PerlinTerrainTest is a diagnostic test for generating and validating procedural terrain
+ * using Perlin noise mapped over Titan's surface grid.
  *
- * This test confirms:
- * - Correct coordinate conversion from global 3D space to grid indices.
- * - Accurate terrain height retrieval from PlanetHeightGrid.
- * - That various offsets from Titan’s center map to the correct grid cells.
+ * This test verifies:
+ * - That Perlin noise is correctly applied to generate varying terrain heights.
+ * - That the generated terrain values respond to scale, amplitude, and seed parameters.
+ * - That spatial coordinates are mapped consistently to grid keys and associated heights.
  *
  * How it works:
- * 1. Loads celestial bodies from SolarSystemFactory.
- * 2. Locates Titan in the system.
- * 3. Creates a surface grid with 10 km resolution.
- * 4. Initializes a flat height grid with a fixed height (1234.0 meters).
- * 5. Computes the grid key and height for 4 different offset positions around Titan.
+ * 1. Loads celestial bodies and locates Titan.
+ * 2. Builds a PlanetSurfaceGrid with fixed cell size (10 km).
+ * 3. Generates Perlin noise terrain using specified parameters:
+ *    - scale: controls terrain smoothness,
+ *    - amplitude: maximum terrain height variation,
+ *    - seed: noise seed for reproducibility.
+ * 4. Evaluates 5 different offset positions around Titan.
+ * 5. For each test point, prints:
+ *    - Global position,
+ *    - Corresponding grid key,
+ *    - Height value from the terrain grid.
  *
- * Each test prints:
- * - The global test position,
- * - The grid cell it maps to,
- * - The height value stored at that location.
- *
+ * This test is essential before applying terrain in landing simulations or visual rendering.
  */
 
 
-public class HeightGridRealTitanTest {
+public class PerlinTerrainTest {
 
     public static void main(String[] args) {
 
 
         List<CelestialBody> bodies = SolarSystemFactory.loadFromTable();
-
 
         CelestialBody titan = null;
         int i = 0;
@@ -59,20 +60,24 @@ public class HeightGridRealTitanTest {
         }
 
 
-        System.out.println("Titan position: " + titan.getPosition());
-
-
         double cellSize = 10000.0;
         PlanetSurfaceGrid surfaceGrid = new PlanetSurfaceGrid(titan, cellSize);
         PlanetHeightGrid heightGrid = new PlanetHeightGrid(surfaceGrid);
-        heightGrid.generateFlatTerrain(1234.0);
 
 
-        Vector3D[] offsets = new Vector3D[4];
+        double scale = 0.1;
+        double amplitude = 500.0;
+        int seed = 12345;
+
+        heightGrid.generatePerlinTerrain(scale, amplitude, seed);
+
+
+        Vector3D[] offsets = new Vector3D[5];
         offsets[0] = new Vector3D(0, 0, 0);
-        offsets[1] = new Vector3D(15000, 500, -25000);
-        offsets[2] = new Vector3D(-70000, 0, 70000);
-        offsets[3] = new Vector3D(9999999, 999, 9999999);
+        offsets[1] = new Vector3D(15000, 0, 15000);
+        offsets[2] = new Vector3D(-30000, 0, 20000);
+        offsets[3] = new Vector3D(50000, 0, -40000);
+        offsets[4] = new Vector3D(-100000, 0, -100000);
 
         int j = 0;
         while (j < offsets.length) {
