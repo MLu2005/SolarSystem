@@ -1,6 +1,6 @@
 package com.example.utilities.titanAtmosphere;
 
-import com.example.solarSystem.Vector3D;
+import com.example.utilities.Vector3D;
 import com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetHeightGrid;
 import com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetWindGrid;
 

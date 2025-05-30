@@ -1,7 +1,7 @@
 package com.example.spaceMissions;
 
 import com.example.utilities.titanAtmosphere.TitanEnvironment;
-import com.example.solarSystem.Vector3D;
+import com.example.utilities.Vector3D;
 
 /**
  * LandingCondition determines whether a spaceship has safely landed on Titan.
