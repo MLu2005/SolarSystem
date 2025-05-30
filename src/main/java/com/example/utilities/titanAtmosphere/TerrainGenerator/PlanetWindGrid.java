@@ -1,7 +1,7 @@
-package com.example.solarSystem.titanAtmosphere.TerrainGenerator;
+package com.example.utilities.titanAtmosphere.TerrainGenerator;
 
-import com.example.solarSystem.Vector3D;
-import com.example.solarSystem.titanAtmosphere.CoordinateKey;
+import com.example.utilities.Vector3D;
+import com.example.utilities.titanAtmosphere.CoordinateKey;
 
 import java.util.HashMap;
 import java.util.Map;

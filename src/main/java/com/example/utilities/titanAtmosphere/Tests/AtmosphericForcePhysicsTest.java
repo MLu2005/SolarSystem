@@ -1,14 +1,15 @@
-package com.example.solarSystem.titanAtmosphere.Tests;
+package com.example.utilities.titanAtmosphere.Tests;
 
-import com.example.solarSystem.Vector3D;
-import com.example.solarSystem.CelestialBody;
-import com.example.solarSystem.titanAtmosphere.*;
-import com.example.solarSystem.titanAtmosphere.TerrainGenerator.PlanetHeightGrid;
-import com.example.solarSystem.titanAtmosphere.TerrainGenerator.PlanetSurfaceGrid;
-import com.example.solarSystem.titanAtmosphere.TerrainGenerator.PlanetWindGrid;
+import com.example.utilities.Vector3D;
+import com.example.solar_system.CelestialBody;
+import com.example.utilities.titanAtmosphere.AtmosphericForce;
+import com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetHeightGrid;
+import com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetSurfaceGrid;
+import com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetWindGrid;
 import com.example.spaceMissions.SpaceShip;
-import com.example.solarSystem.Physics.SolarSystemFactory;
-import com.example.solarSystem.Physics.PhysicsEngine;
+import com.example.utilities.physics_utilities.SolarSystemFactory;
+import com.example.utilities.physics_utilities.PhysicsEngine;
+import com.example.utilities.titanAtmosphere.TitanEnvironment;
 
 import java.util.List;
 

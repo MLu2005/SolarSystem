@@ -1,4 +1,4 @@
-package com.example.solarSystem.titanAtmosphere;
+package com.example.utilities.titanAtmosphere;
 
 public class CoordinateKey {
 

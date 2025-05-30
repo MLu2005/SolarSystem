@@ -1,8 +1,8 @@
-package com.example.solarSystem.titanAtmosphere;
+package com.example.utilities.titanAtmosphere;
 
 import com.example.solarSystem.Vector3D;
-import com.example.solarSystem.titanAtmosphere.TerrainGenerator.PlanetHeightGrid;
-import com.example.solarSystem.titanAtmosphere.TerrainGenerator.PlanetWindGrid;
+import com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetHeightGrid;
+import com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetWindGrid;
 
 /**
  * TitanEnvironment provides access to key environmental factors on or near Titan's surface.

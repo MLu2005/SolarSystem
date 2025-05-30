@@ -1,6 +1,6 @@
 package com.example.spaceMissions;
 
-import com.example.solarSystem.titanAtmosphere.TitanEnvironment;
+import com.example.utilities.titanAtmosphere.TitanEnvironment;
 import com.example.solarSystem.Vector3D;
 
 /**

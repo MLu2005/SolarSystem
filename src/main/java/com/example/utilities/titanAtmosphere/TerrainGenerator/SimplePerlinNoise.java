@@ -1,4 +1,4 @@
-package com.example.solarSystem.titanAtmosphere.TerrainGenerator;
+package com.example.utilities.titanAtmosphere.TerrainGenerator;
 
 import java.util.Random;
 
