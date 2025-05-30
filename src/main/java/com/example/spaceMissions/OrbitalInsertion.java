@@ -1,9 +1,9 @@
 package com.example.spaceMissions;
 
-import com.example.solarSystem.CelestialBody;
-import com.example.solarSystem.Physics.SolarSystemFactory;
-import com.example.solarSystem.SolarSystemODE;
-import com.example.solarSystem.Vector3D;
+import com.example.solar_system.CelestialBody;
+import com.example.utilities.physics_utilities.SolarSystemFactory;
+import com.example.utilities.SolarSystemODE;
+import com.example.utilities.Vector3D;
 import executables.Constants;
 import executables.solvers.RK4Solver;
 

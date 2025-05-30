@@ -3,9 +3,9 @@ package executables;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.example.solarSystem.CelestialBody;
-import com.example.solarSystem.DataLoader;
-import com.example.solarSystem.PlanetPositionCalculator;
+import com.example.solar_system.CelestialBody;
+import com.example.utilities.DataLoader;
+import com.example.utilities.PlanetPositionCalculator;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +28,7 @@ public class Main extends Application {
 
     public static void main(String[] args) throws Exception {
         LocalDateTime j2000 = LocalDateTime.of(2000, 1, 1, 12, 0);
-        List<CelestialBody> bodies = DataLoader.loadBodiesFromCSV("src/main/java/com/example/solarSystem/IC.csv");
+        List<CelestialBody> bodies = DataLoader.loadBodiesFromCSV("src/main/java/com/example/utilities/IC.csv");
         PlanetPositionCalculator calculator = new PlanetPositionCalculator(bodies);
         calculator.propagateTo(j2000);
 

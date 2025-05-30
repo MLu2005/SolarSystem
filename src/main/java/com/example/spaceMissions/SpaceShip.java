@@ -1,7 +1,7 @@
 package com.example.spaceMissions;
 
-import com.example.solarSystem.CelestialBody;
-import com.example.solarSystem.Vector3D;
+import com.example.solar_system.CelestialBody;
+import com.example.utilities.Vector3D;
 
 public class SpaceShip extends CelestialBody {
 

@@ -9,7 +9,6 @@ import javafx.scene.control.*;
 import executables.testing.plotter;
 import executables.solvers.ODEUtility;
 
-import java.awt.event.ActionEvent;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;

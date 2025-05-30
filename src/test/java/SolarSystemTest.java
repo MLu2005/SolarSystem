@@ -1,5 +1,7 @@
 
-import com.example.solarSystem.*;
+import com.example.solar_system.CelestialBody;
+import com.example.utilities.SolarSystemODE;
+import com.example.utilities.*;
 import executables.solvers.RKF45Solver;
 
 import java.util.List;
@@ -18,7 +20,7 @@ public class SolarSystemTest {
      */
     public static void main(String[] args) {
         // 1. Load celestial body data from CSV
-        String filePath = "src/main/java/com/example/solarSystem/IC.csv";  // ← Adjust path if needed
+        String filePath = "src/main/java/com/example/utilities/IC.csv";  // ← Adjust path if needed
         List<CelestialBody> bodies = DataLoader.loadBodiesFromCSV(filePath);
 
         // 2. Create the ODE system using Newtonian gravity
