@@ -7,12 +7,15 @@ module com.example.project {
     requires exp4j;
     requires annotations;
     requires com.almasb.fxgl.all;
-    requires java.xml;
+    requires java.desktop;
+    requires javafx.media;
 
     opens executables to javafx.fxml;
     exports executables;
+
     opens com.example.utilities to javafx.graphics;
     opens com.example.utilities.GA to javafx.graphics;
-    opens com.example.solar_system to javafx.graphics;
 
+    exports com.example.solar_system to javafx.graphics;
+    opens com.example.solar_system to javafx.fxml;
 }

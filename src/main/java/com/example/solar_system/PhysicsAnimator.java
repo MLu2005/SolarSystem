@@ -5,8 +5,11 @@ import com.example.utilities.Vector3D;
 import com.example.utilities.physics_utilities.PhysicsEngine;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
+import javafx.scene.PerspectiveCamera;
+import javafx.scene.SubScene;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
-
 import java.util.List;
 
 
@@ -21,6 +24,11 @@ public class PhysicsAnimator {
     private final Group spaceshipGroup;
     private final double SCALE;
 
+
+    private final LabelManager labelManager;
+    private final PerspectiveCamera camera;
+    private final SubScene subScene;
+
     /**
      * Constructs a PhysicsAnimator instance.
      *
@@ -29,12 +37,43 @@ public class PhysicsAnimator {
      * @param spaceshipGroup  the JavaFX group representing the spaceship
      * @param SCALE           the scale factor used to convert real-world coordinates to display units
      */
-    public PhysicsAnimator(List<CelestialBody> bodies, List<Sphere> planetSpheres, Group spaceshipGroup, double SCALE) {
+    public PhysicsAnimator(List<CelestialBody> bodies, List<Sphere> planetSpheres,
+                           Group spaceshipGroup, double SCALE,
+                           LabelManager labelManager,
+                           PerspectiveCamera camera, SubScene subScene) {
         this.bodies = bodies;
         this.planetSpheres = planetSpheres;
         this.spaceshipGroup = spaceshipGroup;
         this.SCALE = SCALE;
+        this.labelManager = labelManager;
+        this.camera = camera;
+        this.subScene = subScene;
     }
+
+
+    public void initializeLabels() {
+        // Clear previous labels if needed
+
+        Sphere spaceshipLabelAnchor = new Sphere(1);
+        spaceshipLabelAnchor.setMaterial(new PhongMaterial(Color.TRANSPARENT));
+        spaceshipLabelAnchor.setMouseTransparent(true);
+        spaceshipGroup.getChildren().add(spaceshipLabelAnchor);
+
+        for (int i = 0; i < bodies.size(); i++) {
+            CelestialBody body = bodies.get(i);
+            String name = body.getName();
+
+            if (name.equalsIgnoreCase("spaceship")) {
+                labelManager.addLabel(spaceshipLabelAnchor, name);
+            } else {
+                Sphere sphere = planetSpheres.get(i);
+                labelManager.addLabel(sphere, name);
+            }
+        }
+    }
+
+
+
 
     /**
      * Handles everything that moves in the utilities by feeding information to the PhysicsEngine
@@ -100,6 +139,7 @@ public class PhysicsAnimator {
                         }
                     }
                 }
+                labelManager.updateLabelPositions();
             }
         };
     }

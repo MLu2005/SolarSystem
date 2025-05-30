@@ -1,8 +1,11 @@
 package com.example.solar_system;
 
-
 import javafx.scene.*;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Box;
+import javafx.scene.transform.Rotate;
 
 import java.util.List;
 
@@ -10,7 +13,7 @@ import java.util.List;
  * Builds and configures the 3D scene for the solar system visualization.
  * This includes setting up the root node, lighting, orbit rendering, and background.
  */
-public class SceneBuilder {
+public class StageBuilder {
     private final int SCALE;
     private final Group root;
     private final OrbitRendering orbitRenderer;
@@ -20,11 +23,12 @@ public class SceneBuilder {
      *
      * @param scale the scale factor to convert real-world coordinates into scene units
      */
-    public SceneBuilder(int scale) {
+    public StageBuilder(int scale) {
         this.SCALE = scale;
         this.root = new Group();
         this.orbitRenderer = new OrbitRendering(scale);
-        Node backdrop = SpaceFiller.createBackdrop(50000);
+
+        Node backdrop = createSkyBoxBackdrop(30000);
         root.getChildren().add(backdrop);
     }
 
@@ -57,7 +61,6 @@ public class SceneBuilder {
         root.getChildren().addAll(sunLight, ambientLight, fillLight, rimLight);
     }
 
-
     public SubScene createSubScene() {
         SubScene subScene = new SubScene(root, 1000, 800, true, SceneAntialiasing.BALANCED);
         subScene.setFill(Color.BLACK);
@@ -86,4 +89,68 @@ public class SceneBuilder {
     public OrbitRendering getOrbitRenderer() {
         return orbitRenderer;
     }
+
+
+    /**
+     * Creates a skybox cube using 6 thin boxes textured on each face to avoid texture stretching.
+     *
+     * @param size length of each cube edge
+     * @return a Group node representing the skybox cube
+     */
+    private Node createSkyBoxBackdrop(double size) {
+        Group skyboxGroup = new Group();
+        double half = size / 2;
+        double thickness = 0.1;
+
+        String texturePath = getClass().getResource("/styles/voidMesh.jpg").toExternalForm();
+
+        PhongMaterial material = new PhongMaterial();
+        material.setDiffuseMap(new Image(texturePath));
+
+
+        Box rightFace = createFaceBox(size, size, thickness, material);
+        rightFace.setTranslateX(half);
+        rightFace.setRotationAxis(Rotate.Y_AXIS);
+        rightFace.setRotate(90);
+
+
+        Box leftFace = createFaceBox(size, size, thickness, material);
+        leftFace.setTranslateX(-half);
+        leftFace.setRotationAxis(Rotate.Y_AXIS);
+        leftFace.setRotate(-90);
+
+
+        Box topFace = createFaceBox(size, size, thickness, material);
+        topFace.setTranslateY(-half);
+        topFace.setRotationAxis(Rotate.X_AXIS);
+        topFace.setRotate(-90);
+
+
+        Box bottomFace = createFaceBox(size, size, thickness, material);
+        bottomFace.setTranslateY(half);
+        bottomFace.setRotationAxis(Rotate.X_AXIS);
+        bottomFace.setRotate(90);
+
+
+        Box frontFace = createFaceBox(size, size, thickness, material);
+        frontFace.setTranslateZ(half);
+
+        Box backFace = createFaceBox(size, size, thickness, material);
+        backFace.setTranslateZ(-half);
+        backFace.setRotationAxis(Rotate.Y_AXIS);
+        backFace.setRotate(180);
+
+        skyboxGroup.getChildren().addAll(
+                rightFace, leftFace, topFace, bottomFace, frontFace, backFace
+        );
+
+        return skyboxGroup;
+    }
+
+    private Box createFaceBox(double width, double height, double depth, PhongMaterial material) {
+        Box face = new Box(width, height, depth);
+        face.setMaterial(material);
+        return face;
+    }
+
 }
