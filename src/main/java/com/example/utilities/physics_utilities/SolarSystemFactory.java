@@ -56,13 +56,11 @@ public class SolarSystemFactory {
                 new Vector3D(1.31553474845E9, 2.054189449E7, -3.774477837E7),
                 new Vector3D(-0.36, 15.04, 0.0)));
 
-       /*  NASA-inspired values for a spaceship starting in Low Earth Orbit (LEO), such as the International Space Station (ISS)
-         or a spacecraft like the Orion capsule, to match actual orbital mechanics.
-        */
-
-        system.add(new CelestialBody("Spaceship", 2.1E5,  // ~210,000 kg (mass of Orion + service module)
-                new Vector3D(-1.474114613E8, -2.972578731E7, 27450.63 + 400.0),  // 400 km above Earth's surface
-                new Vector3D(5.31, -29.35 + 7.66, 0.0)));  // 7.66 km/s relative to Earth (LEO)
+        // Uses a combination between GA best trajectory found and NASA values.
+        system.add(new CelestialBody("Spaceship", 2.1E5,  // mass ~210,000 kg
+                new Vector3D(-1.4740509568994185E8, -2.9725582352311186E7, 27287.406431384097),
+                new Vector3D(53.87608593069663, -23.73795647814695, 20.476394276366552)));
+        // 7.66 km/s relative to Earth (LEO)
         return system;
     }
 }

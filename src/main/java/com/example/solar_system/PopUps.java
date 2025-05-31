@@ -52,22 +52,32 @@ public class PopUps {
      */
     public static void showHowTo(Stage primaryStage) {
         String howto = """
-            📘 How to Interact with Free Space
-
-            🔼 Elevate:       E
-            🔽 Descend:       Q
-
-            ⬆️ Move Forward:  W
-            ⬇️ Move Backward: S
-            ➡️ Move Right:    D
-            ⬅️ Move Left:     A
-            ⚡ Move Extremely fast: L-Shift
-
-            🖱️ Zoom In/Out:  Use Mouse Scroll
-
-            🖥️ Fullscreen: Press F11
-            
-            📍 Give Camera Coordinates: 3 Simultaneous Left-clicks
+                📘 How to Interact with the Free Space
+                
+                                                       🔼 Elevate:             E
+                                                       🔽 Descend:             Q
+                
+                                                       ⬆️ Move Forward:        W
+                                                       ⬇️ Move Backward:       S
+                                                       ➡️ Move Right:          D
+                                                       ⬅️ Move Left:           A
+                                                       ⚡ Move Extremely Fast:  Left Shift (L-Shift)
+                
+                                                       🖱️ Zoom In/Out:         Mouse Scroll
+                
+                                                       🖥️ Fullscreen:          F11
+                
+                                                       📍 Get Camera Coordinates:  3 Simultaneous Left-clicks
+                
+                                                       --------------------------------------------------------
+                
+                                                       To use Spectator Mode:
+                                                       - Choose the object you want to follow.
+                                                       - You must manually look around to explore the surroundings.
+                                                       - The camera will automatically follow the selected object.
+                
+                                                       To exit Spectator Mode:
+                                                       - Press H
             """;
 
         Alert howTo = new Alert(Alert.AlertType.INFORMATION);
@@ -85,4 +95,57 @@ public class PopUps {
 
         howTo.show();
     }
+
+    // * Pop-up indicating which object are you going to spectate.
+    public static void showSpectatorPopup(String targetName, Stage primaryStage) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Spectator Mode Activated");
+        alert.setHeaderText("Camera now following:");
+        alert.setContentText(targetName);
+
+        Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
+        IconSetter.setIcons(dialogStage, "/styles/spectateIcon.png");
+
+        dialogStage.initOwner(primaryStage);
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.toFront();
+
+        alert.show();
+    }
+
+    // * Tells the user that he got out of spectator mode.
+    public static void showSpectatorExitPopup(Stage primaryStage) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Spectator Mode Disabled");
+        alert.setHeaderText(null);
+        alert.setContentText("👁️❌ You have exited Spectator Mode.\nThe camera has been reset.");
+
+        Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
+        IconSetter.setIcons(dialogStage, "/styles/exitIcon.png");
+
+        dialogStage.initOwner(primaryStage);
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.toFront();
+
+        alert.show();
+    }
+
+    // * Warns the user about not being in spectatorMode to exit in the first place.
+    public static void showNotInSpectatorModePopup(Stage primaryStage) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Not in Spectator Mode");
+        alert.setHeaderText(null);
+        alert.setContentText("‼!! You are currently NOT in Spectator Mode.");
+
+        Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
+        IconSetter.setIcons(dialogStage, "/styles/warningIcon.png");
+
+        dialogStage.initOwner(primaryStage);
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.toFront();
+
+        alert.show();
+    }
+
+
 }

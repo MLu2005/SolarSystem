@@ -15,18 +15,28 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * The main application class for the Solar System Simulator.
+ * Initializes the scene, camera, UI, and celestial bodies.
+ */
 public class SolarSystemApp extends Application {
+
+    /** Node for attaching the spaceship sound */
     private Node soundNode;
+
+    /** Sound effect for the spaceship */
     private SpaceShipSound spaceShipSound;
 
+    /** Group node representing the spaceship */
     private Group spaceshipGroup;
+
     private static final int SCALE = 400000;
     private final List<Sphere> planetSpheres = new ArrayList<>();
     private List<CelestialBody> bodies;
 
     /**
-     * Entry point of the JavaFX application.
-     * Shows loading screen first, then loads the main scene.
+     * Entry point for the JavaFX application.
+     * Displays splash screen before launching the main scene.
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -43,10 +53,10 @@ public class SolarSystemApp extends Application {
     }
 
     /**
-     * Sets up the main scene with celestial bodies, spaceship, UI, camera, and sound.
+     * Sets up the main simulation scene, camera, UI, and renders all celestial bodies.
      *
-     * @param primaryStage the main stage of the application
-     * @throws IOException if FXML loading fails
+     * @param primaryStage the main window
+     * @throws IOException if FXML or resources fail to load
      */
     private void setupMainScene(Stage primaryStage) throws IOException {
         bodies = SolarSystemFactory.loadFromTable();
@@ -72,22 +82,31 @@ public class SolarSystemApp extends Application {
         UIButtonsController uiController = loader.getController();
         uiController.initialize(cameraController, orbitRenderer, primaryStage);
 
+        // * Initialize SpectatorMode
+        SpectatorMode spectatorMode = new SpectatorMode(camera,
+                cameraController.getCameraXGroup(),
+                cameraController.getCameraYGroup(),
+                cameraController.getCameraZGroup()
+        );
+
+        // * Nodes to Targets for spectator mode.
+        Map<String, Node> targetMap = new HashMap<>();
+
         Pane labelPane = new Pane();
         labelPane.setMouseTransparent(true);
         LabelManager labelManager = new LabelManager(labelPane, camera, subScene);
 
         for (CelestialBody body : bodies) {
-            String name = body.getName().toLowerCase();
+            String name = body.getName();
+            Vector3D position = body.getPosition();
 
-            if (name.equals("spaceship")) {
-                spaceshipGroup = SpaceShipBuilder.build(body.getPosition(), SCALE);
+            if (name.equalsIgnoreCase("spaceship")) {
+                spaceshipGroup = SpaceShipBuilder.build(position, SCALE);
                 root.getChildren().add(spaceshipGroup);
-
-                // Attach 3D positional audio to the spaceship
                 soundNode = spaceshipGroup;
                 spaceShipSound = new SpaceShipSound("/Audio/rocketSound.mp3");
                 spaceShipSound.attachToNode(spaceshipGroup);
-
+                targetMap.put("Spaceship", spaceshipGroup);
                 continue;
             }
 
@@ -95,19 +114,25 @@ public class SolarSystemApp extends Application {
             sphere.setMaterial(BodyDecorations.getMaterial(name));
             BodyDecorations.applyGlowEffectIfSun(sphere, name);
 
-            Vector3D position = body.getPosition();
             sphere.setTranslateX(position.x / SCALE);
             sphere.setTranslateY(position.z / SCALE);
 
             planetSpheres.add(sphere);
             root.getChildren().add(sphere);
-            labelManager.updateLabelPositions();
+            targetMap.put(name, sphere);
         }
+
+        // * Provides target map to SpectatorMode
+        spectatorMode.setNamedTargets(targetMap);
+        uiController.setSpectatorMovement(spectatorMode);
+
+        labelManager.updateLabelPositions();
 
         StackPane stackPane = new StackPane();
         stackPane.getChildren().addAll(subScene, labelPane, uiOverlay);
         Scene scene = new Scene(stackPane, 800, 600);
         scene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
+
         subScene.widthProperty().bind(scene.widthProperty());
         subScene.heightProperty().bind(scene.heightProperty());
 
@@ -127,10 +152,10 @@ public class SolarSystemApp extends Application {
         subScene.setCamera(camera);
         cameraController.startMovement();
 
-        scene.setOnKeyPressed(e -> {
-            e.consume();
-            cameraController.onKeyPressed(e.getCode());
-        });
+
+        cameraController.setupKeyHandler(scene, primaryStage);
+
+
         scene.setOnKeyReleased(e -> {
             e.consume();
             cameraController.onKeyReleased(e.getCode());
@@ -152,7 +177,6 @@ public class SolarSystemApp extends Application {
         AnimationTimer orbitTimer = animator.createOrbitTimer();
         orbitTimer.start();
 
-        // * Adjusts sound volume based on camera distance
         if (spaceShipSound != null) {
             new AnimationTimer() {
                 @Override
@@ -163,11 +187,6 @@ public class SolarSystemApp extends Application {
         }
     }
 
-    /**
-     * Launches the application.
-     *
-     * @param args command line arguments (not used)
-     */
     public static void main(String[] args) {
         launch(args);
     }

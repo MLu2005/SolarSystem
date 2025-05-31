@@ -117,9 +117,9 @@ public class SpaceShipBuilder {
         outerFlame.setEffect(glow);
         aura.setEffect(glow);
 
-        // Flickering animation handling.
+        // * Flickering animation handling.
         ScaleTransition flickerInner = new ScaleTransition(Duration.millis(20), innerCore);  // ~50 / 3
-        flickerInner.setFromY(0.7);    // wider range
+        flickerInner.setFromY(0.7);
         flickerInner.setToY(1.4);
         flickerInner.setCycleCount(Animation.INDEFINITE);
         flickerInner.setAutoReverse(true);
@@ -140,7 +140,7 @@ public class SpaceShipBuilder {
         flickerOuter.play();
 
 
-        // Core pulsing.
+        // * Core pulsing.
         Timeline pulse = new Timeline(
                 new KeyFrame(Duration.ZERO, e -> coreMaterial.setDiffuseColor(Color.rgb(255, 120, 0, 0.85))),
                 new KeyFrame(Duration.millis(159), e -> coreMaterial.setDiffuseColor(Color.rgb(255, 160, 0, 0.85))),
@@ -149,15 +149,20 @@ public class SpaceShipBuilder {
         pulse.setCycleCount(Animation.INDEFINITE);
         pulse.play();
 
-        // Grouping all the elements together.
+
         spaceshipGroup.getChildren().addAll(
                 bodyBox, leftFin, rightFin, nose, glass,
                 nozzle, innerCore, coreFlame, outerFlame, aura
         );
 
 
-        spaceshipGroup.setRotationAxis(Rotate.X_AXIS);
-        spaceshipGroup.setRotate(90);
+        // * Spaceship rotations.
+        Rotate rotateX = new Rotate(90, Rotate.X_AXIS);
+        Rotate rotateY = new Rotate(0, Rotate.Y_AXIS);
+        Rotate rotateZ = new Rotate(90, Rotate.Z_AXIS);
+
+        spaceshipGroup.getTransforms().addAll(rotateX, rotateY, rotateZ);
+
 
 
         spaceshipGroup.setTranslateX(position.x / scale);

@@ -1,6 +1,7 @@
 package com.example.solar_system;
 
 import com.example.utilities.Vector3D;
+import javafx.scene.Node;
 
 /**
  * CelestialBody represents a physical object in space such as a planet or a star.
@@ -12,6 +13,9 @@ public class CelestialBody {
     private Vector3D position; // in kilometers
     private Vector3D velocity; // in km/s
     private Vector3D acceleration; // in km/s^2
+
+
+    private transient Node node;
 
     /**
      * Constructs a new CelestialBody with initial position and velocity.

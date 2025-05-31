@@ -83,7 +83,7 @@ public class PhysicsAnimator {
         return new AnimationTimer() {
             @Override
             public void handle(long now) {
-                double step = 1400;
+                double step = 2100;
                 PhysicsEngine engine = new PhysicsEngine();
 
                 for (CelestialBody body : bodies) {
