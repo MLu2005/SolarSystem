@@ -23,7 +23,6 @@ public class SpectatorMode {
     private final Group cameraZ;
 
     private Node target;
-    private double offsetDistance = 100; // Vertical distance above the target on Y-axis
 
     private final AnimationTimer lockTimer = new AnimationTimer() {
         @Override
@@ -58,8 +57,8 @@ public class SpectatorMode {
 
     public void lockOnto(Node target) {
         this.target = target;
-        updateCameraPosition(); // Snap instantly
-        lockTimer.start();      // Begin continuous following
+        updateCameraPosition();
+        lockTimer.start();
     }
 
 
@@ -71,38 +70,38 @@ public class SpectatorMode {
     private void updateCameraPosition() {
         if (target == null) return;
 
-        // Get target's world coordinates
+        // *  Gets target's world coordinates
         double tx = target.getTranslateX();
         double ty = target.getTranslateY();
         double tz = target.getTranslateZ();
 
-        // Camera position – slightly behind and above target to allow visibility
+        //* Puts camera position slightly behind and above target to allow visibility
         double camX = tx + 0;
         double camY = ty - 270;
         double camZ = tz - 270;
 
-        // Set camera group position
+        // * Set camera group position
         cameraY.setTranslateX(camX);
         cameraY.setTranslateY(camY);
         cameraY.setTranslateZ(camZ);
 
-        // Clear rotations
+        // * Clear rotations
         cameraY.getTransforms().clear();
         cameraX.getTransforms().clear();
         cameraZ.getTransforms().clear();
         camera.getTransforms().clear();
 
-        // Calculate direction vector from camera to target
+        // * Calculate direction vector from camera to target
         double dx = tx - camX;
         double dy = ty - camY;
         double dz = tz - camZ;
 
-        // Calculate yaw and pitch
+        // * Calculate yaw and pitch
         double yaw = Math.toDegrees(Math.atan2(dx, dz)); // horizontal angle
         double distance = Math.sqrt(dx*dx + dz*dz);
         double pitch = -Math.toDegrees(Math.atan2(dy, distance)); // vertical angle
 
-        // Apply rotations to camera group
+        // * Applys rotations to camera group
         cameraY.getTransforms().add(new Rotate(yaw, Rotate.Y_AXIS));
         cameraX.getTransforms().add(new Rotate(pitch, Rotate.X_AXIS));
     }
