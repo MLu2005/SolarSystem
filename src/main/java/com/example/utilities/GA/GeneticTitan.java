@@ -5,6 +5,7 @@ import com.example.utilities.physics_utilities.SolarSystemFactory;
 import com.example.utilities.Vector3D;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,23 +84,60 @@ public class GeneticTitan {
         writeToFile(pop, ELITES);
     }
 
+
     public static void writeToFile(Generation pop, int top_n) {
         List<Individual> best = new ArrayList<>();
         for (int i = 0; i < top_n; i++) {
             best.add(pop.best(i));
         }
-        try ( FileWriter myWriter = new FileWriter("src/main/java/com/example/utilities/GA/Best_individuals.txt") ) {
-            for (Individual ind : best) {
-                myWriter.write(ind.toString());
-                myWriter.write("\n");
+
+        StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.append("{\n");
+        jsonBuilder.append("  \"best_individuals\": [\n");
+
+        for (int i = 0; i < best.size(); i++) {
+            Individual ind = best.get(i);
+            List<Double> genes = ind.genes();
+
+            jsonBuilder.append("    {\n");
+            jsonBuilder.append("      \"rank\": ").append(i).append(",\n");
+            jsonBuilder.append("      \"fitness\": ").append(ind.getFitness()).append(",\n");
+            jsonBuilder.append("      \"min_distance_to_titan_km\": ").append(ind.getMinDistanceKm()).append(",\n");
+
+            jsonBuilder.append("      \"launch_position\": {\n");
+            jsonBuilder.append("        \"x\": ").append(genes.get(0)).append(",\n");
+            jsonBuilder.append("        \"y\": ").append(genes.get(1)).append(",\n");
+            jsonBuilder.append("        \"z\": ").append(genes.get(2)).append("\n");
+            jsonBuilder.append("      },\n");
+
+            jsonBuilder.append("      \"launch_velocity\": {\n");
+            jsonBuilder.append("        \"vx\": ").append(genes.get(3)).append(",\n");
+            jsonBuilder.append("        \"vy\": ").append(genes.get(4)).append(",\n");
+            jsonBuilder.append("        \"vz\": ").append(genes.get(5)).append("\n");
+            jsonBuilder.append("      },\n");
+
+            jsonBuilder.append("      \"launch_mass\": ").append(genes.get(6)).append(",\n");
+
+            double dvRel = computeDvRel(genes.get(3), genes.get(4), genes.get(5));
+            jsonBuilder.append("      \"delta_v_relative_to_earth\": ").append(dvRel).append("\n");
+
+            jsonBuilder.append("    }");
+            if (i < best.size() - 1) {
+                jsonBuilder.append(",");
             }
-        } catch (Exception e) {
-            System.out.println("An error occurred writing best individuals: " + e.getMessage());
+            jsonBuilder.append("\n");
+        }
+
+        jsonBuilder.append("  ]\n");
+        jsonBuilder.append("}\n");
+
+        try (FileWriter file = new FileWriter("src/main/java/com/example/utilities/GA/best_individuals.json")) {
+            file.write(jsonBuilder.toString());
+            System.out.println("Results written to best_individuals.json");
+        } catch (IOException e) {
+            System.out.println("Error writing results to JSON: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
 }
-
-
-
