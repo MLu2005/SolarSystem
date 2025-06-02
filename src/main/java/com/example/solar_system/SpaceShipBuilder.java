@@ -21,9 +21,9 @@ public class SpaceShipBuilder {
         // Body box
         Box bodyBox = new Box(7.5, 11, 6); // width - height - depth
 
-        Image body = new Image(SpaceShipBuilder.class.getResource("/styles/rocketMesh.png").toExternalForm(), false);
-        Image fins = new Image(SpaceShipBuilder.class.getResource("/styles/finsMesh.png").toExternalForm(), false);
-        Image man = new Image(SpaceShipBuilder.class.getResource("/styles/spaceMan.png").toExternalForm(), false);
+        Image body = new Image(SpaceShipBuilder.class.getResource("/styles/solarSystemStyling/rocketMesh.png").toExternalForm(), false);
+        Image fins = new Image(SpaceShipBuilder.class.getResource("/styles/solarSystemStyling/finsMesh.png").toExternalForm(), false);
+        Image man = new Image(SpaceShipBuilder.class.getResource("/styles/solarSystemStyling/spaceMan.png").toExternalForm(), false);
 
         PhongMaterial rocketBodyMaterial = BodyDecorations.createMaterialFromImages(Color.WHITE, body);
         PhongMaterial finsMaterial = BodyDecorations.createMaterialFromImages(Color.DARKRED, fins);

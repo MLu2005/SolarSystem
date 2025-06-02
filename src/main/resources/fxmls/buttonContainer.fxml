@@ -20,7 +20,7 @@
             <MenuItem fx:id="itemSaturn" text="Saturn" />
             <MenuItem fx:id="itemUranus" text="Uranus" />
             <MenuItem fx:id="itemNeptune" text="Neptune" />
-            <MenuItem fx:id="itemSpaceShip" text="🚀 SpaceShip" />
+            <MenuItem fx:id="itemSpaceShip" text="🚀 Noah's ark" />
         </items>
     </SplitMenuButton>
 

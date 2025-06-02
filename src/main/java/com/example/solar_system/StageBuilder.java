@@ -102,7 +102,7 @@ public class StageBuilder {
         double half = size / 2;
         double thickness = 0.1;
 
-        String texturePath = getClass().getResource("/styles/voidMesh.jpg").toExternalForm();
+        String texturePath = getClass().getResource("/styles/solarSystemStyling/voidMesh.jpg").toExternalForm();
 
         PhongMaterial material = new PhongMaterial();
         material.setDiffuseMap(new Image(texturePath));

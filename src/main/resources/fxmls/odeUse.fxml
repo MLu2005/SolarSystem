@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="473.0" prefWidth="809.0" snapToPixel="false" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.main_gui.ControllerBeta"
+>
+    <children>
+        <TabPane prefHeight="200.0" prefWidth="724.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <tabs>
+                <Tab text="ODE(GUI)">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="703.0">
+                            <children>
+
+                                <!-- Rectangle with settings background -->
+                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#6a6c6e" height="451.0" layoutX="537.0" stroke="#7d7d7d" strokeType="INSIDE" width="274.0" />
+                                <Text fontSmoothingType="LCD" layoutX="651.0" layoutY="18.0" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" textAlignment="CENTER" underline="true" wrappingWidth="57.98307228088379">
+                                    <font>
+                                        <Font name="Berlin Sans FB Bold" size="12.0" />
+                                    </font></Text>
+
+                                <Label blendMode="COLOR_BURN" layoutX="566.0" layoutY="28.0" prefHeight="18.0" prefWidth="77.0" text="Choose solver:">
+                                    <font>
+                                        <Font name="Berlin Sans FB Demi Bold" size="12.0" />
+                                    </font></Label>
+
+                                <!-- Radio buttons for method selection -->
+                                <RadioButton fx:id="rkf45MethodRadio" blendMode="COLOR_BURN" layoutX="566.0" layoutY="62.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="66.0" text="RKF45" textOverrun="CLIP">
+                                    <font>
+                                        <Font name="Berlin Sans FB Bold" size="12.0" />
+                                    </font>
+                                </RadioButton>
+
+                                <RadioButton fx:id="rk4MethodRadio" blendMode="COLOR_BURN" layoutX="566.0" layoutY="87.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="47.0" text="RK4" textOverrun="CLIP">
+                                    <font>
+                                        <Font name="Berlin Sans FB Bold" size="12.0" />
+                                    </font></RadioButton>
+                                <RadioButton fx:id="eulerMethodRadio" blendMode="COLOR_BURN" layoutX="656.0" layoutY="88.0" mnemonicParsing="false" text="Euler's Method">
+                                    <font>
+                                        <Font name="Berlin Sans FB Bold" size="12.0" />
+                                    </font></RadioButton>
+
+                                <!-- Solve button with correct onAction method -->
+                                <Button fx:id="solveButton" layoutX="634.0" layoutY="376.0" mnemonicParsing="false" onAction="#solveODE" prefHeight="26.0" prefWidth="92.0" text="Solve" />
+
+                                <!-- Various input fields for initial conditions, step size, etc. -->
+                                <TextField fx:id="initialConditionsInput" layoutX="564.0" layoutY="233.0" prefHeight="25.0" prefWidth="210.0" text="initialValuesForInputs" />
+                                <TextField fx:id="stepSizeInput" layoutX="681.0" layoutY="275.0" prefHeight="25.0" prefWidth="95.0" text="stepsSize" />
+                                <TextField fx:id="stepsInput" layoutX="566.0" layoutY="275.0" prefHeight="25.0" prefWidth="95.0" text="stepsInput" />
+                                <TextField fx:id="variablesInput" layoutX="566.0" layoutY="314.0" prefHeight="25.0" prefWidth="95.0" text="variablesInput" />
+                                <TextArea fx:id="equationInput" layoutX="559.0" layoutY="116.0" prefHeight="105.0" prefWidth="229.0" text="ODE&#10;&#10;&#10;" />
+
+                                <!-- Result ListView -->
+                                <ListView fx:id="resultListView" layoutX="24.0" layoutY="62.0" prefHeight="327.0" prefWidth="500.0" />
+
+                                <!-- Button to visualize the ODE -->
+                                <Button fx:id="ODEvisualize" layoutX="634.0" layoutY="409.0" mnemonicParsing="false" onAction="#visualizeODE" prefHeight="26.0" prefWidth="92.0" text="Visualize" />
+                                <Label layoutX="216.0" layoutY="27.0" prefHeight="37.0" prefWidth="101.0" text="Results:">
+                                    <font>
+                                        <Font name="Berlin Sans FB Bold" size="27.0" />
+                                    </font>
+                                    <effect>
+                                        <Glow level="0.43" />
+                                    </effect>
+                                </Label>
+                                <Button fx:id="compareButton" layoutX="230.0" layoutY="402.0" onAction="#compareSolverAccuracy" prefHeight="26.0" prefWidth="162.0" text="Compare Accuracy" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+        <!-- This is the container for the chart -->
+        <StackPane fx:id="chartContainer" layoutX="265.0" layoutY="-322.0" prefHeight="300.0" prefWidth="500.0" />
+    </children>
+</AnchorPane>

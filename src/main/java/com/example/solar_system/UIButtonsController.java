@@ -52,7 +52,7 @@ public class UIButtonsController {
         itemSaturn.setOnAction(e -> handleSpectatorSelection("Saturn"));
         itemUranus.setOnAction(e -> handleSpectatorSelection("Uranus"));
         itemNeptune.setOnAction(e -> handleSpectatorSelection("Neptune"));
-        itemSpaceShip.setOnAction(e -> handleSpectatorSelection("Spaceship"));
+        itemSpaceShip.setOnAction(e -> handleSpectatorSelection("Noah's ark"));
     }
 
 

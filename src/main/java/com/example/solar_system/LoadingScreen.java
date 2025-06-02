@@ -47,7 +47,7 @@ public class LoadingScreen {
         stage.setResizable(false);
         stage.setTitle(" ⌛ Loading...");
 
-        IconSetter.setIcons(stage, "/styles/loadingIcon.png");
+        IconSetter.setIcons(stage, "/styles/solarSystemStyling/loadingIcon.png");
 
         mediaPlayer.setOnReady(() -> {
             // Show the stage only when media is ready

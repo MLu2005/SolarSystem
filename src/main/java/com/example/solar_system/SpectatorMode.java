@@ -49,9 +49,12 @@ public class SpectatorMode {
     public void setFollowedByName(String name) {
         Node node = namedTargets.get(name);
         if (node != null) {
-            lockOnto(node);
+                lockOnto(node);
+                if (namedTargets.get(name).equals("Noah's ark")) {
+                    lockOnto(node);
+                }
         } else {
-            System.err.println("No target found with name: " + name);
+            System.out.println("No object with that name.");
         }
     }
 

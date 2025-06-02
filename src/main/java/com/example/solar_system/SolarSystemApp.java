@@ -77,7 +77,7 @@ public class SolarSystemApp extends Application {
         PerspectiveCamera camera = new PerspectiveCamera(true);
         CameraController cameraController = new CameraController(camera);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/executables/buttonContainer.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/buttonContainer.fxml"));
         VBox uiOverlay = loader.load();
         UIButtonsController uiController = loader.getController();
         uiController.initialize(cameraController, orbitRenderer, primaryStage);
@@ -100,13 +100,13 @@ public class SolarSystemApp extends Application {
             String name = body.getName();
             Vector3D position = body.getPosition();
 
-            if (name.equalsIgnoreCase("spaceship")) {
+            if (name.equalsIgnoreCase("noah's ark")) {
                 spaceshipGroup = SpaceShipBuilder.build(position, SCALE);
                 root.getChildren().add(spaceshipGroup);
                 soundNode = spaceshipGroup;
                 spaceShipSound = new SpaceShipSound("/Audio/rocketSound.mp3");
                 spaceShipSound.attachToNode(spaceshipGroup);
-                targetMap.put("Spaceship", spaceshipGroup);
+                targetMap.put("Noah's ark", spaceshipGroup);
                 continue;
             }
 
@@ -131,7 +131,7 @@ public class SolarSystemApp extends Application {
         StackPane stackPane = new StackPane();
         stackPane.getChildren().addAll(subScene, labelPane, uiOverlay);
         Scene scene = new Scene(stackPane, 800, 600);
-        scene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/styles/solarSystemStyling/styles.css").toExternalForm());
 
         subScene.widthProperty().bind(scene.widthProperty());
         subScene.heightProperty().bind(scene.heightProperty());
@@ -153,7 +153,7 @@ public class SolarSystemApp extends Application {
         cameraController.startMovement();
 
 
-        cameraController.setupKeyHandler(scene, primaryStage);
+        cameraController.setupKeyHandler(scene, primaryStage, spectatorMode);
 
 
         scene.setOnKeyReleased(e -> {

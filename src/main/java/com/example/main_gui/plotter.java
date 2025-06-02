@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.main_gui;
 
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;

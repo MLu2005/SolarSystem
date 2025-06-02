@@ -29,6 +29,8 @@ public class LabelManager {
     // Threshold in pixels: label position must move more than this to trigger repositioning
     private static final double MIN_MOVE_THRESHOLD = 0.5;
 
+
+
     public LabelManager(Pane labelPane, PerspectiveCamera camera, SubScene subScene) {
         if (labelPane == null || camera == null || subScene == null) {
             throw new NullPointerException("Arguments must not be null");
@@ -48,6 +50,12 @@ public class LabelManager {
         if (target == null || text == null) {
             throw new NullPointerException("Target node and text must not be null");
         }
+
+        // * :D
+//        if (text.equalsIgnoreCase("Spaceship")) {
+//            text = "Noah's ark";
+//        }
+
         Label label = new Label(text);
         label.getStyleClass().add("object-label");
         labels.put(target, label);
@@ -107,4 +115,6 @@ public class LabelManager {
         double screenY = (boundsInScreen.getMinY() + boundsInScreen.getMaxY()) / 2;
         return new Point3D(screenX, screenY, 0);
     }
+
+
 }

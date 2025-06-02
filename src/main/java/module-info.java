@@ -9,6 +9,10 @@ module com.example.project {
     requires com.almasb.fxgl.all;
     requires java.desktop;
     requires javafx.media;
+    requires com.jfoenix;
+
+    opens com.example.coreGui to javafx.fxml;
+    exports com.example.coreGui;
 
     opens executables to javafx.fxml;
     exports executables;
@@ -18,4 +22,7 @@ module com.example.project {
 
     exports com.example.solar_system to javafx.graphics;
     opens com.example.solar_system to javafx.fxml;
+
+    exports com.example.main_gui;
+    opens com.example.main_gui to javafx.fxml;
 }

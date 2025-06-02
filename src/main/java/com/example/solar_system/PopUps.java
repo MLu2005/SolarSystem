@@ -35,7 +35,7 @@ public class PopUps {
         cameraLocation.setContentText(location);
 
         Stage dialogStage = (Stage) cameraLocation.getDialogPane().getScene().getWindow();
-        IconSetter.setIcons(dialogStage, "/styles/locationIcon.png");
+        IconSetter.setIcons(dialogStage, "/styles/solarSystemStyling/locationIcon.png");
 
         // * This part ensures that the pop-up is pushed to the front!
         dialogStage.initOwner(primaryStage);
@@ -86,7 +86,7 @@ public class PopUps {
         howTo.setContentText(howto);
 
         Stage dialogStage = (Stage) howTo.getDialogPane().getScene().getWindow();
-        IconSetter.setIcons(dialogStage, "/styles/howTo.png");
+        IconSetter.setIcons(dialogStage, "/styles/solarSystemStyling/howTo.png");
 
         // * This part ensures that the pop-up is pushed to the front!
         dialogStage.initOwner(primaryStage);
@@ -104,7 +104,7 @@ public class PopUps {
         alert.setContentText(targetName);
 
         Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
-        IconSetter.setIcons(dialogStage, "/styles/spectateIcon.png");
+        IconSetter.setIcons(dialogStage, "/styles/solarSystemStyling/spectateIcon.png");
 
         dialogStage.initOwner(primaryStage);
         dialogStage.initModality(Modality.WINDOW_MODAL);
@@ -121,7 +121,7 @@ public class PopUps {
         alert.setContentText("👁️❌ You have exited Spectator Mode.\nThe camera has been reset.");
 
         Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
-        IconSetter.setIcons(dialogStage, "/styles/exitIcon.png");
+        IconSetter.setIcons(dialogStage, "/styles/solarSystemStyling/exitIcon.png");
 
         dialogStage.initOwner(primaryStage);
         dialogStage.initModality(Modality.WINDOW_MODAL);
@@ -138,7 +138,7 @@ public class PopUps {
         alert.setContentText("‼!! You are currently NOT in Spectator Mode.");
 
         Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
-        IconSetter.setIcons(dialogStage, "/styles/warningIcon.png");
+        IconSetter.setIcons(dialogStage, "/styles/solarSystemStyling/warningIcon.png");
 
         dialogStage.initOwner(primaryStage);
         dialogStage.initModality(Modality.WINDOW_MODAL);
