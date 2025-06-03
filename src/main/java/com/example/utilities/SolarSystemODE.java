@@ -1,6 +1,7 @@
 package com.example.utilities;
 
 import com.example.solar_system.CelestialBody;
+import executables.Constants;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -12,7 +13,7 @@ import java.util.function.BiFunction;
  */
 public class SolarSystemODE {
 
-    public static final double G = 6.67430e-20; // Gravitational constant in km^3 / (kg * s^2)
+    public static final double G = Constants.G; // Gravitational constant in km^3 / (kg * s^2)
 
     /**
      * Generates a function that computes the derivative (velocity and acceleration) for each body
