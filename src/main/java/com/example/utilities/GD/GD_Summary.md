@@ -9,6 +9,8 @@ This README provides a high-level overview of how gradient-based optimization—
 5. **High-Level Workflow**: How the pieces fit together in practice
 6. **References**: Suggested sources for deeper understanding
 
+IMPORTANT: JSON writer was made pretty by AI, after not finding out how to do it automatically like in python
+
 ---
 
 ## 1. Objective Function

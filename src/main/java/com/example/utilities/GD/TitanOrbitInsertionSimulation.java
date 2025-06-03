@@ -20,7 +20,6 @@ import java.util.List;
 
 /**
  * TitanOrbitInsertionSimulation demonstrates the full execution of the gradient descent algorithm
- * for positioning a spacecraft into orbit around Titan.
  * 
  * This simulation:
  * 1. Initializes the spacecraft and simulation environment
