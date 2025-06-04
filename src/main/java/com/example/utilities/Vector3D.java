@@ -65,6 +65,14 @@ public class Vector3D {
     }
 
     /**
+     * Returns the squared magnitude of the vector.
+     * This is more efficient than magnitude() when only comparing distances.
+     */
+    public double magnitudeSquared() {
+        return x * x + y * y + z * z;
+    }
+
+    /**
      * Computes the Euclidean distance between this vector and another vector.
      */
     public double distanceTo(Vector3D other) {
@@ -79,6 +87,16 @@ public class Vector3D {
         double mag = magnitude();
         if (mag == 0) return Vector3D.zero();
         return scale(1.0 / mag);
+    }
+
+    /**
+     * Returns a unit vector (vector of length 1) in the direction of this vector.
+     * If the vector has magnitude less than a small threshold, returns the zero vector.
+     * This is safer than normalize() for numerical stability.
+     */
+    public Vector3D safeNormalize() {
+        double mag = magnitude();
+        return mag < 1e-12 ? Vector3D.zero() : scale(1.0 / mag);
     }
 
     /**

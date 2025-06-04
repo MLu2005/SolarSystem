@@ -1,5 +1,6 @@
 package com.example.spaceMissions;
 
+import com.example.utilities.Ship.SpaceShip;
 import com.example.utilities.titanAtmosphere.TitanEnvironment;
 import com.example.utilities.Vector3D;
 

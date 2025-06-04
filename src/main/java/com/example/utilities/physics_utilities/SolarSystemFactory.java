@@ -9,59 +9,72 @@ import java.util.List;
 /**
  * Factory class to load a predefined solar system with real celestial bodies and their
  * approximate positions and velocities at a given time.
+ *
+ * Units:
+ *   • position  – kilometres (km)
+ *   • velocity  – kilometres per second (km s⁻¹)
+ *   • mass      – kilograms (kg)
  */
-public class SolarSystemFactory {
-
-    private SolarSystemFactory() {
-        // Prevent instantiation
-    }
-
+public final class SolarSystemFactory {
+    private SolarSystemFactory() { /* prevent instantiation */ }
     /**
-     * Loads a list of celestial bodies representing a simplified solar system snapshot.
+     * Loads a list of celestial bodies representing a simplified Solar-System snapshot
+     * whose state vectors are an exact copy of the rows in IC.csv.
      *
-     * @return a list of initialized CelestialBody objects
+     * @return a list of initialised CelestialBody objects
      */
     public static List<CelestialBody> loadFromTable() {
         List<CelestialBody> system = new ArrayList<>();
 
-        system.add(new CelestialBody("Sun", 1.9885E30, new Vector3D(0, 0, 0), new Vector3D(0, 0, 0)));
-        system.add(new CelestialBody("Mercury", 3.302E23,
-                new Vector3D(-5.671193616E7, -3.22725121E7, 2583296.74),
-                new Vector3D(13.88, -40.32, -4.57)));
-        system.add(new CelestialBody("Venus", 4.8685E24,
-                new Vector3D(-1.0393267209E8, -3.187005741E7, 5551106.73),
-                new Vector3D(9.89, -33.69, -1.03)));
-        system.add(new CelestialBody("Earth", 5.97219E24,
-                new Vector3D(-1.474114613E8, -2.972578731E7, 27450.63),
-                new Vector3D(5.31, -29.35, 0.0)));
-        system.add(new CelestialBody("Moon", 7.349E22,
-                new Vector3D(-1.470270613E8, -2.972578731E7, 27450.63),
-                new Vector3D(5.31, -28.328, 0.0)));
-        system.add(new CelestialBody("Mars", 6.4171E23,
-                new Vector3D(-2.1526640622E8, -3.044089497E7, 4542807.19),
-                new Vector3D(2.65, -22.96, -0.41)));
-        system.add(new CelestialBody("Jupiter", 1.8982E27,
-                new Vector3D(6.0857935174E8, 4.672016269E7, -1.483329181E7),
-                new Vector3D(-0.6, 12.13, 0.1)));
-        system.add(new CelestialBody("Saturn", 5.6834E26,
-                new Vector3D(1.31431287745E9, 2.054189449E7, -3.774477837E7),
-                new Vector3D(-0.36, 9.47, 0.0)));
-        system.add(new CelestialBody("Uranus", 8.681E25,
-                new Vector3D(2.14338351673E9, 2.3914058252E8, -2.455374152E7),
-                new Vector3D(-0.75, 6.41, -0.02)));
-        system.add(new CelestialBody("Neptune", 1.0241E26,
-                new Vector3D(4.45444278098E9, -3.9150318139E8, -8.633703583E7),
-                new Vector3D(0.46, 5.41, -0.12)));
-        system.add(new CelestialBody("Titan", 1.3452E23,
-                new Vector3D(1.31553474845E9, 2.054189449E7, -3.774477837E7),
-                new Vector3D(-0.36, 15.04, 0.0)));
+        system.add(new CelestialBody("Sun", 1.9900000000E30,
+                new Vector3D(0, 0, 0),
+                new Vector3D(0, 0, 0)));
 
-        // Uses a combination between GA best trajectory found and NASA values.
-        system.add(new CelestialBody("Spaceship", 2.1E5,  // mass ~210,000 kg
+        system.add(new CelestialBody("Mercury", 3.3000000000E23,
+                new Vector3D(-5.6700000000E7, -3.2300000000E7, 2.5800000000E6),
+                new Vector3D(1.3900000000E1, -4.0300000000E1, -4.5700000000E0)));
+
+        system.add(new CelestialBody("Venus", 4.8700000000E24,
+                new Vector3D(-1.0400000000E8, -3.1900000000E7, 5.5500000000E6),
+                new Vector3D(9.8900000000E0, -3.3700000000E1, -1.0300000000E0)));
+
+        system.add(new CelestialBody("Earth", 5.9700000000E24,
+                new Vector3D(-1.4700000000E8, -2.9700000000E7, 2.7500000000E4),
+                new Vector3D(5.3100000000E0, -2.9300000000E1, 6.6900000000E-04)));
+
+        system.add(new CelestialBody("Moon", 7.3500000000E22,
+                new Vector3D(-1.4700000000E8, -2.9500000000E7, 5.2900000000E4),
+                new Vector3D(4.5300000000E0, -2.8600000000E1, 6.7300000000E-02)));
+
+        system.add(new CelestialBody("Mars", 6.4200000000E23,
+                new Vector3D(-2.1500000000E8, 1.2700000000E8, 7.9400000000E6),
+                new Vector3D(-1.1500000000E1, -1.8700000000E1, -1.1100000000E-01)));
+
+        system.add(new CelestialBody("Jupiter", 1.9000000000E27,
+                new Vector3D(5.5400000000E7, 7.6200000000E8, -4.4000000000E6),
+                new Vector3D(-1.3200000000E1, 1.2900000000E1, 5.2200000000E-02)));
+
+        system.add(new CelestialBody("Saturn", 5.6800000000E26,
+                new Vector3D(1.4200000000E9, -1.9100000000E8, -5.3300000000E7),
+                new Vector3D(7.4800000000E-01, 9.5500000000E0, -1.9600000000E-01)));
+
+        system.add(new CelestialBody("Titan", 1.3500000000E23,
+                new Vector3D(1.4200000000E9, -1.9200000000E8, -5.2800000000E7),
+                new Vector3D(5.9500000000E0, 7.6800000000E0, 2.5400000000E-01)));
+
+        system.add(new CelestialBody("Uranus", 8.6800000000E25,
+                new Vector3D(1.6200000000E9, 2.4300000000E9, -1.1900000000E7),
+                new Vector3D(-5.7200000000E0, 3.4500000000E0, 8.7000000000E-02)));
+
+        system.add(new CelestialBody("Neptune", 1.0200000000E26,
+                new Vector3D(4.4700000000E9, -5.3100000000E7, -1.0200000000E8),
+                new Vector3D(2.8700000000E-02, 5.4700000000E0, -1.1300000000E-01)));
+
+        /* Uses a combination between GA best trajectory found and NASA values. */
+        system.add(new CelestialBody("Spaceship", 50000,
                 new Vector3D(-1.4740509568994185E8, -2.9725582352311186E7, 27287.406431384097),
                 new Vector3D(53.87608593069663, -23.73795647814695, 20.476394276366552)));
-        // 7.66 km/s relative to Earth (LEO)
+
         return system;
     }
 }
-

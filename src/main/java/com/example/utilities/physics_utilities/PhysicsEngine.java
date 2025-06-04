@@ -2,6 +2,7 @@ package com.example.utilities.physics_utilities;
 
 import com.example.utilities.Vector3D;
 import com.example.solar_system.CelestialBody;
+import executables.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 public class PhysicsEngine {
 
-    private static final double G = 6.6743E-20; // Gravitational constant in km^3 kg^-1 s^-2
+    private static final double G = Constants.G; // Gravitational constant in km^3 kg^-1 s^-2
     private final List<CelestialBody> bodies = new ArrayList<>();
 
     public void addBody(CelestialBody body) {
@@ -30,9 +31,13 @@ public class PhysicsEngine {
      */
     private Vector3D computeGravitationalForce(CelestialBody a, CelestialBody b) {
         Vector3D r = b.getPosition().subtract(a.getPosition());
-        double distance = r.magnitude() + 1e-10; // avoid division by zero
+        if (r.magnitudeSquared() < 1e-24) {              // skip self-interaction
+            return Vector3D.zero();
+        }
+        Vector3D direction = r.safeNormalize();
+        double distance = r.magnitude();
         double forceMagnitude = G * a.getMass() * b.getMass() / (distance * distance);
-        return r.normalize().scale(forceMagnitude);
+        return direction.scale(forceMagnitude);
     }
 
     /**

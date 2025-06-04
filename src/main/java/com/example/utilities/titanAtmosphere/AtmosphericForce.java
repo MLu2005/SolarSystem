@@ -1,7 +1,7 @@
 package com.example.utilities.titanAtmosphere;
 
 import com.example.utilities.Vector3D;
-import com.example.spaceMissions.SpaceShip;
+import com.example.utilities.Ship.SpaceShip;
 
 /**
  * AtmosphericForce models aerodynamic drag acting on a spacecraft

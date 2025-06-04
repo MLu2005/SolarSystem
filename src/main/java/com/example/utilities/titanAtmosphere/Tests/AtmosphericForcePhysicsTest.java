@@ -6,7 +6,7 @@ import com.example.utilities.titanAtmosphere.AtmosphericForce;
 import com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetHeightGrid;
 import com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetSurfaceGrid;
 import com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetWindGrid;
-import com.example.spaceMissions.SpaceShip;
+import com.example.utilities.Ship.SpaceShip;
 import com.example.utilities.physics_utilities.SolarSystemFactory;
 import com.example.utilities.physics_utilities.PhysicsEngine;
 import com.example.utilities.titanAtmosphere.TitanEnvironment;

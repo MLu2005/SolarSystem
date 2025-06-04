@@ -5,10 +5,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.effect.Bloom;
 import javafx.scene.shape.Sphere;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,7 +74,7 @@ public class BodyDecorations {
             PhongMaterial rockMaterial = new PhongMaterial(Color.GOLD);
             try {
                 Image glowTexture = new Image(
-                        BodyDecorations.class.getResource("/styles/sunMesh2.png").toExternalForm()
+                        BodyDecorations.class.getResource("/styles/solarSystemStyling/sunMesh2.png").toExternalForm()
                 );
                 rockMaterial.setDiffuseMap(glowTexture);
                 rockMaterial.setSelfIlluminationMap(glowTexture);
@@ -94,7 +90,7 @@ public class BodyDecorations {
             PhongMaterial rockMaterial = new PhongMaterial();
             try {
                 Image earthTexture = new Image(
-                        BodyDecorations.class.getResource("/styles/earthMesh.png").toExternalForm()
+                        BodyDecorations.class.getResource("/styles/solarSystemStyling/earthMesh.png").toExternalForm()
                 );
                 rockMaterial.setDiffuseMap(earthTexture);
             } catch (Exception e) {
@@ -110,7 +106,7 @@ public class BodyDecorations {
             PhongMaterial rockMaterial = new PhongMaterial();
             try {
                 Image earthTexture = new Image(
-                        BodyDecorations.class.getResource("/styles/moonMesh.png").toExternalForm()
+                        BodyDecorations.class.getResource("/styles/solarSystemStyling/moonMesh.png").toExternalForm()
                 );
                 rockMaterial.setDiffuseMap(earthTexture);
             } catch (Exception e) {
@@ -126,7 +122,7 @@ public class BodyDecorations {
             PhongMaterial rockMaterial = new PhongMaterial();
             try {
                 Image earthTexture = new Image(
-                        BodyDecorations.class.getResource("/styles/mercuryMesh.png").toExternalForm()
+                        BodyDecorations.class.getResource("/styles/solarSystemStyling/mercuryMesh.png").toExternalForm()
                 );
                 rockMaterial.setDiffuseMap(earthTexture);
             } catch (Exception e) {
@@ -142,7 +138,7 @@ public class BodyDecorations {
             PhongMaterial rockMaterial = new PhongMaterial();
             try {
                 Image earthTexture = new Image(
-                        BodyDecorations.class.getResource("/styles/marsMesh.png").toExternalForm()
+                        BodyDecorations.class.getResource("/styles/solarSystemStyling/marsMesh.png").toExternalForm()
                 );
                 rockMaterial.setDiffuseMap(earthTexture);
             } catch (Exception e) {
@@ -158,7 +154,7 @@ public class BodyDecorations {
             PhongMaterial rockMaterial = new PhongMaterial();
             try {
                 Image earthTexture = new Image(
-                        BodyDecorations.class.getResource("/styles/saturnMesh.png").toExternalForm()
+                        BodyDecorations.class.getResource("/styles/solarSystemStyling/saturnMesh.png").toExternalForm()
                 );
                 rockMaterial.setDiffuseMap(earthTexture);
             } catch (Exception e) {
@@ -174,7 +170,7 @@ public class BodyDecorations {
             PhongMaterial rockMaterial = new PhongMaterial();
             try {
                 Image earthTexture = new Image(
-                        BodyDecorations.class.getResource("/styles/uranusMesh.png").toExternalForm()
+                        BodyDecorations.class.getResource("/styles/solarSystemStyling/uranusMesh.png").toExternalForm()
                 );
                 rockMaterial.setDiffuseMap(earthTexture);
             } catch (Exception e) {
@@ -190,7 +186,7 @@ public class BodyDecorations {
             PhongMaterial rockMaterial = new PhongMaterial();
             try {
                 Image earthTexture = new Image(
-                        BodyDecorations.class.getResource("/styles/neptuneMesh.png").toExternalForm()
+                        BodyDecorations.class.getResource("/styles/solarSystemStyling/neptuneMesh.png").toExternalForm()
                 );
                 rockMaterial.setDiffuseMap(earthTexture);
             } catch (Exception e) {
@@ -206,7 +202,7 @@ public class BodyDecorations {
             PhongMaterial rockMaterial = new PhongMaterial();
             try {
                 Image earthTexture = new Image(
-                        BodyDecorations.class.getResource("/styles/jupiterMesh.png").toExternalForm()
+                        BodyDecorations.class.getResource("/styles/solarSystemStyling/jupiterMesh.png").toExternalForm()
                 );
                 rockMaterial.setDiffuseMap(earthTexture);
             } catch (Exception e) {
@@ -222,7 +218,7 @@ public class BodyDecorations {
             PhongMaterial rockMaterial = new PhongMaterial();
             try {
                 Image earthTexture = new Image(
-                        BodyDecorations.class.getResource("/styles/titanMesh.png").toExternalForm()
+                        BodyDecorations.class.getResource("/styles/solarSystemStyling/titanMesh.png").toExternalForm()
                 );
                 rockMaterial.setDiffuseMap(earthTexture);
             } catch (Exception e) {
@@ -238,7 +234,7 @@ public class BodyDecorations {
             PhongMaterial rockMaterial = new PhongMaterial();
             try {
                 Image earthTexture = new Image(
-                        BodyDecorations.class.getResource("/styles/venusMesh.png").toExternalForm()
+                        BodyDecorations.class.getResource("/styles/solarSystemStyling/venusMesh.png").toExternalForm()
                 );
                 rockMaterial.setDiffuseMap(earthTexture);
             } catch (Exception e) {
@@ -257,7 +253,7 @@ public class BodyDecorations {
      * Used for customizing the rocket by taking in multiple skins for each body structure.
      *
      * @param fallbackColor backup color.
-     * @param images eh images?
+     * @param images eh guiStyling?
      */
     public static PhongMaterial createMaterialFromImages(Color fallbackColor, Image... images) {
         PhongMaterial material = new PhongMaterial();

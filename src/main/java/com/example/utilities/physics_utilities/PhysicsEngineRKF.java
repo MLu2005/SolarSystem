@@ -2,6 +2,7 @@ package com.example.utilities.physics_utilities;
 
 import com.example.solar_system.CelestialBody;
 import com.example.utilities.Vector3D;
+import executables.Constants;
 import executables.solvers.ODESolver;
 import executables.solvers.RKF45Solver;
 
@@ -11,10 +12,10 @@ import java.util.function.BiFunction;
 
 public class PhysicsEngineRKF {
 
-    private static final double G = 6.6743E-20; // Gravitational constant in km^3 kg^-1 s^-2
-    private static final double SOFTENING_LENGTH = 100.0; // km
-    private static final double INITIAL_STEP_SIZE = 60.0; // seconds
-    private static final int MAX_STEPS = 500;
+    private static final double G = Constants.G; // Gravitational constant in km^3 kg^-1 s^-2
+    private static final double SOFTENING_LENGTH = Constants.SOFTENING_LENGTH; // km
+    private static final double INITIAL_STEP_SIZE = Constants.INITIAL_STEP_SIZE; // seconds
+    private static final int MAX_STEPS = Constants.MAX_STEPS;
 
     private final List<CelestialBody> bodies = new ArrayList<>();
     private final ODESolver solver;
@@ -122,4 +123,3 @@ public class PhysicsEngineRKF {
         }
     }
 }
-

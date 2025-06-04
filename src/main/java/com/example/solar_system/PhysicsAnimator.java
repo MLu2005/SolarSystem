@@ -63,7 +63,7 @@ public class PhysicsAnimator {
             CelestialBody body = bodies.get(i);
             String name = body.getName();
 
-            if (name.equalsIgnoreCase("spaceship")) {
+            if (name.equalsIgnoreCase("noah's ark")) {
                 labelManager.addLabel(spaceshipLabelAnchor, name);
             } else {
                 Sphere sphere = planetSpheres.get(i);
@@ -81,9 +81,24 @@ public class PhysicsAnimator {
      */
     public AnimationTimer createOrbitTimer() {
         return new AnimationTimer() {
+            private boolean titanOverrideDone = false;
+
             @Override
             public void handle(long now) {
-                double step = 2100;
+
+
+//                if (!titanOverrideDone) {
+//                    for (CelestialBody body : bodies) {
+//                        if (body.getName().equalsIgnoreCase("titan")) {
+//                            body.setPosition(new Vector3D(1.31553474845E9, 2.054189449E7, -3.774477837E7));
+//                            body.setVelocity(new Vector3D(-0.36, 15.04, 0.0));
+//                            break;
+//                        }
+//                    }
+//                    titanOverrideDone = true;
+//                }
+
+                double step = 2500;
                 PhysicsEngine engine = new PhysicsEngine();
 
                 for (CelestialBody body : bodies) {
@@ -92,9 +107,7 @@ public class PhysicsAnimator {
 
                 engine.step(step);
 
-                // * Get the current state of all bodies (using the current positions and velocities)
                 double[] currentState = StateUtils.extractStateVector(bodies);
-
                 StateUtils.applyStateVector(currentState, bodies);
 
                 for (int i = 0; i < bodies.size(); i++) {
@@ -102,45 +115,43 @@ public class PhysicsAnimator {
                     Vector3D pos = body.getPosition();
                     String name = body.getName().toLowerCase();
 
-                    // * Assign moon to earth and visually pushing it out
                     if (name.equals("moon")) {
                         Vector3D earthPos = bodies.stream()
                                 .filter(b -> b.getName().equalsIgnoreCase("earth"))
                                 .findFirst()
                                 .map(CelestialBody::getPosition)
                                 .orElse(new Vector3D(0, 0, 0));
-
                         Vector3D directionFromEarth = pos.subtract(earthPos).normalize();
                         pos = pos.add(directionFromEarth.scale(SCALE * 15));
                     }
 
-                    // * Assign titan to saturn and visually pushing it out
                     if (name.equals("titan")) {
                         Vector3D saturnPos = bodies.stream()
                                 .filter(b -> b.getName().equalsIgnoreCase("saturn"))
                                 .findFirst()
                                 .map(CelestialBody::getPosition)
                                 .orElse(new Vector3D(0, 1, 0));
-
                         Vector3D directionFromSaturn = pos.subtract(saturnPos).normalize();
                         pos = pos.add(directionFromSaturn.scale(44 * SCALE));
                     }
 
-                    // * Update spaceship or planet sphere position
-                    if (name.equals("spaceship") && spaceshipGroup != null) {
+                    if (name.equals("noah's ark") && spaceshipGroup != null) {
                         spaceshipGroup.setTranslateX(pos.x / SCALE);
                         spaceshipGroup.setTranslateY(pos.z / SCALE);
                         spaceshipGroup.setTranslateZ(pos.y / SCALE);
                     } else {
-                        if (!name.equals("spaceship")) {
+                        if (!name.equals("noah's ark")) {
                             planetSpheres.get(i).setTranslateX(pos.x / SCALE);
                             planetSpheres.get(i).setTranslateZ(pos.y / SCALE);
                             planetSpheres.get(i).setTranslateY(0);
                         }
                     }
                 }
+
                 labelManager.updateLabelPositions();
             }
         };
     }
+
 }
+

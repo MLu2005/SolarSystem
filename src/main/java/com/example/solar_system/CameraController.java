@@ -233,7 +233,7 @@ public class CameraController {
     /**
      * Handles key events and toggles fullscreen or spectator mode.
      */
-    public void setupKeyHandler(Scene scene, Stage primaryStage) {
+    public void setupKeyHandler(Scene scene, Stage primaryStage, SpectatorMode spectatorMode) {
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case F11 -> toggleFullScreen(primaryStage);
@@ -254,6 +254,7 @@ public class CameraController {
 
         scene.setOnKeyReleased(event -> onKeyReleased(event.getCode()));
     }
+
 
 
     // Turns the full screen off/on.

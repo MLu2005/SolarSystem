@@ -13,7 +13,7 @@ import java.util.Random;
 import java.util.Vector;
 import java.util.function.BiFunction;
 
-class Individual {
+public class Individual {
 
     private static final double EARTH_RADIUS = Constants.EARTH_RADIUS_KM;
     private static final double MAX_DV = 60.0;  // max rel‑speed km/s
@@ -49,7 +49,7 @@ class Individual {
     private double fitness;
 
     public Individual() { this(randomGene()); }
-    private Individual(Vector<Double> g) { gene = g; }
+    public Individual(Vector<Double> g) { gene = g; }
     private static Individual of(Vector<Double> g){ return new Individual(g); }
 
     /**
@@ -84,7 +84,7 @@ class Individual {
                 PROBE_MASS));
     }
 
-    void evaluate() {
+    public void evaluate() {
         // Set up engine with all solar bodies + cloned Titan (no probe)
         PhysicsEngine engine = new PhysicsEngine();
         for (CelestialBody b : OBJECTS_IN_SPACE) {

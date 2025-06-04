@@ -28,4 +28,13 @@ public class FuelTracker {
     public void reset() {
         remainingFuel = initialFuel;
     }
+
+    /**
+     * Returns the initial fuel amount.
+     * 
+     * @return The initial fuel amount in kg
+     */
+    public double getInitialFuel() {
+        return initialFuel;
+    }
 }

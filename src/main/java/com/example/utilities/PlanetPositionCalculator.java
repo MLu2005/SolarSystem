@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import com.example.solar_system.CelestialBody;
+import executables.Constants;
 import executables.solvers.RKF45Solver;
 
 /**
@@ -15,9 +16,9 @@ import executables.solvers.RKF45Solver;
  */
 public class PlanetPositionCalculator {
 
-    private static final double GRAVITATIONAL_CONSTANT = 6.67430e-20;
-    private static final double J2000_EPOCH_JULIAN_DATE = 2451545.0;
-    private static final double SECONDS_PER_DAY = 86400.0;
+    private static final double GRAVITATIONAL_CONSTANT = Constants.G;
+    private static final double J2000_EPOCH_JULIAN_DATE = Constants.J2000_EPOCH_JULIAN_DATE;
+    private static final double SECONDS_PER_DAY = Constants.SECONDS_PER_DAY;
 
     private final List<CelestialBody> initialBodies;
     private final double[] bodyMasses;
