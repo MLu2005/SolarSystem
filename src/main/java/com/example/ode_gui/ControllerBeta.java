@@ -1,18 +1,23 @@
-package com.example.main_gui;
+package com.example.ode_gui;
 
 import executables.solvers.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.Group;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+import javafx.scene.image.ImageView;
+
+import javafx.scene.layout.AnchorPane;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
@@ -31,10 +36,29 @@ public class ControllerBeta {
     @FXML private RadioButton eulerMethodRadio;
     @FXML private RadioButton rkf45MethodRadio;
 
+    @FXML private ImageView closeIcon;
+    @FXML private ImageView minimizeIcon;
+    @FXML private AnchorPane rootPane;
+
     private ToggleGroup toggleGroup;
+    private double xOffset = 0;
+    private double yOffset = 0;
+
 
     @FXML
     public void initialize() {
+
+        rootPane.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+
+        rootPane.setOnMouseDragged(event -> {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setX(event.getScreenX() - xOffset);
+            stage.setY(event.getScreenY() - yOffset);
+        });
+
         toggleGroup = new ToggleGroup();
         eulerMethodRadio.setToggleGroup(toggleGroup);
         rk4MethodRadio.setToggleGroup(toggleGroup);
@@ -50,6 +74,17 @@ public class ControllerBeta {
         ODEvisualize.setOnAction(e -> visualizeODE());
     }
 
+    @FXML
+    private void handleClose(MouseEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    private void handleMinimize(MouseEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setIconified(true);
+    }
 
     private static class ODEInput {
         double x0;
@@ -282,7 +317,7 @@ public class ControllerBeta {
 
             Stage stage = new Stage();
             stage.setTitle("Solver Error Comparison");
-            stage.setScene(new Scene(new Group(chart), 800, 600));
+            stage.setScene(new Scene(new Group(chart), 550, 400));
             stage.show();
 
         } catch (Exception e) {

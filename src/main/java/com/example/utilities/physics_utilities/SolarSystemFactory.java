@@ -70,10 +70,12 @@ public final class SolarSystemFactory {
                 new Vector3D(4.4700000000E9, -5.3100000000E7, -1.0200000000E8),
                 new Vector3D(2.8700000000E-02, 5.4700000000E0, -1.1300000000E-01)));
 
-        /* Uses a combination between GA best trajectory found and NASA values. */
-        system.add(new CelestialBody("Spaceship", 50000,
-                new Vector3D(-1.4740509568994185E8, -2.9725582352311186E7, 27287.406431384097),
-                new Vector3D(53.87608593069663, -23.73795647814695, 20.476394276366552)));
+        system.add(new CelestialBody("Noah's ark", 50000.0,
+                new Vector3D(-1.4699366647890487E8, -2.9700655866209034E7, 27285.544752075686),
+                new Vector3D(56.199263487003066, -31.70830008678653, -13.951757766821851)));
+
+
+
 
         return system;
     }

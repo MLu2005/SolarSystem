@@ -92,20 +92,52 @@
         <!-- Main Content Pane -->
         <AnchorPane layoutX="44.0" layoutY="46.0" prefHeight="454.0" prefWidth="756.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
-                <Pane prefHeight="454.0" prefWidth="756.0" style="-fx-background-color: #000000;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <Pane prefHeight="219.0" prefWidth="756.0" style="-fx-background-color: #000000;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <!-- Drawer Side Pane -->
                         <AnchorPane fx:id="drawerPane" layoutY="-4.0" prefHeight="131.0" prefWidth="222.0" style="-fx-background-color: #6c6c6c;">
                             <children>
                                 <VBox layoutX="3.0" layoutY="8.0" prefHeight="123.0" prefWidth="222.0" spacing="5.0">
-                                    <children>
-                                        <Button prefHeight="37.0" prefWidth="219.0" style="-fx-font-size: 16;" text="Enter the Solar System" />
-                                        <Button prefHeight="37.0" prefWidth="219.0" style="-fx-font-size: 16;" text="Solve ODE's" />
-                                        <Button prefHeight="37.0" prefWidth="219.0" style="-fx-font-size: 16;" text="?" />
-                                    </children>
+                           <children>
+                               <Button fx:id="solarSystemButton" blendMode="DIFFERENCE" mnemonicParsing="false" onAction="#launchSolarSystem" prefHeight="39.0" prefWidth="222.0" text="S.S. GUI">
+                                   <cursor>
+                                       <Cursor fx:constant="HAND" />
+                                   </cursor>
+                                   <font>
+                                       <Font name="Berlin Sans FB Bold" size="15.0" />
+                                   </font>
+                               </Button>
+                               <Button fx:id="odeSolvingButton" blendMode="DIFFERENCE" mnemonicParsing="false" onAction="#launchODE" prefHeight="39.0" prefWidth="222.0" text="O.D.E. GUI">
+                                   <cursor>
+                                       <Cursor fx:constant="HAND" />
+                                   </cursor>
+                                   <font>
+                                       <Font name="Berlin Sans FB Bold" size="15.0" />
+                                   </font>
+                               </Button>
+                              <Button blendMode="DIFFERENCE" mnemonicParsing="false" prefHeight="39.0" prefWidth="222.0" text="?">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <font>
+                                    <Font name="Berlin Sans FB Bold" size="15.0" />
+                                 </font>
+                              </Button>
+
+                           </children>
                                 </VBox>
                             </children>
                         </AnchorPane>
+                  <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="258.0" layoutY="38.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="470.0" text="- To interact with the Suite press on the stack icon on the top left." textFill="#9a9a9a">
+                     <font>
+                        <Font name="Berlin Sans FB Demi Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" contentDisplay="TOP" layoutX="266.0" layoutY="62.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="476.0" text="Then proceed by choosing to go into the solarSystem or O.D.E. solving." textFill="#9a9a9a">
+                     <font>
+                        <Font name="Berlin Sans FB Demi Bold" size="15.0" />
+                     </font>
+                  </Label>
                     </children>
                 </Pane>
             </children>

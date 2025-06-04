@@ -1,12 +1,15 @@
 package com.example.coreGui;
 
+import com.example.ode_gui.odeGui;
+import com.example.solar_system.SolarSystemApp;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -32,27 +35,24 @@ public class ControllerAlpha implements Initializable {
     private AnchorPane topBar;
 
     private boolean drawerOpen = false;
-
     private double xOffset = 0;
     private double yOffset = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Close app
         exit.setOnMouseClicked(event -> System.exit(0));
 
-        // Minimize app
         minimize.setOnMouseClicked(event -> {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setIconified(true);
         });
 
-        // Initialize drawer closed
+        // Hide drawer initially
         TranslateTransition hideDrawer = new TranslateTransition(Duration.seconds(0.3), drawerPane);
         hideDrawer.setByX(-600);
         hideDrawer.play();
 
-        // Toggle drawer
+        // Toggle drawer on click
         drawerImage.setOnMouseClicked(event -> {
             TranslateTransition transition = new TranslateTransition(Duration.seconds(0.3), drawerPane);
             if (drawerOpen) {
@@ -65,7 +65,7 @@ public class ControllerAlpha implements Initializable {
             transition.play();
         });
 
-        // Enable window dragging using topBar
+        // Drag window
         topBar.setOnMousePressed(this::handleMousePressed);
         topBar.setOnMouseDragged(this::handleMouseDragged);
     }
@@ -79,5 +79,39 @@ public class ControllerAlpha implements Initializable {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setX(event.getScreenX() - xOffset);
         stage.setY(event.getScreenY() - yOffset);
+    }
+
+    @FXML
+    private void launchSolarSystem() {
+        Thread thread = new Thread(() -> {
+            try {
+                Platform.runLater(() -> {
+                    try {
+                        SolarSystemApp app = new SolarSystemApp();
+                        Stage newStage = new Stage();
+                        app.start(newStage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    @FXML
+    private void launchODE() {
+        Thread thread = new Thread(() -> {
+            try {
+                odeGui.startNewWindow();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 }
