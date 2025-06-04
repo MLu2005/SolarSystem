@@ -123,8 +123,8 @@ public final class SolarSystemFactory {
      * Returns a CelestialBody representing Titan with approximate position and velocity
      * relative to the Sun, based on Saturn's position and velocity.
      *
-     * @param saturn the CelestialBody representing Saturn
-     * @return the CelestialBody representing Titan
+     * @param saturn the CelestialBody representing Saturn.
+     * @return the CelestialBody representing Titan.
      */
     @NotNull
     private static CelestialBody getCelestialBody(CelestialBody saturn) {
