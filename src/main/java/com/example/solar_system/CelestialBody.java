@@ -16,8 +16,6 @@ public class CelestialBody {
     private Vector3D acceleration; // in km/s^2
 
 
-    private transient Node node;
-
     /**
      * Constructs a new CelestialBody with initial position and velocity.
      * Acceleration is set to zero by default.

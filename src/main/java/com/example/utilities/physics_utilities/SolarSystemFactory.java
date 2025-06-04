@@ -103,4 +103,21 @@ public final class SolarSystemFactory {
 
         return system;
     }
+
+    public static double getRadiusKm(String name) {
+        switch (name.toLowerCase()) {
+            case "sun":      return 696_342.0;
+            case "mercury":  return 2_439.7;
+            case "venus":    return 6_051.8;
+            case "earth":    return 6_371.0;
+            case "moon":     return 1_737.4;
+            case "mars":     return 3_389.5;
+            case "jupiter":  return 69_911.0;
+            case "saturn":   return 58_232.0;
+            case "uranus":   return 25_362.0;
+            case "neptune":  return 24_622.0;
+            case "titan":    return 2_575.0;      // shown for completeness
+            default:         return 0.0;          // unknown / artificial bodies
+        }
+    }
 }

@@ -13,6 +13,8 @@ import java.util.Random;
 import java.util.Vector;
 import java.util.function.BiFunction;
 
+import static com.example.utilities.physics_utilities.SolarSystemFactory.getRadiusKm;
+
 public class Individual {
 
     private static final double EARTH_RADIUS = Constants.EARTH_RADIUS_KM;
@@ -85,7 +87,7 @@ public class Individual {
     }
 
     public void evaluate() {
-        // Set up engine with all solar bodies + cloned Titan (no probe)
+        /* (2.1) Build a physics engine containing all real bodies, plus Titan */
         PhysicsEngine engine = new PhysicsEngine();
         for (CelestialBody b : OBJECTS_IN_SPACE) {
             engine.addBody(cloneBody(b));
@@ -93,6 +95,7 @@ public class Individual {
         CelestialBody titanClone = cloneBody(TITAN);
         engine.addBody(titanClone);
 
+        /* (2.2) Initialise probe’s six-dimensional state vector yProbe[0-5]   */
         double[] yProbe = new double[6];
         {
             CelestialBody probe0 = new CelestialBody(
@@ -109,38 +112,28 @@ public class Individual {
             yProbe[5] = probe0.getVelocity().getZ();
         }
 
-        final double G = Constants.G;
-        final double dt = 3600;
-        final double SIM_T  = Constants.SIM_LEN;
-        double t = 0.0;
+        final double G       = Constants.G;
+        final double dt      = 3600;               // 1-hour steps
+        final double SIM_T   = Constants.SIM_LEN;  // full simulation length
+        double       t       = 0.0;
 
         minDistanceTitanKm = Double.MAX_VALUE;
-
-        RK4Solver rk4 = new RK4Solver();
+        RK4Solver rk4      = new RK4Solver();
 
         while (t < SIM_T) {
 
-
             List<Vector3D> posOld = new ArrayList<>();
-            for (CelestialBody b : engine.getBodies()) {
-                posOld.add(b.getPosition());
-            }
+            for (CelestialBody b : engine.getBodies()) posOld.add(b.getPosition());
 
             engine.step(dt);
 
             List<Vector3D> posNew = new ArrayList<>();
-            for (CelestialBody b : engine.getBodies()) {
-                posNew.add(b.getPosition());
-            }
+            for (CelestialBody b : engine.getBodies()) posNew.add(b.getPosition());
 
-            // making sure that we can use the rk4 with the engine step and we can still
-            // do the solver step inside the same time interval as the world around it
+
             BiFunction<Double,double[],double[]> f = (tOffset, y) -> {
                 double[] dy = new double[6];
-                // position derivatives
-                dy[0] = y[3];
-                dy[1] = y[4];
-                dy[2] = y[5];
+                dy[0] = y[3];  dy[1] = y[4];  dy[2] = y[5];
 
                 double ax = 0, ay = 0, az = 0;
                 for (int i = 0; i < posOld.size(); i++) {
@@ -159,21 +152,32 @@ public class Individual {
                     ay += G * m * dy1 * invR3;
                     az += G * m * dz * invR3;
                 }
-                dy[3] = ax;
-                dy[4] = ay;
-                dy[5] = az;
+                dy[3] = ax;  dy[4] = ay;  dy[5] = az;
                 return dy;
             };
             yProbe = rk4.solveStep(f, 0.0, yProbe, dt);
 
             Vector3D probePos = new Vector3D(yProbe[0], yProbe[1], yProbe[2]);
-            double d = probePos.subtract(titanClone.getPosition()).magnitude();
-            if (d < minDistanceTitanKm) {
-                minDistanceTitanKm = d;
+            double dTitan = probePos.subtract(titanClone.getPosition()).magnitude();
+            if (dTitan < minDistanceTitanKm) minDistanceTitanKm = dTitan;
+
+            // @Moaaz here is the new colision detection logic
+            for (CelestialBody body : engine.getBodies()) {
+                String name = body.getName();
+                if ("probe".equalsIgnoreCase(name) || "titan".equalsIgnoreCase(name)) continue;
+
+                double dist = probePos.subtract(body.getPosition()).magnitude();
+                double radius = getRadiusKm(name);
+                if (radius > 0.0 && dist <= radius) {
+                    fitness = 0.0;
+                    return;
+                }
             }
 
             t += dt;
         }
+
+        /* (2.6) Normal fitness if no collision occurred -------------------- */
         fitness = 1e6 / (minDistanceTitanKm + 1000);
     }
 
