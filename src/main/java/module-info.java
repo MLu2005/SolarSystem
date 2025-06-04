@@ -29,8 +29,8 @@ module com.example.project {
     exports com.example.solar_system;
     opens com.example.solar_system to javafx.fxml;
 
-    exports com.example.main_gui;
-    opens com.example.main_gui to javafx.fxml;
+    exports com.example.ode_gui;
+    opens com.example.ode_gui to javafx.fxml;
     exports com.example.utilities.GD.Opitmizers;
     exports com.example.utilities.GD.Controllers;
     exports com.example.utilities.GD.Utility;

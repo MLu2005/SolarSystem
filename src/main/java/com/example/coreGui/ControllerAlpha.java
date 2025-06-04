@@ -1,6 +1,6 @@
 package com.example.coreGui;
 
-import com.example.main_gui.odeGui;
+import com.example.ode_gui.odeGui;
 import com.example.solar_system.SolarSystemApp;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;

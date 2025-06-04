@@ -1,4 +1,4 @@
-package com.example.main_gui;
+package com.example.ode_gui;
 
 import executables.solvers.*;
 import javafx.application.Platform;
