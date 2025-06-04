@@ -2,6 +2,7 @@ package com.example.solar_system;
 
 import com.example.utilities.StateUtils;
 import com.example.utilities.Vector3D;
+import com.example.utilities.physics_utilities.OrbitalEnergyMonitor;
 import executables.solvers.RK4Solver;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
@@ -15,6 +16,7 @@ import java.util.List;
 
 public class PhysicsAnimator {
 
+    private final OrbitalEnergyMonitor energyMonitor;
     private final List<CelestialBody> bodies;
     private final List<Sphere> planetSpheres;
     private final Group spaceshipGroup;
@@ -40,6 +42,11 @@ public class PhysicsAnimator {
         this.camera = camera;
         this.subScene = subScene;
         this.burnManager = burnManager;
+        List<CelestialBody> trackedBodies = bodies.stream()
+                .filter(b -> !b.getName().equalsIgnoreCase("noah's ark"))
+                .toList();
+
+        this.energyMonitor = new OrbitalEnergyMonitor(trackedBodies);
 
         // Extract initial state
         this.stateVector = StateUtils.extractStateVector(bodies);
@@ -70,16 +77,20 @@ public class PhysicsAnimator {
 
             @Override
             public void handle(long now) {
-                double step = 10000;
+                double step = 3000;
 
+                energyMonitor.recordEnergy(currentTime);
+                energyMonitor.printStatus();
 
+                // Apply burn if needed
                 if (burnManager != null) {
                     burnManager.tryApplyBurn(bodies, "noah's ark");
                 }
 
+                // Use RK4 to compute next state
                 stateVector = rk4Solver.solveStep(
                         (t, y) -> {
-                            StateUtils.applyStateVector(y, bodies);
+                            StateUtils.applyStateVector(y, bodies); // Sync state
                             return StateUtils.computeDerivatives(y, bodies);
                         },
                         currentTime,
@@ -87,8 +98,10 @@ public class PhysicsAnimator {
                         step
                 );
 
+                // Apply the updated state vector to the celestial bodies
                 StateUtils.applyStateVector(stateVector, bodies);
 
+                // Update UI positions (all flattened on Y=0)
                 for (int i = 0; i < bodies.size(); i++) {
                     CelestialBody body = bodies.get(i);
                     Vector3D pos = body.getPosition();
