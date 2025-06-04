@@ -22,51 +22,27 @@ public class LanderSimulator {
                 break;
             }
         }
-        if (titan == null) {
-            throw new IllegalStateException("Titan not found");
-        }
-
         double cellSize = 1.0;
-        PlanetHeightGrid heightGrid = new PlanetHeightGrid(
-                new com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetSurfaceGrid(titan, cellSize)
-        );
+        PlanetHeightGrid heightGrid = new PlanetHeightGrid(new com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetSurfaceGrid(titan, cellSize));
         heightGrid.generateFlatTerrain(0.0);
-
-        PlanetWindGrid windGrid = new PlanetWindGrid(
-                new com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetSurfaceGrid(titan, cellSize)
-        );
+        PlanetWindGrid windGrid = new PlanetWindGrid(new com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetSurfaceGrid(titan, cellSize));
         windGrid.generateConstantWind(new Vector3D(windSpeedX, 0, 0));
-
         return new TitanEnvironment(heightGrid, windGrid);
     }
 
-    public static double[][] simulateOpenLoop(
-            double[] initialState,
-            double timeStep,
-            int maximumSteps,
-            double windSpeed,
-            double landerMassKilograms
-    ) {
+    public static double[][] simulateOpenLoop(double[] initialState, double timeStep, int maximumSteps, double windSpeed, double landerMassKilograms) {
         TitanEnvironment environment = buildEnvironment(windSpeed);
         Controller openLoopController = new OpenLoopController();
         LanderODE odeFunction = new LanderODE(openLoopController, environment, DRAG_COEFFICIENT, MAX_ATMOS_HEIGHT, landerMassKilograms);
-
         RK4Solver solver = new RK4Solver();
         BiFunction<Double, double[], Boolean> stopIfLanded = (time, state) -> state[1] <= 0.0;
         return solver.solve(odeFunction, 0.0, initialState, timeStep, maximumSteps, stopIfLanded);
     }
 
-    public static double[][] simulateFeedback(
-            double[] initialState,
-            double timeStep,
-            int maximumSteps,
-            double windSpeed,
-            double landerMassKilograms
-    ) {
+    public static double[][] simulateFeedback(double[] initialState, double timeStep, int maximumSteps, double windSpeed, double landerMassKilograms) {
         TitanEnvironment environment = buildEnvironment(windSpeed);
         Controller feedbackController = new FeedbackController();
         LanderODE odeFunction = new LanderODE(feedbackController, environment, DRAG_COEFFICIENT, MAX_ATMOS_HEIGHT, landerMassKilograms);
-
         RK4Solver solver = new RK4Solver();
         BiFunction<Double, double[], Boolean> stopIfLanded = (time, state) -> state[1] <= 0.0;
         return solver.solve(odeFunction, 0.0, initialState, timeStep, maximumSteps, stopIfLanded);
@@ -86,7 +62,6 @@ public class LanderSimulator {
         int maximumSteps = 10000;
         double windSpeed = 0.0001;
         double landerMassKilograms = 10000.0;
-
         System.out.println("=== Initial Conditions ===");
         System.out.printf("horizontalPosition = %.6f km%n", initialState[0]);
         System.out.printf("verticalPosition   = %.6f km%n", initialState[1]);

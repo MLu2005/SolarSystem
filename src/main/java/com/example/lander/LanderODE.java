@@ -23,14 +23,7 @@ public class LanderODE implements BiFunction<Double, double[], double[]> {
         this.controller = controller;
         Vector3D initialPosition = new Vector3D(0, 0, 0);
         Vector3D initialVelocity = new Vector3D(0, 0, 0);
-        this.tempShip = new SpaceShip(
-                "LanderDummy",
-                0.0,
-                initialVelocity,
-                landerMassKilograms,
-                0.0,
-                initialPosition
-        );
+        this.tempShip = new SpaceShip("LanderDummy", 0.0, initialVelocity, landerMassKilograms,0.0, initialPosition);
         this.dragModel = new AtmosphericForce(environment, dragCoefficient, maxAtmosphereHeight);
     }
 

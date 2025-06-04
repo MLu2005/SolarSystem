@@ -144,7 +144,7 @@ public class LanderVisualizer extends Application {
         // Label:
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font(14));
-        gc.fillText("Titan Lander Descent (5× Playback Speed)", 20, 20);
+        gc.fillText("Titan Lander Descent (20× Playback Speed)", 20, 20);
         gc.fillText("Ground (y = 0 km)", 10, groundY - 10);
     }
 
