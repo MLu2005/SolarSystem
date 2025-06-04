@@ -9,81 +9,115 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Glow?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="473.0" prefWidth="809.0" snapToPixel="false" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.main_gui.ControllerBeta"
->
-    <children>
-        <TabPane prefHeight="200.0" prefWidth="724.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <tabs>
-                <Tab text="ODE(GUI)">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="703.0">
-                            <children>
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="858.0" snapToPixel="false" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.main_gui.ControllerBeta">
 
-                                <!-- Rectangle with settings background -->
-                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#6a6c6e" height="451.0" layoutX="537.0" stroke="#7d7d7d" strokeType="INSIDE" width="274.0" />
-                                <Text fontSmoothingType="LCD" layoutX="651.0" layoutY="18.0" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" textAlignment="CENTER" underline="true" wrappingWidth="57.98307228088379">
-                                    <font>
-                                        <Font name="Berlin Sans FB Bold" size="12.0" />
-                                    </font></Text>
+    <!-- Minimize and Close Icons -->
+    <ImageView fx:id="minimizeIcon" fitHeight="29.0" fitWidth="29.0" layoutX="790.0" layoutY="1.0" onMouseClicked="#handleMinimize" pickOnBounds="true" preserveRatio="true">
+        <image>
+            <Image url="file:/C:/Users/iikxq/IdeaProjects/1_2/src/main/resources/guiStyling/minimize3.png" />
+        </image>
+    </ImageView>
 
-                                <Label blendMode="COLOR_BURN" layoutX="566.0" layoutY="28.0" prefHeight="18.0" prefWidth="77.0" text="Choose solver:">
-                                    <font>
-                                        <Font name="Berlin Sans FB Demi Bold" size="12.0" />
-                                    </font></Label>
+    <ImageView fx:id="closeIcon" fitHeight="29.0" fitWidth="30.0" layoutX="819.0" layoutY="1.0" onMouseClicked="#handleClose" pickOnBounds="true" preserveRatio="true">
+        <image>
+            <Image url="file:/C:/Users/iikxq/IdeaProjects/1_2/src/main/resources/guiStyling/exit3.png" />
+        </image>
+    </ImageView>
 
-                                <!-- Radio buttons for method selection -->
-                                <RadioButton fx:id="rkf45MethodRadio" blendMode="COLOR_BURN" layoutX="566.0" layoutY="62.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="66.0" text="RKF45" textOverrun="CLIP">
-                                    <font>
-                                        <Font name="Berlin Sans FB Bold" size="12.0" />
-                                    </font>
-                                </RadioButton>
+    <TabPane layoutY="30.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="507.0" prefWidth="860.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+        <tabs>
+            <Tab text="ode(GUI)">
+                <content>
+                    <AnchorPane fx:id="contentPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="496.0" prefWidth="856.0">
 
-                                <RadioButton fx:id="rk4MethodRadio" blendMode="COLOR_BURN" layoutX="566.0" layoutY="87.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="47.0" text="RK4" textOverrun="CLIP">
-                                    <font>
-                                        <Font name="Berlin Sans FB Bold" size="12.0" />
-                                    </font></RadioButton>
-                                <RadioButton fx:id="eulerMethodRadio" blendMode="COLOR_BURN" layoutX="656.0" layoutY="88.0" mnemonicParsing="false" text="Euler's Method">
-                                    <font>
-                                        <Font name="Berlin Sans FB Bold" size="12.0" />
-                                    </font></RadioButton>
+                        <!-- Rectangle with settings background -->
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#6a6c6e" height="473.0" layoutX="537.0" stroke="#7d7d7d" strokeType="INSIDE" width="320.0" />
 
-                                <!-- Solve button with correct onAction method -->
-                                <Button fx:id="solveButton" layoutX="634.0" layoutY="376.0" mnemonicParsing="false" onAction="#solveODE" prefHeight="26.0" prefWidth="92.0" text="Solve" />
+                        <Text fontSmoothingType="LCD" layoutX="669.0" layoutY="17.0" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" textAlignment="CENTER" underline="true" wrappingWidth="57.98307228088379">
+                            <font>
+                                <Font name="Berlin Sans FB Bold" size="12.0" />
+                            </font>
+                        </Text>
 
-                                <!-- Various input fields for initial conditions, step size, etc. -->
-                                <TextField fx:id="initialConditionsInput" layoutX="564.0" layoutY="233.0" prefHeight="25.0" prefWidth="210.0" text="initialValuesForInputs" />
-                                <TextField fx:id="stepSizeInput" layoutX="681.0" layoutY="275.0" prefHeight="25.0" prefWidth="95.0" text="stepsSize" />
-                                <TextField fx:id="stepsInput" layoutX="566.0" layoutY="275.0" prefHeight="25.0" prefWidth="95.0" text="stepsInput" />
-                                <TextField fx:id="variablesInput" layoutX="566.0" layoutY="314.0" prefHeight="25.0" prefWidth="95.0" text="variablesInput" />
-                                <TextArea fx:id="equationInput" layoutX="559.0" layoutY="116.0" prefHeight="105.0" prefWidth="229.0" text="ODE&#10;&#10;&#10;" />
+                        <Label blendMode="COLOR_BURN" layoutX="566.0" layoutY="28.0" prefHeight="18.0" prefWidth="77.0" text="Choose solver:">
+                            <font>
+                                <Font name="Berlin Sans FB Demi Bold" size="12.0" />
+                            </font>
+                        </Label>
 
-                                <!-- Result ListView -->
-                                <ListView fx:id="resultListView" layoutX="24.0" layoutY="62.0" prefHeight="327.0" prefWidth="500.0" />
+                        <RadioButton fx:id="rkf45MethodRadio" blendMode="COLOR_BURN" layoutX="566.0" layoutY="62.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="66.0" text="RKF45" textOverrun="CLIP">
+                            <font>
+                                <Font name="Berlin Sans FB Bold" size="12.0" />
+                            </font>
+                        </RadioButton>
 
-                                <!-- Button to visualize the ODE -->
-                                <Button fx:id="ODEvisualize" layoutX="634.0" layoutY="409.0" mnemonicParsing="false" onAction="#visualizeODE" prefHeight="26.0" prefWidth="92.0" text="Visualize" />
-                                <Label layoutX="216.0" layoutY="27.0" prefHeight="37.0" prefWidth="101.0" text="Results:">
-                                    <font>
-                                        <Font name="Berlin Sans FB Bold" size="27.0" />
-                                    </font>
-                                    <effect>
-                                        <Glow level="0.43" />
-                                    </effect>
-                                </Label>
-                                <Button fx:id="compareButton" layoutX="230.0" layoutY="402.0" onAction="#compareSolverAccuracy" prefHeight="26.0" prefWidth="162.0" text="Compare Accuracy" />
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
-            </tabs>
-        </TabPane>
-        <!-- This is the container for the chart -->
-        <StackPane fx:id="chartContainer" layoutX="265.0" layoutY="-322.0" prefHeight="300.0" prefWidth="500.0" />
-    </children>
+                        <RadioButton fx:id="rk4MethodRadio" blendMode="COLOR_BURN" layoutX="566.0" layoutY="87.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="47.0" text="RK4" textOverrun="CLIP">
+                            <font>
+                                <Font name="Berlin Sans FB Bold" size="12.0" />
+                            </font>
+                        </RadioButton>
+
+                        <RadioButton fx:id="eulerMethodRadio" blendMode="COLOR_BURN" layoutX="656.0" layoutY="88.0" mnemonicParsing="false" text="Euler's Method">
+                            <font>
+                                <Font name="Berlin Sans FB Bold" size="12.0" />
+                            </font>
+                        </RadioButton>
+
+                        <Button fx:id="solveButton" layoutX="651.0" layoutY="371.0" mnemonicParsing="false" onAction="#solveODE" prefHeight="26.0" prefWidth="92.0" text="Solve">
+                            <font>
+                                <Font name="Consolas Bold" size="12.0" />
+                            </font>
+                            <effect>
+                                <Reflection fraction="0.2" />
+                            </effect>
+                        </Button>
+
+                        <TextField fx:id="initialConditionsInput" layoutX="564.0" layoutY="233.0" prefHeight="25.0" prefWidth="267.0" text="initialValuesForInputs" />
+                        <TextField fx:id="stepSizeInput" layoutX="681.0" layoutY="275.0" prefHeight="25.0" prefWidth="95.0" text="stepsSize" />
+                        <TextField fx:id="stepsInput" layoutX="566.0" layoutY="275.0" prefHeight="25.0" prefWidth="95.0" text="stepsInput" />
+                        <TextField fx:id="variablesInput" layoutX="566.0" layoutY="314.0" prefHeight="25.0" prefWidth="95.0" text="variablesInput" />
+                        <TextArea fx:id="equationInput" layoutX="559.0" layoutY="116.0" prefHeight="105.0" prefWidth="275.0" text="ODE&#10;&#10;&#10;" />
+
+                        <ListView fx:id="resultListView" layoutX="24.0" layoutY="62.0" prefHeight="309.0" prefWidth="500.0" />
+
+                        <Button fx:id="ODEvisualize" layoutX="651.0" layoutY="409.0" mnemonicParsing="false" onAction="#visualizeODE" prefHeight="26.0" prefWidth="92.0" text="Visualize">
+                            <font>
+                                <Font name="Consolas Bold" size="12.0" />
+                            </font>
+                            <effect>
+                                <Reflection fraction="0.27" />
+                            </effect>
+                        </Button>
+
+                        <Label layoutX="216.0" layoutY="27.0" prefHeight="37.0" prefWidth="101.0" text="Results:">
+                            <font>
+                                <Font name="Berlin Sans FB Bold" size="27.0" />
+                            </font>
+                            <effect>
+                                <Glow level="0.43" />
+                            </effect>
+                        </Label>
+
+                        <Button fx:id="compareButton" layoutX="144.0" layoutY="396.0" mnemonicParsing="false" onAction="#compareSolverAccuracy" prefHeight="26.0" prefWidth="259.0" text="Log-Log Plot ODE Error comparison">
+                            <font>
+                                <Font name="Consolas Bold" size="12.0" />
+                            </font>
+                            <effect>
+                                <Reflection fraction="0.56" />
+                            </effect>
+                        </Button>
+
+                    </AnchorPane>
+                </content>
+            </Tab>
+        </tabs>
+    </TabPane>
 </AnchorPane>

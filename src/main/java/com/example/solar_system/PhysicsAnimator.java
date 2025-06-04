@@ -98,7 +98,7 @@ public class PhysicsAnimator {
 //                    titanOverrideDone = true;
 //                }
 
-                double step = 2500;
+                double step = 3000;
                 PhysicsEngine engine = new PhysicsEngine();
 
                 for (CelestialBody body : bodies) {
@@ -137,8 +137,8 @@ public class PhysicsAnimator {
 
                     if (name.equals("noah's ark") && spaceshipGroup != null) {
                         spaceshipGroup.setTranslateX(pos.x / SCALE);
-                        spaceshipGroup.setTranslateY(pos.z / SCALE);
-                        spaceshipGroup.setTranslateZ(pos.y / SCALE);
+                        spaceshipGroup.setTranslateY(pos.y / SCALE);
+                        spaceshipGroup.setTranslateZ(0);
                     } else {
                         if (!name.equals("noah's ark")) {
                             planetSpheres.get(i).setTranslateX(pos.x / SCALE);

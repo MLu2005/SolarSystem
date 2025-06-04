@@ -29,29 +29,46 @@ public class RKF45Solver implements ODESolver {
         int i = 0;
         double t = t0;
 
+
         while (i < steps) {
             if (stopCondition != null && stopCondition.apply(t, y0)) {
                 return Arrays.copyOf(values, i + 1);
             }
 
-            double[] k1 = f.apply(t, y0);
-            double[] k2 = f.apply(t + 0.25 * optimal_step_size, addVectors(y0, scaleVector(k1, 0.25 * optimal_step_size)));
+            double[] k1 = scaleVector(f.apply(t, y0), optimal_step_size);
 
-            double[] k3 = f.apply(t + (3.0 / 8.0) * optimal_step_size, addVectors(y0, addVectors
-                    (scaleVector(k1, (3.0 / 32.0) * optimal_step_size), scaleVector(k2, (9.0 / 32.0) * optimal_step_size))));
+            double[] k2 = scaleVector(f.apply(t + 0.25 * optimal_step_size,
+                    addVectors(y0, scaleVector(k1, 0.25))), optimal_step_size);
 
-            double[] k4 = f.apply(t + (12.0 / 13.0) * optimal_step_size, addVectors(y0, addVectors
-                    (addVectors(scaleVector(k1, (1932.0 / 2197.0) * optimal_step_size),
-                            scaleVector(k2, (-7200.0 / 2197.0) * optimal_step_size)), scaleVector(k3, (7296.0 / 2197.0) * optimal_step_size))));
+            double[] k3 = scaleVector(f.apply(t + (3.0 / 8.0) * optimal_step_size,
+                    addVectors(y0, addVectors(
+                            scaleVector(k1, 3.0 / 32.0),
+                            scaleVector(k2, 9.0 / 32.0)))), optimal_step_size);
 
-            double[] k5 = f.apply(t + optimal_step_size, addVectors(y0, addVectors(addVectors(
-                    addVectors(scaleVector(k1, (439.0 / 216.0) * optimal_step_size), scaleVector(k2, -8.0 * optimal_step_size)),
-                    scaleVector(k3, (3680.0 / 513.0) * optimal_step_size)), scaleVector(k4, (-845.0 / 4104.0) * optimal_step_size))));
+            double[] k4 = scaleVector(f.apply(t + (12.0 / 13.0) * optimal_step_size,
+                    addVectors(y0, addVectors(
+                            addVectors(
+                                    scaleVector(k1, 1932.0 / 2197.0),
+                                    scaleVector(k2, -7200.0 / 2197.0)),
+                            scaleVector(k3, 7296.0 / 2197.0)))), optimal_step_size);
 
-            double[] k6 = f.apply(t + 0.5 * optimal_step_size, addVectors(y0, addVectors(addVectors(
-                            addVectors(addVectors(scaleVector(k1, (-8.0 / 27.0) * optimal_step_size), scaleVector(k2, 2.0 * optimal_step_size)),
-                                    scaleVector(k3, (-3544.0 / 2565.0) * optimal_step_size)), scaleVector(k4, (1859.0 / 4104.0) * optimal_step_size)),
-                    scaleVector(k5, (-11.0 / 40.0) * optimal_step_size))));
+            double[] k5 = scaleVector(f.apply(t + optimal_step_size,
+                    addVectors(y0, addVectors(
+                            addVectors(
+                                    addVectors(scaleVector(k1, 439.0 / 216.0),
+                                            scaleVector(k2, -8.0)),
+                                    scaleVector(k3, 3680.0 / 513.0)),
+                            scaleVector(k4, -845.0 / 4104.0)))), optimal_step_size);
+
+            double[] k6 = scaleVector(f.apply(t + 0.5 * optimal_step_size,
+                    addVectors(y0, addVectors(
+                            addVectors(
+                                    addVectors(
+                                            addVectors(scaleVector(k1, -8.0 / 27.0),
+                                                    scaleVector(k2, 2.0)),
+                                            scaleVector(k3, -3544.0 / 2565.0)),
+                                    scaleVector(k4, 1859.0 / 4104.0)),
+                            scaleVector(k5, -11.0 / 40.0)))), optimal_step_size);
 
             double[] yNext = new double[dim];
             for (int j = 0; j < dim; j++) {
@@ -83,7 +100,6 @@ public class RKF45Solver implements ODESolver {
             double s;
 
             if (err == 0) {
-                // we need a large jump, but also not to large. I believe matlab uses 4, but im unsure
                 s = 5.0;
             } else {
                 s = 0.84 * Math.pow(stepSizeTol / err, 0.25);
@@ -103,6 +119,7 @@ public class RKF45Solver implements ODESolver {
                 optimal_step_size *= s;
             }
         }
+
         return values;
     }
 }
