@@ -31,9 +31,5 @@ module com.example.project {
 
     exports com.example.ode_gui;
     opens com.example.ode_gui to javafx.fxml;
-    exports com.example.utilities.GD.Opitmizers;
-    exports com.example.utilities.GD.Controllers;
-    exports com.example.utilities.GD.Utility;
-    exports com.example.utilities.GD;
     exports com.example.utilities.Ship;
 }

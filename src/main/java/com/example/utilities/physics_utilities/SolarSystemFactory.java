@@ -2,6 +2,8 @@ package com.example.utilities.physics_utilities;
 
 import com.example.solar_system.CelestialBody;
 import com.example.utilities.Vector3D;
+import com.example.utilities.Ship.SpaceShip;
+import executables.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,28 @@ public final class SolarSystemFactory {
         system.add(new CelestialBody("Earth", 5.9700000000E24,
                 new Vector3D(-1.4700000000E8, -2.9700000000E7, 2.7500000000E4),
                 new Vector3D(5.3100000000E0, -2.9300000000E1, 6.6900000000E-04)));
+
+        // Create a spaceship in a 200 km circular parking orbit around Earth
+        double rPark = Constants.R_EARTH + 200.0;
+        double vPark = Math.sqrt(Constants.MU_EARTH / rPark);
+
+        // Earth-centric coordinates for position and velocity
+        Vector3D earthPosition = new Vector3D(-1.4700000000E8, -2.9700000000E7, 2.7500000000E4);
+        Vector3D earthVelocity = new Vector3D(5.3100000000E0, -2.9300000000E1, 6.6900000000E-04);
+
+        // Position the spaceship 200 km above Earth in the x-direction (relative to Earth)
+        Vector3D spaceshipPosition = new Vector3D(rPark, 0, 0).add(earthPosition);
+
+        // For a circular orbit, velocity must be perpendicular to position vector (relative to Earth)
+        // and have the correct magnitude for the orbital radius
+        Vector3D spaceshipVelocity = new Vector3D(0, vPark, 0).add(earthVelocity);
+
+        // Create spaceship with 0 thrust and 50_000.0 kg of initial fuel
+        system.add(new SpaceShip("Spaceship", 0.0, 
+                spaceshipVelocity,
+                50_000.0, 
+                50_000.0,
+                spaceshipPosition));
 
         system.add(new CelestialBody("Moon", 7.3500000000E22,
                 new Vector3D(-1.4700000000E8, -2.9500000000E7, 5.2900000000E4),

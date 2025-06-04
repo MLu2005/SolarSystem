@@ -192,6 +192,24 @@ public class Individual {
     public double getFitness()       { return fitness;}
     public Vector<Double> genes()    { return gene;}
 
+    /**
+     * Returns the launch position as a double array of length 3 (x, y, z in km).
+     * 
+     * @return double array containing [x, y, z]
+     */
+    public double[] getLaunchPosition() {
+        return new double[] {this.gene.get(0), this.gene.get(1), this.gene.get(2)};
+    }
+
+    /**
+     * Returns the launch velocity as a double array of length 3 (vx, vy, vz in km/s).
+     * 
+     * @return double array containing [vx, vy, vz]
+     */
+    public double[] getLaunchVelocity() {
+        return new double[] {this.gene.get(3), this.gene.get(4), this.gene.get(5)};
+    }
+
 
     /**
      * Mutates the individual by small surface wiggle and velocity tweak +- 0.5 km/s.
