@@ -66,21 +66,20 @@ public final class SolarSystemFactory {
         system.add(moon);
 
         CelestialBody mars = new CelestialBody(
-                "Mars",
-                6.4171E23,
-                new Vector3D(-2.1526640622E8, -3.044089497E7, 4542807.19), // Position in km
-                new Vector3D(2.65, -22.96, -0.41)
+                        "Mars",
+                        6.42E23, // mass in kg
+                new Vector3D(-2.15E8, 1.27E8, 7.94E6),  // position in km
+                new Vector3D(-11.5, -18.7, -0.111)       // velocity in km/s
         );
         system.add(mars);
 
-
         CelestialBody jupiter = new CelestialBody(
                 "Jupiter",
-                1.8982e27,
-                new Vector3D(4.6227437176e8, -5.4263327794e8, -1.4602405740e7), // Position in km
-                new Vector3D(7.2111227508, 4.2072541773, -0.1529611687) // Velocity in km/s
-        );
+                1.89813e27, // mass in kg
+                new Vector3D(7.7857e8, 1.4396e8, -1.2481e7), // position in km
+                new Vector3D(-2.556, 12.120, 0.087)); // velocity in km/s
         system.add(jupiter);
+
 
 
         CelestialBody saturn = new CelestialBody(
