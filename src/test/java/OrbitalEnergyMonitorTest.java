@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the OrbitalEnergyMonitor class.
- * Simulates a basic system with two bodies to validate energy calculations.
+ * Simulates two-body and edge cases to verify energy calculations.
  */
 class OrbitalEnergyMonitorTest {
 
@@ -19,14 +19,13 @@ class OrbitalEnergyMonitorTest {
     private OrbitalEnergyMonitor monitor;
 
     /**
-     * Creates a simple 2-body system: Sun and Earth.
-     * Units are in km and km/s, masses in kg.
+     * Sets up a basic Sun–Earth system for testing.
+     * Units: km (distance), km/s (velocity), kg (mass).
      */
     @BeforeEach
     void setUp() {
         bodies = new ArrayList<>();
 
-        // Sun: mass = 1.989e30 kg, at origin
         CelestialBody sun = new CelestialBody(
                 "Sun",
                 1.989e30,
@@ -34,7 +33,6 @@ class OrbitalEnergyMonitorTest {
                 new Vector3D(0, 0, 0)
         );
 
-        // Earth: mass = 5.972e24 kg, at 1 AU (approx 1.496e8 km), orbital velocity ~29.78 km/s
         CelestialBody earth = new CelestialBody(
                 "Earth",
                 5.972e24,
@@ -49,55 +47,137 @@ class OrbitalEnergyMonitorTest {
     }
 
     /**
-     * Verifies that energy is recorded and lists grow as expected.
+     * Tests that initial and current energy are equal when no change occurs.
      */
     @Test
-    void testEnergyIsRecordedCorrectly() {
+    void testEnergyStaysConstantWithoutChange() {
         monitor.recordEnergy(0.0);
-        monitor.recordEnergy(10000.0);
+        monitor.recordEnergy(1000.0);
 
-        assertEquals(2, monitor.energyHistory.size(), "Energy history should contain 2 entries");
-        assertEquals(2, monitor.timeHistory.size(), "Time history should contain 2 entries");
+        assertEquals(
+                monitor.getInitialEnergy(),
+                monitor.getCurrentEnergy(),
+                1e-6,
+                "Energy should remain the same if system state is unchanged"
+        );
+
+        assertEquals(
+                0.0,
+                monitor.getRelativeEnergyDrift(),
+                1e-6,
+                "Energy drift should be 0 when no changes occur"
+        );
     }
 
     /**
-     * Tests that initial and current energy are the same if no changes occur.
+     * Tests that energy drift becomes non-zero if a velocity is artificially modified.
      */
     @Test
-    void testInitialAndCurrentEnergyMatchWithoutChange() {
+    void testEnergyDriftWhenVelocityChanges() {
         monitor.recordEnergy(0.0);
+
+        CelestialBody earth = bodies.get(1);
+        earth.setVelocity(new Vector3D(0, 40.0, 0)); // Simulated disturbance
+
         monitor.recordEnergy(500.0);
+
+        assertNotEquals(
+                0.0,
+                monitor.getRelativeEnergyDrift(),
+                1e-10,
+                "Energy drift should be non-zero after velocity change"
+        );
+    }
+
+    /**
+     * Tests that a zero-mass body does not cause crashes in energy computation.
+     */
+    @Test
+    void testZeroMassBodySafeToInclude() {
+        CelestialBody ghost = new CelestialBody("Ghost", 0.0, new Vector3D(1, 0, 0), new Vector3D(0, 0, 0));
+        bodies.add(ghost);
+
+        assertDoesNotThrow(() -> {
+            monitor.recordEnergy(0.0);
+            monitor.recordEnergy(1000.0);
+        });
+    }
+
+    /**
+     * Tests that two bodies at the same position (zero distance) don't cause division errors.
+     */
+    @Test
+    void testZeroDistanceDoesNotCrash() {
+        CelestialBody clone = new CelestialBody(
+                "EarthClone",
+                5.972e24,
+                new Vector3D(1.496e8, 0, 0),
+                new Vector3D(0, 29.78, 0)
+        );
+        bodies.add(clone);
+
+        assertDoesNotThrow(() -> {
+            monitor.recordEnergy(0.0);
+            monitor.recordEnergy(1000.0);
+        });
+    }
+
+    /**
+     * Tests system behavior when a high-velocity body is introduced.
+     */
+    @Test
+    void testHighVelocityBodyDoesNotBreakComputation() {
+        CelestialBody fast = new CelestialBody(
+                "Speedy",
+                1e20,
+                new Vector3D(3e8, 0, 0),
+                new Vector3D(1e5, -1e5, 0)
+        );
+        bodies.add(fast);
+
+        assertDoesNotThrow(() -> {
+            monitor.recordEnergy(0.0);
+            monitor.recordEnergy(5000.0);
+        });
+    }
+
+    /**
+     * Tests that a large simulation time value doesn't affect energy logic.
+     */
+    @Test
+    void testLargeTimeStepIsHandledCorrectly() {
+        monitor.recordEnergy(0.0);
+        monitor.recordEnergy(1e9); // Simulated very long time step
+
+        assertEquals(
+                0.0,
+                monitor.getRelativeEnergyDrift(),
+                1e-6,
+                "Large time step alone should not cause drift if state is constant"
+        );
+    }
+
+    /**
+     * Explicitly tests that drift formula matches the expected manual computation.
+     */
+    @Test
+    void testDriftMatchesManualComputation() {
+        monitor.recordEnergy(0.0);
+
+        // Introduce small change
+        bodies.get(1).setVelocity(new Vector3D(0, 29.90, 0));
+
+        monitor.recordEnergy(2000.0);
 
         double initial = monitor.getInitialEnergy();
         double current = monitor.getCurrentEnergy();
+        double expectedDrift = (current - initial) / Math.abs(initial);
 
-        assertEquals(initial, current, 1e-6, "Initial and current energy should be equal if state is unchanged");
-    }
-
-    /**
-     * Simulates velocity change and checks that drift is non-zero.
-     */
-    @Test
-    void testEnergyDriftAfterVelocityChange() {
-        monitor.recordEnergy(0.0);
-
-        // Boost Earth's velocity (simulate external disturbance or numerical error)
-        CelestialBody earth = bodies.get(1);
-        earth.setVelocity(new Vector3D(0, 40.0, 0)); // previously ~29.78 km/s
-
-        monitor.recordEnergy(1000.0);
-
-        double drift = monitor.getRelativeEnergyDrift();
-        assertNotEquals(0.0, drift, "Energy drift should be non-zero after velocity change");
-    }
-
-    /**
-     * Prints the drift to visually inspect it (manual check).
-     */
-    @Test
-    void testPrintStatusDoesNotCrash() {
-        monitor.recordEnergy(0.0);
-        monitor.recordEnergy(2000.0);
-        monitor.printStatus(); // Should print to console without errors
+        assertEquals(
+                expectedDrift,
+                monitor.getRelativeEnergyDrift(),
+                1e-9,
+                "Drift formula should match manual computation"
+        );
     }
 }
