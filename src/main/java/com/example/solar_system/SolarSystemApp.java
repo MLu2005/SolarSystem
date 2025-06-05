@@ -2,6 +2,7 @@ package com.example.solar_system;
 
 import com.example.utilities.Vector3D;
 import com.example.utilities.physics_utilities.SolarSystemFactory;
+import com.example.utilities.physics_utilities.PhysicsEngine;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -66,6 +67,12 @@ public class SolarSystemApp extends Application {
             return;
         }
 
+        // NEW: Create physics engine and register all celestial bodies
+        PhysicsEngine engine = new PhysicsEngine();
+        for (CelestialBody body : bodies) {
+            engine.addBody(body);
+        }
+
         StageBuilder sceneBuilder = new StageBuilder(SCALE);
         sceneBuilder.setupLighting();
         sceneBuilder.prepareOrbits(bodies);
@@ -82,14 +89,14 @@ public class SolarSystemApp extends Application {
         UIButtonsController uiController = loader.getController();
         uiController.initialize(cameraController, orbitRenderer, primaryStage);
 
-        // * Initialize SpectatorMode
+        // Initialize SpectatorMode
         SpectatorMode spectatorMode = new SpectatorMode(camera,
                 cameraController.getCameraXGroup(),
                 cameraController.getCameraYGroup(),
                 cameraController.getCameraZGroup()
         );
 
-        // * Nodes to Targets for spectator mode.
+        // Nodes to Targets for spectator mode
         Map<String, Node> targetMap = new HashMap<>();
 
         Pane labelPane = new Pane();
@@ -122,7 +129,7 @@ public class SolarSystemApp extends Application {
             targetMap.put(name, sphere);
         }
 
-        // * Provides target map to SpectatorMode
+        // Provide target map to SpectatorMode
         spectatorMode.setNamedTargets(targetMap);
         uiController.setSpectatorMovement(spectatorMode);
 
@@ -152,9 +159,7 @@ public class SolarSystemApp extends Application {
         subScene.setCamera(camera);
         cameraController.startMovement();
 
-
         cameraController.setupKeyHandler(scene, primaryStage, spectatorMode);
-
 
         scene.setOnKeyReleased(e -> {
             e.consume();
@@ -168,15 +173,18 @@ public class SolarSystemApp extends Application {
             if (e.getClickCount() == 3) PopUps.showCameraLocation(cameraController, primaryStage);
         });
 
-
-
         PhysicsAnimator animator = new PhysicsAnimator(
-                bodies, planetSpheres, spaceshipGroup, SCALE,
-                labelManager, camera, subScene
-
+                bodies,
+                planetSpheres,
+                spaceshipGroup,
+                SCALE,
+                labelManager,
+                camera,
+                subScene,
+                engine
         );
-        animator.initializeLabels();
 
+        animator.initializeLabels();
         AnimationTimer orbitTimer = animator.createOrbitTimer();
         uiController.setOrbitTimer(orbitTimer);
 

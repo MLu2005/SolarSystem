@@ -3,19 +3,18 @@ package com.example.utilities.physics_utilities;
 import com.example.utilities.Vector3D;
 import com.example.solar_system.CelestialBody;
 import executables.Constants;
+import executables.solvers.RK4Solver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
- * PhysicsEngine handles the gravitational interactions between celestial bodies
- * and updates their positions and velocities using a basic integration step.
+ * Now USES RK4 instead of VERLET!
  */
 public class PhysicsEngine {
 
-    private static final double G = Constants.G; // Gravitational constant in km^3 kg^-1 s^-2
+    private static final double G = Constants.G;
     private final List<CelestialBody> bodies = new ArrayList<>();
 
     public void addBody(CelestialBody body) {
@@ -26,55 +25,81 @@ public class PhysicsEngine {
         return bodies;
     }
 
-    /**
-     * Computes the gravitational force exerted on 'a' by 'b'.
-     */
-    private Vector3D computeGravitationalForce(CelestialBody a, CelestialBody b) {
-        Vector3D r = b.getPosition().subtract(a.getPosition());
-        if (r.magnitudeSquared() < 1e-24) {              // skip self-interaction
-            return Vector3D.zero();
-        }
-        Vector3D direction = r.safeNormalize();
-        double distance = r.magnitude();
-        double forceMagnitude = G * a.getMass() * b.getMass() / (distance * distance);
-        return direction.scale(forceMagnitude);
-    }
-
-    /**
-     * Advances the simulation by time step dt using a simple Verlet-like integration.
-     */
     public void step(double dt) {
-        // First: update positions based on current velocity and acceleration
-        for (CelestialBody body : bodies) {
-            Vector3D displacement = body.getVelocity().scale(dt)
-                    .add(body.getAcceleration().scale(0.5 * dt * dt));
-            body.setPosition(body.getPosition().add(displacement));
+        int n = bodies.size();
+
+
+        double[] y = new double[n * 6];
+        for (int i = 0; i < n; i++) {
+            CelestialBody b = bodies.get(i);
+            int idx = i * 6;
+            y[idx] = b.getPosition().x;
+            y[idx + 1] = b.getPosition().y;
+            y[idx + 2] = b.getPosition().z;
+            y[idx + 3] = b.getVelocity().x;
+            y[idx + 4] = b.getVelocity().y;
+            y[idx + 5] = b.getVelocity().z;
         }
 
-        // Second: compute new forces (and thus new accelerations)
-        Map<CelestialBody, Vector3D> newForces = new HashMap<>();
-        for (CelestialBody body : bodies) {
-            newForces.put(body, Vector3D.zero());
-        }
+        BiFunction<Double, double[], double[]> f = (t, state) -> {
+            double[] dydt = new double[n * 6];
 
-        for (int i = 0; i < bodies.size(); i++) {
-            CelestialBody a = bodies.get(i);
-            for (int j = 0; j < bodies.size(); j++) {
-                if (i != j) {
-                    CelestialBody b = bodies.get(j);
-                    Vector3D force = computeGravitationalForce(a, b);
-                    newForces.put(a, newForces.get(a).add(force));
-                }
+            for (int i = 0; i < n; i++) {
+                int idx = i * 6;
+                dydt[idx] = state[idx + 3];
+                dydt[idx + 1] = state[idx + 4];
+                dydt[idx + 2] = state[idx + 5];
             }
-        }
 
-        // Third: update velocities using average acceleration
-        for (CelestialBody body : bodies) {
-            Vector3D force = newForces.get(body);
-            Vector3D newAccel = force.scale(1.0 / body.getMass());
-            Vector3D avgAccel = body.getAcceleration().add(newAccel).scale(0.5);
-            body.setVelocity(body.getVelocity().add(avgAccel.scale(dt)));
-            body.setAcceleration(newAccel);
+            for (int i = 0; i < n; i++) {
+                CelestialBody bi = bodies.get(i);
+                Vector3D pos_i = new Vector3D(state[i * 6], state[i * 6 + 1], state[i * 6 + 2]);
+                Vector3D acc = Vector3D.zero();
+
+                for (int j = 0; j < n; j++) {
+                    if (i == j) continue;
+
+                    CelestialBody bj = bodies.get(j);
+                    Vector3D pos_j = new Vector3D(state[j * 6], state[j * 6 + 1], state[j * 6 + 2]);
+                    Vector3D r = pos_j.subtract(pos_i);
+                    double distSq = r.magnitudeSquared();
+
+                    if (distSq < 1e-6) continue;
+
+                    double forceMag = G * bj.getMass() / distSq;
+                    acc = acc.add(r.safeNormalize().scale(forceMag));
+                }
+
+                int idx = i * 6;
+                dydt[idx + 3] = acc.x;
+                dydt[idx + 4] = acc.y;
+                dydt[idx + 5] = acc.z;
+            }
+
+            return dydt;
+        };
+
+        // RK4 integration
+        RK4Solver rk4 = new RK4Solver();
+        double[] newState = rk4.solveStep(f, 0, y, dt);
+
+        for (int i = 0; i < n; i++) {
+            int idx = i * 6;
+            Vector3D pos = new Vector3D(newState[idx], newState[idx + 1], newState[idx + 2]);
+            Vector3D vel = new Vector3D(newState[idx + 3], newState[idx + 4], newState[idx + 5]);
+            CelestialBody body = bodies.get(i);
+
+            body.setPosition(pos);
+            body.setVelocity(vel);
+
+            double[] finalDerivatives = f.apply(0.0, newState);
+            Vector3D a = new Vector3D(
+                    finalDerivatives[idx + 3],
+                    finalDerivatives[idx + 4],
+                    finalDerivatives[idx + 5]
+            );
+            body.setAcceleration(a);
+
         }
     }
 }
