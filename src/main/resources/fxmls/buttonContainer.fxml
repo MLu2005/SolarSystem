@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="buttonContainer" spacing="10" translateX="20" translateY="20"
-      xmlns="http://javafx.com/javafx/23.0.1"
-      xmlns:fx="http://javafx.com/fxml/1"
+<VBox fx:id="buttonContainer" prefHeight="179.0" prefWidth="250.0" spacing="10" translateX="20" translateY="20"
+      xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.example.solar_system.UIButtonsController">
 
     <!-- Spectator Mode SplitMenuButton -->
@@ -24,13 +25,16 @@
         </items>
     </SplitMenuButton>
 
-    <!-- Actions SplitMenuButton -->
     <SplitMenuButton text="⚙ Actions">
         <items>
-            <MenuItem mnemonicParsing="false" text="Toggle Orbits" onAction="#handleToggleOrbits"/>
-            <MenuItem mnemonicParsing="false" text="Toggle FullScreen" onAction="#handleToggleFullScreen"/>
-            <MenuItem mnemonicParsing="false" text="Reset Camera" onAction="#handleResetCamera"/>
+            <MenuItem mnemonicParsing="false" onAction="#handleToggleOrbits" text="Toggle Orbits" />
+            <MenuItem mnemonicParsing="false" onAction="#handleToggleFullScreen" text="Toggle FullScreen" />
+            <MenuItem mnemonicParsing="false" onAction="#handleResetCamera" text="Reset Camera" />
         </items>
     </SplitMenuButton>
+
+    <Label prefHeight="11.0" prefWidth="126.0" text="Play / Stop simulation." textFill="WHITE" />
+
+    <ToggleButton fx:id="toggleRunButton" mnemonicParsing="false" text="⏯" />
 
 </VBox>
