@@ -6,6 +6,7 @@ package com.example.utilities;
  */
 public class Vector3D {
 
+    public static final Vector3D ZERO = new Vector3D(0, 0, 0);
     public double x, y, z;
 
     /**

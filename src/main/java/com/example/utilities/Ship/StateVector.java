@@ -125,4 +125,26 @@ public class StateVector {
         return String.format("Position: %s\nVelocity: %s\nOrientation: %s\nMass: %.3e kg",
                 position, velocity, orientation, mass);
     }
+
+    public double getX() {
+        return position.getX();
+    }
+
+    public double getY() {
+        return position.getY();
+    }
+
+    public double getZ() {
+        return position.getZ();
+    }
+
+    public double getVx() {
+        return velocity.getX();
+    }
+    public double getVy() {
+        return velocity.getY();
+    }
+    public double getVz() {
+        return velocity.getZ();
+    }
 }

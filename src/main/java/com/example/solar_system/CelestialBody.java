@@ -2,6 +2,7 @@ package com.example.solar_system;
 
 import com.example.utilities.Ship.StateVector;
 import com.example.utilities.Vector3D;
+import com.example.utilities.physics_utilities.SolarSystemFactory;
 import javafx.scene.Node;
 
 /**
@@ -80,5 +81,9 @@ public class CelestialBody {
 
     public StateVector getState() {
         return new StateVector(position, velocity, Vector3D.zero(), mass);
+    }
+
+    public double getRadius(String name) {
+        return SolarSystemFactory.getRadiusKm(name);
     }
 }

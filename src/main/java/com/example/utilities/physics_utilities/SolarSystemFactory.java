@@ -75,8 +75,6 @@ public final class SolarSystemFactory {
                 new Vector3D(56.199263487003066, -31.70830008678653, -13.951757766821851)));
 
 
-
-
         return system;
     }
 
