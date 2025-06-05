@@ -110,12 +110,14 @@ public final class SolarSystemFactory {
         system.add(neptune);
 
 
-        // Spaceship / Noah's Ark (arbitrary position)
+        // Spaceship / Noah's Ark (updated the best trajectory data)
         system.add(new CelestialBody("Noah's ark", 50000.0,
-                new Vector3D(-1.4699366647890487E8, -2.9700655866209034E7, 27285.544752075686),
-                new Vector3D(56.199263487003066, -31.70830008678653, -13.951757766821851)));
+                new Vector3D(-1.4699392692624402E8, -2.970192132688297E7, 27373.82883395478),
+                new Vector3D(54.08720813572575, -41.50176739356171, -3.5044954692950294)));
 
         return system;
+
+
     }
 
     /**
@@ -143,6 +145,23 @@ public final class SolarSystemFactory {
         );
 
         return new CelestialBody("Titan", 1.3452e23, titanPos, titanVel);
+    }
+
+    public static double getRadiusKm(String name) {
+        switch (name.toLowerCase()) {
+            case "sun":      return 696_342.0;
+            case "mercury":  return 2_439.7;
+            case "venus":    return 6_051.8;
+            case "earth":    return 6_371.0;
+            case "moon":     return 1_737.4;
+            case "mars":     return 3_389.5;
+            case "jupiter":  return 69_911.0;
+            case "saturn":   return 58_232.0;
+            case "uranus":   return 25_362.0;
+            case "neptune":  return 24_622.0;
+            case "titan":    return 2_575.0;      // shown for completeness
+            default:         return 0.0;          // unknown / artificial bodies
+        }
     }
 
 }

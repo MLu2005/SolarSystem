@@ -168,21 +168,17 @@ public class SolarSystemApp extends Application {
             if (e.getClickCount() == 3) PopUps.showCameraLocation(cameraController, primaryStage);
         });
 
-        BurnManager burnManager = new BurnManager(
-                0.2,           // burnMagnitude in m/s (e.g. 1.35 km/s)
-                "Titan",        // target body for proximity
-                50_000_000      // triggerDistance (10,000 km)
-        );
+
 
         PhysicsAnimator animator = new PhysicsAnimator(
                 bodies, planetSpheres, spaceshipGroup, SCALE,
-                labelManager, camera, subScene,
-                burnManager
+                labelManager, camera, subScene
+
         );
         animator.initializeLabels();
 
         AnimationTimer orbitTimer = animator.createOrbitTimer();
-        orbitTimer.start();
+        uiController.setOrbitTimer(orbitTimer);
 
         if (spaceShipSound != null) {
             new AnimationTimer() {

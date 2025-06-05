@@ -125,4 +125,11 @@ public class Vector3D {
     public String toString() {
         return String.format("(%.6f, %.6f, %.6f)", x, y, z);
     }
+
+    /**
+     * Returns a copy (clone) of this vector.
+     */
+    public Vector3D copy() {
+        return new Vector3D(this.x, this.y, this.z);
+    }
 }

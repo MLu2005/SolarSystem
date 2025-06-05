@@ -9,6 +9,8 @@ import javafx.scene.Node;
  * It stores basic physical properties: name, mass, position, velocity, and acceleration.
  */
 public class CelestialBody {
+    public static CelestialBody rocket;
+    public static CelestialBody titan;
     private final String name;
     private final double mass; // in kilograms
     private Vector3D position; // in kilometers
@@ -56,6 +58,10 @@ public class CelestialBody {
     }
 
     // Setters
+    public double getGravitationalParameter() {
+        final double G = 6.67430e-20; // km³ / (kg·s²)
+        return G * mass;
+    }
 
     /** Sets a new position vector. */
     public void setPosition(Vector3D position) {
