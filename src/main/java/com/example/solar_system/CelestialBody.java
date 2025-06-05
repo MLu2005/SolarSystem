@@ -1,5 +1,6 @@
 package com.example.solar_system;
 
+import com.example.utilities.Ship.StateVector;
 import com.example.utilities.Vector3D;
 import javafx.scene.Node;
 
@@ -14,8 +15,6 @@ public class CelestialBody {
     private Vector3D velocity; // in km/s
     private Vector3D acceleration; // in km/s^2
 
-
-    private transient Node node;
 
     /**
      * Constructs a new CelestialBody with initial position and velocity.
@@ -77,5 +76,9 @@ public class CelestialBody {
     @Override
     public String toString() {
         return String.format("%s\nMass: %.3e kg\nPos: %s\nVel: %s\n", name, mass, position, velocity);
+    }
+
+    public StateVector getState() {
+        return new StateVector(position, velocity, Vector3D.zero(), mass);
     }
 }

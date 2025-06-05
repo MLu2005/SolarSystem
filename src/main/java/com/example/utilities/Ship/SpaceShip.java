@@ -208,4 +208,8 @@ public class SpaceShip extends CelestialBody {
         setOrientation(stateVector.getOrientation());
         // Note: Mass cannot be changed directly in CelestialBody
     }
+
+    public StateVector getState() {
+        return new StateVector(getPosition(), getVelocity(), orientation, getMass());
+    }
 }

@@ -17,8 +17,14 @@ public class Constants {
 
     // Celestial body parameters
     public static final double EARTH_RADIUS_KM = 6371;
+    public static final double R_EARTH = 6378.137; // Earth radius in km
     public static final double TITAN_RADIUS_KM = 2575;
+    public static final double R_TITAN = TITAN_RADIUS_KM; // Titan radius in km
     public static final double TITAN_MASS_KG = 1.3452E23;
+    public static final double MU_EARTH = 3.986004418e5; // Earth's gravitational parameter in km³/s²
+    public static final double MU_SUN = 1.32712440018e11; // Sun's gravitational parameter in km³/s²
+    public static final double MU_SATURN = G * 5.68E26; // Saturn's gravitational parameter in km³/s²
+    public static final double MU_TITAN = G * TITAN_MASS_KG; // Titan's gravitational parameter in km³/s²
 
     // Spacecraft parameters
     public static final double PROBE_MASS = 50000.0; // kg
