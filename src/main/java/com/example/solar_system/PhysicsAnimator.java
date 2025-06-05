@@ -1,9 +1,8 @@
 package com.example.solar_system;
 
-import com.example.utilities.StateUtils;
 import com.example.utilities.Vector3D;
 import com.example.utilities.physics_utilities.OrbitalEnergyMonitor;
-import executables.solvers.RK4Solver;
+import com.example.utilities.physics_utilities.PhysicsEngine;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
@@ -11,6 +10,7 @@ import javafx.scene.SubScene;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
+
 import java.util.List;
 
 public class PhysicsAnimator {
@@ -23,14 +23,16 @@ public class PhysicsAnimator {
     private final LabelManager labelManager;
     private final PerspectiveCamera camera;
     private final SubScene subScene;
+    private final PhysicsEngine engine;
 
-    private final RK4Solver rk4Solver = new RK4Solver();
-    private double[] stateVector;
-
-    public PhysicsAnimator(List<CelestialBody> bodies, List<Sphere> planetSpheres,
-                           Group spaceshipGroup, double SCALE,
+    public PhysicsAnimator(List<CelestialBody> bodies,
+                           List<Sphere> planetSpheres,
+                           Group spaceshipGroup,
+                           double SCALE,
                            LabelManager labelManager,
-                           PerspectiveCamera camera, SubScene subScene) {
+                           PerspectiveCamera camera,
+                           SubScene subScene,
+                           PhysicsEngine engine) {
         this.bodies = bodies;
         this.planetSpheres = planetSpheres;
         this.spaceshipGroup = spaceshipGroup;
@@ -38,14 +40,13 @@ public class PhysicsAnimator {
         this.labelManager = labelManager;
         this.camera = camera;
         this.subScene = subScene;
+        this.engine = engine;
+
         List<CelestialBody> trackedBodies = bodies.stream()
                 .filter(b -> !b.getName().equalsIgnoreCase("noah's ark"))
                 .toList();
 
         this.energyMonitor = new OrbitalEnergyMonitor(trackedBodies);
-
-        // Extract initial state vector (positions and velocities)
-        this.stateVector = StateUtils.extractStateVector(bodies);
     }
 
     public void initializeLabels() {
@@ -75,18 +76,8 @@ public class PhysicsAnimator {
             public void handle(long now) {
                 double step = 3000;
 
-                // Apply RK4 solver step to advance physics
-                stateVector = rk4Solver.solveStep(
-                        (t, y) -> {
-                            StateUtils.applyStateVector(y, bodies);
-                            return StateUtils.computeDerivatives(y, bodies);
-                        },
-                        currentTime,
-                        stateVector,
-                        step
-                );
-
-                StateUtils.applyStateVector(stateVector, bodies);
+                // Step forward using PhysicsEngine (which now uses RK4)
+                engine.step(step);
 
                 Vector3D rocketPos = null;
                 Vector3D titanPos = null;
