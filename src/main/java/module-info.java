@@ -25,6 +25,7 @@ module com.example.project {
     exports com.example.utilities.physics_utilities;
     exports com.example.utilities.GA;
     exports com.example.spaceMissions;
+    exports com.example.lander;
 
     exports com.example.solar_system;
     opens com.example.solar_system to javafx.fxml;
