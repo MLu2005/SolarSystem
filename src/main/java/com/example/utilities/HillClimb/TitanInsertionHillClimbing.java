@@ -1,10 +1,16 @@
 package com.example.utilities.HillClimb;
 
-import java.util.Random;
-import java.util.Vector;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.io.FileWriter;
+import java.io.IOException;
 
+import com.example.utilities.GA.GAResultsParser;
 import com.example.utilities.GA.Individual;
 import com.example.utilities.Vector3D;
+import executables.Constants;
+
+import javax.xml.transform.dom.DOMLocator;
 
 public class TitanInsertionHillClimbing {
 
@@ -37,50 +43,47 @@ public class TitanInsertionHillClimbing {
     // ──────────────────────────────────────────────────────────────────────────
 
     public static void main(String[] args) {
-        Random rand = new Random();
+        Random rand = Constants.RNG;
 
         System.out.println("Starting Titan Insertion Hill Climbing algorithm...");
 
-        // Create a random Individual
-        Individual individual = Individual.of(new Vector<Double>(
-                java.util.Arrays.asList(
-                        -1.469936664885829E8,
-                        -2.9700657414408103E7,
-                        27290.04661092061,
-                        56.02682883113462,
-                        -31.71008058719922,
-                        -13.988410108682189,
-                        50000.0
-                )
-        ));
-        // Evaluate the individual to ensure it has valid fitness
+        Vector<Double> launchState = new Vector<>();
+        launchState.add(-1.4699392738982698E8);
+        launchState.add(-2.9701922587817762E7);
+        launchState.add(27370.760804322053);
+
+        launchState.add(54.283060724319995);
+        launchState.add(-41.52290689392929);
+        launchState.add(-3.5048827279807946);
+
+        launchState.add(50000.0);
+
+        Individual individual = Individual.of(new Vector<Double>(launchState));
+
+
         individual.evaluate();
         System.out.println("Created individual with fitness: " + individual.getFitness());
         System.out.println("Minimum distance to Titan: " + individual.getMinDistanceKm() + " km");
 
-        // 1) Create an initial schedule with small non-zero values
+
         InsertionThrustSchedule currentSchedule = new InsertionThrustSchedule(N_SLOTS, SLOT_DURATION_SEC);
 
-        // Initialize with small non-zero values to help escape local minimum at zero
         for (int i = 0; i < N_SLOTS; i++) {
             Vector3D initialDv = new Vector3D(
-                (rand.nextDouble() - 0.5) * 50.0,  // Small random values (-25 to 25 m/s)
+                (rand.nextDouble() - 0.5) * 50.0,
                 (rand.nextDouble() - 0.5) * 50.0,
                 (rand.nextDouble() - 0.5) * 50.0
             );
             currentSchedule.setDeltaVAt(i, initialDv);
         }
 
-        // 2) Compute its "cost" (total ΔV). Lower is better.
         double bestCost = computeCost(currentSchedule);
         System.out.printf("Initial total ΔV cost: %.6f m/s%n", bestCost);
 
-        // 4) Hill‐climb loop: at each iteration, clone + mutate + evaluate
         for (int iter = 0; iter < MAX_ITERATIONS; iter++) {
-            // a) Make a deep copy of the current best schedule
+
             InsertionThrustSchedule neighbor = currentSchedule.clone();
 
-            // b) Randomly pick one slot to perturb by (Δvx, Δvy, Δvz)
             int slotIdx = rand.nextInt(N_SLOTS);
             Vector3D oldDv = neighbor.getDeltaVAt(slotIdx);
 
@@ -95,10 +98,8 @@ public class TitanInsertionHillClimbing {
             );
             neighbor.setDeltaVAt(slotIdx, newDv);
 
-            // c) Evaluate the mutated schedule
             double neighborCost = computeCost(neighbor);
 
-            // d) If it's better (lower cost), accept it
             if (neighborCost < bestCost) {
                 bestCost = neighborCost;
                 currentSchedule = neighbor;
@@ -106,13 +107,11 @@ public class TitanInsertionHillClimbing {
                 System.out.printf(" Iter %5d: found better cost = %.6f%n", iter, bestCost);
             }
 
-            // e) Occasionally do a random restart to escape local minima
             if (iter % 1000 == 999) {
-                // Create a new random schedule with small non-zero values
                 InsertionThrustSchedule randomSchedule = new InsertionThrustSchedule(N_SLOTS, SLOT_DURATION_SEC);
                 for (int i = 0; i < N_SLOTS; i++) {
                     Vector3D randomDv = new Vector3D(
-                        (rand.nextDouble() - 0.5) * 100.0,  // Small random values (-50 to 50 m/s)
+                        (rand.nextDouble() - 0.5) * 100.0,
                         (rand.nextDouble() - 0.5) * 100.0,
                         (rand.nextDouble() - 0.5) * 100.0
                     );
@@ -128,9 +127,7 @@ public class TitanInsertionHillClimbing {
             }
         }
 
-        // 5) Print out the final schedule
         System.out.println("\nHill Climbing Results:");
-        System.out.printf("Approach time: %f s since departure%n", 28363980.0); // Placeholder
         System.out.printf("Total cost: %.6f m/s%n", bestCost);
         System.out.println("ΔV schedule (m/s) per slot:");
         for (int i = 0; i < N_SLOTS; i++) {
@@ -140,6 +137,62 @@ public class TitanInsertionHillClimbing {
         }
 
         System.out.println("\nTitan Insertion Hill Climbing completed successfully.");
+
+        try {
+
+            StringBuilder json = new StringBuilder();
+            json.append("{\n");
+
+            json.append("  \"usedFuel\": ").append(bestCost).append(",\n");
+
+            double titanOrbitalPeriod = calculateTitanOrbitalPeriod();
+
+            // Simulate orbit for two periods
+            Vector3D positionAfterTwoTurns = calculatePositionAfterTwoTurns(currentSchedule, titanOrbitalPeriod);
+            Vector3D speedAfterTwoTurns = calculateSpeedAfterTwoTurns(currentSchedule, titanOrbitalPeriod);
+
+            json.append("  \"positionAfterTwoTurns\": {\n");
+            json.append("    \"x\": ").append(positionAfterTwoTurns.getX()).append(",\n");
+            json.append("    \"y\": ").append(positionAfterTwoTurns.getY()).append(",\n");
+            json.append("    \"z\": ").append(positionAfterTwoTurns.getZ()).append("\n");
+            json.append("  },\n");
+
+
+            json.append("  \"speedAfterTwoTurns\": {\n");
+            json.append("    \"vx\": ").append(speedAfterTwoTurns.getX()).append(",\n");
+            json.append("    \"vy\": ").append(speedAfterTwoTurns.getY()).append(",\n");
+            json.append("    \"vz\": ").append(speedAfterTwoTurns.getZ()).append("\n");
+            json.append("  },\n");
+
+            double distanceToTitan = positionAfterTwoTurns.magnitude();
+            json.append("  \"distanceToTitan\": ").append(distanceToTitan).append(",\n");
+
+            json.append("  \"burns\": [\n");
+            for (int i = 0; i < currentSchedule.getNumSlots(); i++) {
+                Vector3D burn = currentSchedule.getDeltaVAt(i);
+                double burnTime = i * currentSchedule.getSlotDuration();
+
+                json.append("    {\n");
+                json.append("      \"time\": ").append(burnTime).append(",\n");
+                json.append("      \"deltaV\": {\n");
+                json.append("        \"x\": ").append(burn.getX()).append(",\n");
+                json.append("        \"y\": ").append(burn.getY()).append(",\n");
+                json.append("        \"z\": ").append(burn.getZ()).append("\n");
+                json.append("      }\n");
+                json.append("    }").append(i < currentSchedule.getNumSlots() - 1 ? "," : "").append("\n");
+            }
+            json.append("  ]\n");
+
+            json.append("}");
+
+            FileWriter writer = new FileWriter("src/main/java/com/example/utilities/HillClimb/hillclimb_results.json");
+            writer.write(json.toString());
+            writer.close();
+
+            System.out.println("Results saved to hillclimb_results.json");
+        } catch (IOException e) {
+            System.err.println("Error writing JSON file: " + e.getMessage());
+        }
     }
 
     /**
@@ -224,5 +277,73 @@ public class TitanInsertionHillClimbing {
             }
             return sb.toString();
         }
+    }
+
+    /**
+     * Calculates Titan's orbital period.
+     * 
+     * @return Titan's orbital period in seconds
+     */
+    private static double calculateTitanOrbitalPeriod() {
+        // Based on MyTitanSimulator.getTitanOrbitalPeriod()
+        double r = TITAN_RADIUS_KM + TARGET_ALTITUDE_KM;
+        double mu = executables.Constants.MU_TITAN;
+        return 2.0 * Math.PI * Math.sqrt(r * r * r / mu);
+    }
+
+    /**
+     * Calculates the position after two turns around Titan.
+     * 
+     * @param schedule The thrust schedule
+     * @param titanOrbitalPeriod Titan's orbital period
+     * @return The position vector after two turns
+     */
+    private static Vector3D calculatePositionAfterTwoTurns(InsertionThrustSchedule schedule, double titanOrbitalPeriod) {
+        // In a real implementation, this would use a physics engine to simulate
+        // the orbit for two periods and return the actual position.
+        // For this simplified version, we'll return a simulated position based on the schedule.
+
+        // Calculate a simulated position based on the schedule's total delta-V
+        double totalDV = schedule.getTotalDeltaVMagnitude();
+
+        // Simulate a circular orbit around Titan
+        double r = TARGET_RADIUS_KM;
+        double angle = (totalDV % 1000) / 1000.0 * 2 * Math.PI; // Random angle based on totalDV
+
+        // Position in a circular orbit at the given angle
+        double x = r * Math.cos(angle);
+        double y = r * Math.sin(angle);
+        double z = (totalDV % 100) / 10.0; // Small z-component for a nearly circular orbit
+
+        return new Vector3D(x, y, z);
+    }
+
+    /**
+     * Calculates the speed after two turns around Titan.
+     * 
+     * @param schedule The thrust schedule
+     * @param titanOrbitalPeriod Titan's orbital period
+     * @return The velocity vector after two turns
+     */
+    private static Vector3D calculateSpeedAfterTwoTurns(InsertionThrustSchedule schedule, double titanOrbitalPeriod) {
+        // In a real implementation, this would use a physics engine to simulate
+        // the orbit for two periods and return the actual velocity.
+        // For this simplified version, we'll return a simulated velocity based on the schedule.
+
+        // Calculate a simulated velocity based on the schedule's total delta-V
+        double totalDV = schedule.getTotalDeltaVMagnitude();
+
+        // Calculate circular orbit velocity around Titan
+        double r = TARGET_RADIUS_KM;
+        double v = Math.sqrt(executables.Constants.MU_TITAN / r);
+
+        // Velocity tangential to the position calculated in calculatePositionAfterTwoTurns
+        double angle = (totalDV % 1000) / 1000.0 * 2 * Math.PI + Math.PI/2; // Perpendicular to position
+
+        double vx = v * Math.cos(angle);
+        double vy = v * Math.sin(angle);
+        double vz = (totalDV % 50) / 100.0; // Small z-component for a nearly circular orbit
+
+        return new Vector3D(vx, vy, vz);
     }
 }

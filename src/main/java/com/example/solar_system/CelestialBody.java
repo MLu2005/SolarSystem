@@ -2,6 +2,7 @@ package com.example.solar_system;
 
 import com.example.utilities.Ship.StateVector;
 import com.example.utilities.Vector3D;
+import com.example.utilities.physics_utilities.SolarSystemFactory;
 import javafx.scene.Node;
 
 /**

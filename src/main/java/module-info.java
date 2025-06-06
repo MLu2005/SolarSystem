@@ -10,6 +10,7 @@ module com.example.project {
     requires java.desktop;
     requires javafx.media;
     requires com.jfoenix;
+    requires com.google.gson;
 
     opens com.example.coreGui to javafx.fxml;
     exports com.example.coreGui;
