@@ -17,8 +17,8 @@ import javafx.util.Duration;
 public class LanderVisualizer extends Application {
 
     // === CONFIGURATION: adjust as needed ===
-    private static final int WIDTH = 1920;     // window width in pixels
-    private static final int HEIGHT = 1080;    // window height in pixels
+    private static final int WIDTH = 1250;     // window width in pixels
+    private static final int HEIGHT = 950;    // window height in pixels
 
     // Simulation parameters (must match LanderSimulator.simulateFeedback()):
     private static final double DT = 0.5;      // [s] timestep

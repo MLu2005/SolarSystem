@@ -5,15 +5,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.transform.Rotate;
+
 import java.util.List;
 
 /**
  * Renders orbital rings for celestial bodies in a JavaFX 3D scene.
- * Only bodies that are not the Sun, Moon, or Titan will have rings drawn.
+ * Only bodies that are not in the excluded list will have rings drawn.
  */
 public class OrbitRendering {
     private final Group orbitRingGroup = new Group();
     private final int scale;
+
+    // List of body names (lowercase) that should not have orbit rings
+    private static final List<String> excludedBodies = List.of(
+            "sun", "moon", "titan", "noah's ark"
+    );
 
     /**
      * Constructs an OrbitRendering instance with the given scale factor.
@@ -34,7 +40,7 @@ public class OrbitRendering {
         for (CelestialBody body : bodies) {
             String name = body.getName().toLowerCase();
 
-            if (!name.equals("sun") && !name.equals("moon") && !name.equals("titan")) {
+            if (!excludedBodies.contains(name)) {
                 double radius = body.getPosition().magnitude() / scale;
                 int segments = 1750;
 
@@ -60,6 +66,7 @@ public class OrbitRendering {
             }
         }
     }
+
     /**
      * Returns the group containing all orbit rings.
      *

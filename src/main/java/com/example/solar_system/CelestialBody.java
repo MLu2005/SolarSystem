@@ -2,7 +2,6 @@ package com.example.solar_system;
 
 import com.example.utilities.Ship.StateVector;
 import com.example.utilities.Vector3D;
-import com.example.utilities.physics_utilities.SolarSystemFactory;
 import javafx.scene.Node;
 
 /**
@@ -10,7 +9,7 @@ import javafx.scene.Node;
  * It stores basic physical properties: name, mass, position, velocity, and acceleration.
  */
 public class CelestialBody {
-
+    public static CelestialBody rocket;
     public static CelestialBody titan;
     private final String name;
     private final double mass; // in kilograms
