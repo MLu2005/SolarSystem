@@ -89,20 +89,17 @@ public class PhysicsAnimator {
                         .map(CelestialBody::getPosition)
                         .orElse(Vector3D.zero());
 
-                // Loop over bodies for rendering and track rocket/titan raw positions
                 for (int i = 0; i < bodies.size(); i++) {
                     CelestialBody body = bodies.get(i);
                     Vector3D pos = body.getPosition();
                     String name = body.getName().toLowerCase();
 
-                    // Save raw positions of rocket and titan
                     if (name.equals("noah's ark")) {
                         rocketPos = pos;
                     } else if (name.equals("titan")) {
                         titanPos = pos;
                     }
 
-                    // Apply moon visual offset (for rendering only)
                     if (name.equals("moon")) {
                         Vector3D earthPos = bodies.stream()
                                 .filter(b -> b.getName().equalsIgnoreCase("earth"))
@@ -113,7 +110,6 @@ public class PhysicsAnimator {
                         pos = pos.add(directionFromEarth.scale(SCALE * 15));
                     }
 
-                    // Apply titan visual offset (for rendering only)
                     if (name.equals("titan")) {
                         Vector3D directionFromSaturn = pos.subtract(saturnPos).normalize();
                         pos = pos.add(directionFromSaturn.scale(44 * SCALE));
@@ -128,19 +124,19 @@ public class PhysicsAnimator {
                     if (name.equals("noah's ark") && spaceshipGroup != null) {
                         spaceshipGroup.setTranslateX(x);
                         spaceshipGroup.setTranslateZ(y);
-                        spaceshipGroup.setTranslateY(z);
+                        spaceshipGroup.setTranslateY(0);
                     } else if (!name.equals("noah's ark")) {
                         Sphere sphere = planetSpheres.get(i);
                         sphere.setTranslateX(x);
                         sphere.setTranslateZ(y);
-                        sphere.setTranslateY(z);
+                        sphere.setTranslateY(0);
                     }
                 }
 
                 // Calculate and print raw physics distance (in km)
                 if (rocketPos != null && titanPos != null) {
                     double distanceMeters = rocketPos.subtract(titanPos).magnitude();
-                    double distanceKm = distanceMeters / 1000.0;
+                    double distanceKm = distanceMeters;
                     System.out.printf("Distance to Titan (physics): %.3f km%n", distanceKm);
                 }
 
