@@ -10,7 +10,7 @@ import javafx.scene.Node;
  * It stores basic physical properties: name, mass, position, velocity, and acceleration.
  */
 public class CelestialBody {
-    public static CelestialBody rocket;
+
     public static CelestialBody titan;
     private final String name;
     private final double mass; // in kilograms
@@ -91,5 +91,35 @@ public class CelestialBody {
 
     public double getRadius(String name) {
         return SolarSystemFactory.getRadiusKm(name);
+    }
+
+
+    public Vector3D getInitialPosition() {
+        CelestialBody[] solarSystemFactory = (CelestialBody[]) SolarSystemFactory.loadFromTable().toArray();
+        for (CelestialBody body : solarSystemFactory) {
+            if (body.getName().equals(name)) {
+                return body.getPosition();
+            }
+        }
+        throw new IllegalArgumentException("Celestial body not found: " + name);
+    }
+
+    public Vector3D getInitialVelocity() {
+        CelestialBody[] solarSystemFactory = (CelestialBody[]) SolarSystemFactory.loadFromTable().toArray();
+        for (CelestialBody body : solarSystemFactory) {
+            if (body.getName().equals(name)) {
+                return body.getVelocity();
+            }
+        }
+        throw new IllegalArgumentException("Celestial body not found: " + name);
+    }
+
+    public StateVector getStateVector() {
+        return new StateVector(
+                position.copy(),
+                velocity.copy(),
+                Vector3D.zero(), // No orientation for CelestialBody
+                mass
+        );
     }
 }

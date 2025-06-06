@@ -52,7 +52,7 @@ public class Individual {
 
     public Individual() { this(randomGene()); }
     public Individual(Vector<Double> g) { gene = g; }
-    private static Individual of(Vector<Double> g){ return new Individual(g); }
+    public static Individual of(Vector<Double> g){ return new Individual(g); }
 
     /**
      * Generates a random gene for a new individual.
@@ -112,13 +112,13 @@ public class Individual {
             yProbe[5] = probe0.getVelocity().getZ();
         }
 
-        final double G       = Constants.G;
-        final double dt      = 3600;               // 1-hour steps
-        final double SIM_T   = Constants.SIM_LEN;  // full simulation length
-        double       t       = 0.0;
+        final double G= Constants.G;
+        final double dt = 3600;
+        final double SIM_T = Constants.SIM_LEN;
+        double t = 0.0;
 
         minDistanceTitanKm = Double.MAX_VALUE;
-        RK4Solver rk4      = new RK4Solver();
+        RK4Solver rk4 = new RK4Solver();
 
         while (t < SIM_T) {
 
@@ -282,4 +282,5 @@ public class Individual {
                 gene.toString()
         );
     }
+
 }

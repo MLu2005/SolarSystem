@@ -37,4 +37,8 @@ public class FuelTracker {
     public double getInitialFuel() {
         return initialFuel;
     }
+
+    public double getRemainingFuel() {
+        return remainingFuel;
+    }
 }

@@ -21,14 +21,11 @@ public class Constants {
     public static final double TITAN_RADIUS_KM = 2575;
     public static final double R_TITAN = TITAN_RADIUS_KM; // Titan radius in km
     public static final double TITAN_MASS_KG = 1.3452E23;
-    public static final double MU_EARTH = 3.986004418e5; // Earth's gravitational parameter in km³/s²
-    public static final double MU_SUN = 1.32712440018e11; // Sun's gravitational parameter in km³/s²
     public static final double MU_SATURN = G * 5.68E26; // Saturn's gravitational parameter in km³/s²
     public static final double MU_TITAN = G * TITAN_MASS_KG; // Titan's gravitational parameter in km³/s²
 
     // Spacecraft parameters
     public static final double PROBE_MASS = 50000.0; // kg
-    public static final double MAX_DV = 60.0; // Maximum delta-v in km/s
     public static final double ORIENTATION_EPS = 1e-12; // Orientation epsilon
 
     // Physics engine parameters
@@ -36,12 +33,6 @@ public class Constants {
     public static final double INITIAL_STEP_SIZE = 60.0; // seconds
     public static final int MAX_STEPS = 500;
 
-    // Titan orbit parameters
-    public static final double TITAN_DEFAULT_ALTITUDE = 1500.0; // km above Titan's surface
-    public static final double TITAN_DEFAULT_ECCENTRICITY = 0.05; // Slightly elliptical
-    public static final double TITAN_DEFAULT_INCLINATION = 45.0; // degrees
-    public static final double TITAN_DEFAULT_ARGUMENT_OF_PERIAPSIS = 0.0; // degrees
-    public static final double TITAN_DEFAULT_LONGITUDE_OF_ASCENDING_NODE = 0.0; // degrees
 
     // Random number generator with fixed seed for reproducibility
     public static final java.util.Random RNG = new java.util.Random(69);

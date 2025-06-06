@@ -16,7 +16,7 @@ import java.util.List;
  *   • mass      – kilograms (kg)
  */
 public final class SolarSystemFactory {
-    private SolarSystemFactory() { /* prevent instantiation */ }
+    public SolarSystemFactory() { /* prevent instantiation */ }
     /**
      * Loads a list of celestial bodies representing a simplified Solar-System snapshot
      * whose state vectors are an exact copy of the rows in IC.csv.
@@ -74,9 +74,6 @@ public final class SolarSystemFactory {
                 new Vector3D(-1.4699366647890487E8, -2.9700655866209034E7, 27285.544752075686),
                 new Vector3D(56.199263487003066, -31.70830008678653, -13.951757766821851)));
 
-
-
-
         return system;
     }
 
@@ -95,5 +92,10 @@ public final class SolarSystemFactory {
             case "titan":    return 2_575.0;      // shown for completeness
             default:         return 0.0;          // unknown / artificial bodies
         }
+    }
+
+    public CelestialBody[] getAllBodies() {
+        List<CelestialBody> bodies = loadFromTable();
+        return bodies.toArray(new CelestialBody[0]);
     }
 }

@@ -1,6 +1,7 @@
 import com.example.utilities.Vector3D;
 import org.junit.jupiter.api.Test;
 
+import java.util.Vector;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -154,5 +155,22 @@ class Vector3DTest {
         Vector3D v = new Vector3D(1.23456789, -2.34567891, 3.14159265);
         String expected = String.format("(%.6f, %.6f, %.6f)", 1.23456789, -2.34567891, 3.14159265);
         assertEquals(expected, v.toString());
+    }
+
+    /**
+     * Tests conversion to Vector<Double>.
+     */
+    @Test
+    void testToVector() {
+        Vector3D v = new Vector3D(1.5, -2.5, 3.5);
+        Vector<Double> vector = v.toVector();
+
+        // Check size
+        assertEquals(3, vector.size());
+
+        // Check components
+        assertEquals(1.5, vector.get(0), 1e-9);
+        assertEquals(-2.5, vector.get(1), 1e-9);
+        assertEquals(3.5, vector.get(2), 1e-9);
     }
 }

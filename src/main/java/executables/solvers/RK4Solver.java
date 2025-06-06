@@ -60,33 +60,38 @@ public class RK4Solver implements ODESolver {
             double h
     ) {
         int dim = y.length;
-        double[] k1 = f.apply(t, y);
+        double halfH = 0.5 * h;
+        double tPlusHalfH = t + halfH;
+        double tPlusH = t + h;
+        double inv6 = h / 6.0;
 
         double[] yTemp = new double[dim];
+        double[] result = new double[dim];
+
+        double[] k1 = f.apply(t, y);
 
         for (int j = 0; j < dim; j++) {
-            yTemp[j] = y[j] + 0.5 * h * k1[j];
+            yTemp[j] = y[j] + halfH * k1[j];
         }
-        double[] k2 = f.apply(t + 0.5 * h, yTemp);
+        double[] k2 = f.apply(tPlusHalfH, yTemp);
 
         for (int j = 0; j < dim; j++) {
-            yTemp[j] = y[j] + 0.5 * h * k2[j];
+            yTemp[j] = y[j] + halfH * k2[j];
         }
-        double[] k3 = f.apply(t + 0.5 * h, yTemp);
+        double[] k3 = f.apply(tPlusHalfH, yTemp);
 
         for (int j = 0; j < dim; j++) {
             yTemp[j] = y[j] + h * k3[j];
         }
-        double[] k4 = f.apply(t + h, yTemp);
+        double[] k4 = f.apply(tPlusH, yTemp);
 
-        double[] nextY = new double[dim];
-        double inv6 = h / 6.0;
         for (int j = 0; j < dim; j++) {
-            nextY[j] = y[j]
-                    + inv6 * (k1[j] + 2 * k2[j] + 2 * k3[j] + k4[j]);
+            // Combine terms to minimize operations
+            double k23 = k2[j] + k3[j];  // Calculate k2+k3 once
+            result[j] = y[j] + inv6 * (k1[j] + 2 * k23 + k4[j]);
         }
 
-        return nextY;
+        return result;
     }
 
 

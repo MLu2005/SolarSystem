@@ -32,6 +32,19 @@ public class SpaceShip extends CelestialBody {
         initializeMissionCapabilities(initialFuel);
     }
 
+    public SpaceShip(Vector3D initialPosition,
+                      Vector3D initialVelocity,
+                      double mass,
+                      double thrust,
+                      FuelTracker fuelTracker) {
+        // We simply name all ships “SpaceShip” in the CelestialBody list.
+        super("SpaceShip", mass, initialPosition, initialVelocity);
+        this.thrust = thrust;
+        this.fuelTracker = fuelTracker;
+        this.orientation = new Vector3D(1.0, 0.0, 0.0); // default “+x” direction
+        this.missionCapabilities = new java.util.HashMap<>();
+    }
+
     /**
      * Initializes the mission capabilities based on initial fuel.
      * 
@@ -211,5 +224,34 @@ public class SpaceShip extends CelestialBody {
 
     public StateVector getState() {
         return new StateVector(getPosition(), getVelocity(), orientation, getMass());
+    }
+
+    public void applyImpulse(Vector3D vector3D) {
+        double deltaV_mps = vector3D.norm();
+        if (deltaV_mps < 1e-12) {
+            return; // zero‐magnitude → no change
+        }
+
+        // 1) Compute the actual ΔV in km/s
+        double deltaV_kmps = deltaV_mps / 1000.0;
+
+        // 2) Compute the impulse “vector” in km·kg/s = (deltaV_kmps × mass_kg).
+        //    But since CelestialBody stores velocity in km/s, we do:
+        Vector3D impulseVec = orientation.scale(deltaV_kmps * this.getMass());
+
+        // 3) Update ship’s velocity: v_new = v_old + impulseVec / mass
+        Vector3D newVel = this.getVelocity().add(impulseVec.scale(1.0 / this.getMass()));
+        this.setVelocity(newVel);
+
+        // 4) Consume fuel: e.g. 0.01 kg of propellant per 1 m/s of ΔV
+        double fuelConsumed = deltaV_mps * 0.01;
+        if (fuelConsumed > fuelTracker.getRemaining()) {
+            throw new IllegalStateException("Not enough fuel: needed "
+                    + fuelConsumed
+                    + " kg, have "
+                    + fuelTracker.getRemainingFuel());
+        }
+        fuelTracker.consume(fuelConsumed);
+
     }
 }

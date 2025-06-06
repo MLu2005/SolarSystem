@@ -1,5 +1,7 @@
 package com.example.utilities;
 
+import java.util.Vector;
+
 /**
  * Vector3D represents a 3-dimensional vector used for positions, velocities, and accelerations
  * in the solar system simulation. Includes common vector operations like addition, normalization, and dot product.
@@ -132,5 +134,26 @@ public class Vector3D {
      */
     public Vector3D copy() {
         return new Vector3D(this.x, this.y, this.z);
+    }
+
+    public double norm() {
+        return Math.sqrt(x * x + y * y + z * z);
+    }
+
+    public Vector3D scalarMultiply(double v) {
+        return new Vector3D(this.x * v, this.y * v, this.z * v);
+    }
+
+    /**
+     * Converts this Vector3D to a Vector<Double> containing the x, y, and z components.
+     * 
+     * @return a Vector<Double> containing the x, y, and z components of this Vector3D
+     */
+    public Vector<Double> toVector() {
+        Vector<Double> vector = new Vector<>();
+        vector.add(this.x);
+        vector.add(this.y);
+        vector.add(this.z);
+        return vector;
     }
 }
