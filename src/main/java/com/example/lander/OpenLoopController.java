@@ -1,33 +1,26 @@
 package com.example.lander;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-
 public class OpenLoopController implements Controller {
-    private static final double G_TITAN = 1.352e-3;
-    public static final double U_MAX = 10 * G_TITAN;
-    public static final double V_MAX = 1.0;
-    private static final double K_P_THETA = 10.0;
-    private static final double K_D_THETA = 5.0;
+    private static final double[][] BURNS = {
+        {     0.0, -80.04850434341043,  -43.94430155323007},
+        { 86400.0,  55.58131104689241,  213.64400318220342},
+        {172800.0,  68.97168415712228, -140.6078877540702 },
+        {259200.0, -41.09315567406595,   42.93089451447104},
+        {345600.0,  -8.948848762144895,  -6.6411424028483435}
+    };
 
     @Override
-    public double getU(double time, double[] stateVector) {
-        double thrust = G_TITAN;
-        return min(max(thrust, 0.0), U_MAX);
+    public double getU(double time, double[] state) {
+        for (double[] b : BURNS) {
+            if (Math.abs(time - b[0]) < 1e-6) {
+                return Math.hypot(b[1], b[2]);
+            }
+        }
+        return 0.0;
     }
 
     @Override
-    public double getV(double time, double[] stateVector) {
-        double angle = stateVector[4];
-        double angularRate = stateVector[5];
-
-        double rotationAcceleration = -(K_P_THETA * angle + K_D_THETA * angularRate);
-        if (rotationAcceleration > V_MAX) {
-            rotationAcceleration = V_MAX;
-        }
-        if (rotationAcceleration < -V_MAX) {
-            rotationAcceleration = -V_MAX;
-        }
-        return rotationAcceleration;
+    public double getV(double time, double[] state) {
+        return 0.0;
     }
 }
