@@ -76,28 +76,4 @@ public class InsertionThrustSchedule implements Cloneable {
         return copy;
     }
 
-    /**
-     * Creates an InsertionThrustSchedule from an Individual's genome.
-     * The genome is expected to contain 3*nSlots values representing the x, y, z components
-     * of the delta-V vectors for each slot.
-     * 
-     * @param individual The Individual containing the genome
-     * @param slotDurationSec The duration of each slot in seconds
-     * @return A new InsertionThrustSchedule with delta-V vectors from the genome
-     */
-    public static InsertionThrustSchedule fromGenome(Individual individual, double slotDurationSec) {
-        Vector<Double> genes = individual.genes();
-        int nSlots = genes.size() / 3;
-
-        InsertionThrustSchedule schedule = new InsertionThrustSchedule(nSlots, slotDurationSec);
-
-        for (int i = 0; i < nSlots; i++) {
-            double x = genes.get(i * 3);
-            double y = genes.get(i * 3 + 1);
-            double z = genes.get(i * 3 + 2);
-            schedule.setDeltaVAt(i, new Vector3D(x, y, z));
-        }
-
-        return schedule;
-    }
 }

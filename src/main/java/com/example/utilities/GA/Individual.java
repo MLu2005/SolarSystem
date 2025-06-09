@@ -87,7 +87,6 @@ public class Individual {
     }
 
     public void evaluate() {
-        /* (2.1) Build a physics engine containing all real bodies, plus Titan */
         PhysicsEngine engine = new PhysicsEngine();
         for (CelestialBody b : OBJECTS_IN_SPACE) {
             engine.addBody(cloneBody(b));
@@ -95,7 +94,6 @@ public class Individual {
         CelestialBody titanClone = cloneBody(TITAN);
         engine.addBody(titanClone);
 
-        /* (2.2) Initialise probe’s six-dimensional state vector yProbe[0-5]   */
         double[] yProbe = new double[6];
         {
             CelestialBody probe0 = new CelestialBody(
@@ -176,8 +174,7 @@ public class Individual {
 
             t += dt;
         }
-
-        /* (2.6) Normal fitness if no collision occurred -------------------- */
+        
         fitness = 1e6 / (minDistanceTitanKm + 1000);
     }
 

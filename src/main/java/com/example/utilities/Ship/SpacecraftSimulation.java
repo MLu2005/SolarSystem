@@ -19,21 +19,14 @@ import java.util.function.BiFunction;
  */
 public class SpacecraftSimulation {
 
-    // List of all planetary bodies (Sun, planets, Titan, etc.) that we will treat as gravitating masses.
     private final List<CelestialBody> bodyList = new ArrayList<>();
-    // Map from body name → CelestialBody for quick lookup
     private final Map<String, CelestialBody> bodyMap = new HashMap<>();
 
-    // A single SpaceShip (also treated as a “body” for integration)
     private SpaceShip spacecraft;
 
-    // The initial state (flattened array) for resetting
+    // The initial state
     private double[] initialStateArray;
     private double initialJulian;
-
-    // The integrator (static RK4 methods)
-    // We assume RK4Solver.integrate(double[] state, double t0, double dt,
-    //                                  BiFunction<Double,double[],double[]>) exists.
 
     // The current state (mutable)
     private double[] currentState;
@@ -83,30 +76,6 @@ public class SpacecraftSimulation {
         this.currentJulian = departureJulian;
     }
 
-    /**
-     * Resets the simulation back to the exact initial condition (positions, velocities, Julian).
-     */
-    public void resetToInitialState() {
-        currentState = initialStateArray.clone();
-        // Restore each body’s position & velocity
-        int n = bodyList.size();
-        for (int i = 0; i < n; i++) {
-            CelestialBody b = bodyList.get(i);
-            int idx = i * 6;
-            b.setPosition(new Vector3D(
-                    currentState[idx + 0],
-                    currentState[idx + 1],
-                    currentState[idx + 2]
-            ));
-            b.setVelocity(new Vector3D(
-                    currentState[idx + 3],
-                    currentState[idx + 4],
-                    currentState[idx + 5]
-            ));
-        }
-        spacecraft = (SpaceShip) bodyMap.get("SpaceShip");
-        currentJulian = initialJulian;
-    }
 
     /**
      * Advances the entire N‐body + spacecraft state by dt seconds.  If applyThrust=true,

@@ -14,10 +14,6 @@ import java.util.List;
  * Sources: https://nssdc.gsfc.nasa.gov/planetary/factsheet/
  *          https://science.nasa.gov/mars/facts/#h-orbit-and-rotation
  *
- * Units:
- *   • position  – kilometres (km)
- *   • velocity  – kilometres per second (km s⁻¹)
- *   • mass      – kilograms (kg)
  */
 public final class SolarSystemFactory {
     private SolarSystemFactory() { /* prevent instantiation */ }

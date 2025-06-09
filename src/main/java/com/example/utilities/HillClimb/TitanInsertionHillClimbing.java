@@ -1,20 +1,14 @@
 package com.example.utilities.HillClimb;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import com.example.utilities.GA.GAResultsParser;
 import com.example.utilities.GA.Individual;
 import com.example.utilities.Vector3D;
 import executables.Constants;
 
-import javax.xml.transform.dom.DOMLocator;
-
 public class TitanInsertionHillClimbing {
-
-    // ─── TUNE THESE PARAMETERS ────────────────────────────────────────────────
 
     /** Number of discrete thrust‐slots in the insertion profile **/
     private static final int N_SLOTS = 5;
@@ -40,11 +34,9 @@ public class TitanInsertionHillClimbing {
     /** Weight for the continuous penalty **/
     private static final double DEVIATION_FACTOR = 1000.0;
 
-    // ──────────────────────────────────────────────────────────────────────────
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Random rand = Constants.RNG;
-
         System.out.println("Starting Titan Insertion Hill Climbing algorithm...");
 
         Vector<Double> launchState = new Vector<>();
@@ -59,7 +51,6 @@ public class TitanInsertionHillClimbing {
         launchState.add(50000.0);
 
         Individual individual = Individual.of(new Vector<Double>(launchState));
-
 
         individual.evaluate();
         System.out.println("Created individual with fitness: " + individual.getFitness());
@@ -81,9 +72,7 @@ public class TitanInsertionHillClimbing {
         System.out.printf("Initial total ΔV cost: %.6f m/s%n", bestCost);
 
         for (int iter = 0; iter < MAX_ITERATIONS; iter++) {
-
             InsertionThrustSchedule neighbor = currentSchedule.clone();
-
             int slotIdx = rand.nextInt(N_SLOTS);
             Vector3D oldDv = neighbor.getDeltaVAt(slotIdx);
 
@@ -106,7 +95,6 @@ public class TitanInsertionHillClimbing {
                 // Optional debug print:
                 System.out.printf(" Iter %5d: found better cost = %.6f%n", iter, bestCost);
             }
-
             if (iter % 1000 == 999) {
                 InsertionThrustSchedule randomSchedule = new InsertionThrustSchedule(N_SLOTS, SLOT_DURATION_SEC);
                 for (int i = 0; i < N_SLOTS; i++) {
@@ -117,7 +105,6 @@ public class TitanInsertionHillClimbing {
                     );
                     randomSchedule.setDeltaVAt(i, randomDv);
                 }
-
                 double randomCost = computeCost(randomSchedule);
                 if (randomCost < bestCost) {
                     bestCost = randomCost;
@@ -126,7 +113,6 @@ public class TitanInsertionHillClimbing {
                 }
             }
         }
-
         System.out.println("\nHill Climbing Results:");
         System.out.printf("Total cost: %.6f m/s%n", bestCost);
         System.out.println("ΔV schedule (m/s) per slot:");
@@ -135,9 +121,7 @@ public class TitanInsertionHillClimbing {
             System.out.printf("  Slot %d: [%.3f, %.3f, %.3f]%n",
                               i, dv.getX(), dv.getY(), dv.getZ());
         }
-
         System.out.println("\nTitan Insertion Hill Climbing completed successfully.");
-
         try {
 
             StringBuilder json = new StringBuilder();
@@ -206,29 +190,89 @@ public class TitanInsertionHillClimbing {
         // Calculate total ΔV magnitude
         double totalDV_mps = schedule.getTotalDeltaVMagnitude();
 
-        // In a real implementation, we would:
+        // Implementing the real simulation as described in the comments:
         // 1. Reset simulation to initial state
+        // Create a simulated spacecraft at a position relative to Titan
+        Vector3D initialPosition = new Vector3D(
+            TARGET_RADIUS_KM * 2, // Start at twice the target radius away from Titan
+            0,
+            0
+        );
+        Vector3D initialVelocity = new Vector3D(
+            0,
+            Math.sqrt(executables.Constants.MU_TITAN / (TARGET_RADIUS_KM * 2)), // Initial velocity for approach
+            0
+        );
+
         // 2. Apply the thrust schedule
-        // 3. Simulate the orbit for one Titan period
+        Vector3D position = initialPosition;
+        Vector3D velocity = initialVelocity;
+
+        // Apply each thrust in the schedule
+        for (int i = 0; i < schedule.getNumSlots(); i++) {
+            Vector3D deltaV = schedule.getDeltaVAt(i);
+            // Convert from m/s to km/s for consistency with position units
+            Vector3D deltaVkms = new Vector3D(
+                deltaV.getX() / 1000.0,
+                deltaV.getY() / 1000.0,
+                deltaV.getZ() / 1000.0
+            );
+
+            // Apply the thrust (instantaneous velocity change)
+            velocity = velocity.add(deltaVkms);
+
+            // Simulate motion until the next thrust (or end of simulation)
+            double timeStep = 60.0; // 60 seconds per step
+            double slotDuration = schedule.getSlotDuration();
+
+            for (double t = 0; t < slotDuration; t += timeStep) {
+                // Calculate gravitational acceleration towards Titan
+                double distanceToTitan = position.magnitude();
+                double acceleration = -executables.Constants.MU_TITAN / (distanceToTitan * distanceToTitan);
+
+                Vector3D accelerationVector = position.normalize().scale(acceleration);
+
+                // Update velocity and position using simple Euler integration
+                velocity = velocity.add(accelerationVector.scale(timeStep));
+                position = position.add(velocity.scale(timeStep));
+            }
+        }
+
+        double titanOrbitalPeriod = calculateTitanOrbitalPeriod();
+        double timeStep = 60.0; // 60 seconds per step
+
+        for (double t = 0; t < titanOrbitalPeriod; t += timeStep) {
+            // Calculate gravitational acceleration towards Titan
+            double distanceToTitan = position.magnitude();
+            double acceleration = -executables.Constants.MU_TITAN / (distanceToTitan * distanceToTitan);
+
+            Vector3D accelerationVector = position.normalize().scale(acceleration);
+
+            // Update velocity and position using simple Euler integration
+            velocity = velocity.add(accelerationVector.scale(timeStep));
+            position = position.add(velocity.scale(timeStep));
+        }
+
         // 4. Calculate the deviation from the target orbit
+        double finalRadius = position.magnitude();
+        double deviation = Math.abs(finalRadius - TARGET_RADIUS_KM);
 
-        // For this simplified example, we'll simulate an orbit with deviation
-        // proportional to how far the total ΔV is from an "optimal" value
-        // This is just a placeholder for demonstration purposes
-        double optimalDV = 1000.0; // Example "optimal" ΔV in m/s
-        double orbitQuality = Math.abs(totalDV_mps - optimalDV) / 100.0;
+        // Calculate eccentricity to check if the orbit is circular
+        Vector3D angularMomentum = position.cross(velocity);
+        double angularMomentumMagnitude = angularMomentum.magnitude();
+        double mu = executables.Constants.MU_TITAN;
+        Vector3D eccentricityVector = velocity.cross(angularMomentum).scale(1.0/mu).subtract(position.normalize());
+        double eccentricity = eccentricityVector.magnitude();
 
-        // Simulate orbit radius based on the quality of our maneuver
-        // Better maneuvers (closer to optimal ΔV) result in orbits closer to target
-        double rKm = TARGET_RADIUS_KM + (orbitQuality * (Math.random() - 0.5) * 10.0);
+        // Add penalty for non-circular orbits
+        double eccentricityPenalty = DEVIATION_FACTOR * eccentricity * 10.0;
 
         // Calculate continuous penalty based on deviation from target orbit
-        double deviation = Math.abs(rKm - TARGET_RADIUS_KM);
-        double penalty = DEVIATION_FACTOR * deviation;
+        double radiusPenalty = DEVIATION_FACTOR * deviation;
 
-        // The cost is the total ΔV plus the penalty for deviation
+        // The cost is the total ΔV plus the penalties
         // This creates a smooth gradient for the hill climber to follow
-        return totalDV_mps + penalty;
+        return totalDV_mps + radiusPenalty + eccentricityPenalty;
     }
 
     /**

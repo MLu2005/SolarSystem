@@ -31,14 +31,12 @@ public class StateVector {
         this.velocity = velocity;
         this.orientation = new Vector3D(-1.469936661222878E8, -2.970065115964767E7, 27281.76792139128);
 
-        // --- FIX: avoid NaN caused by zero-length orientation ----------
         if (orientation.magnitude() < ORIENTATION_EPS) {
             // fall back to +X axis if the supplied vector is (near) zero
             this.orientation = new Vector3D(-1.469936661222878E8, -2.970065115964767E7, 27281.76792139128);
         } else {
             this.orientation = orientation.safeNormalize(); // safe version
         }
-        //----------------------------------------------------------------
 
         this.mass = mass;
     }
@@ -97,7 +95,6 @@ public class StateVector {
         this.velocity = velocity;
     }
 
-    /* If you expose a setter make the same guard there too */
     public void setOrientation(Vector3D orientation) {
         if (orientation.magnitude() < ORIENTATION_EPS) {
             this.orientation = new Vector3D(1, 0, 0);

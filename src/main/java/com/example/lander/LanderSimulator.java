@@ -50,10 +50,10 @@ public class LanderSimulator {
 
     public static void main(String[] args) {
         double[] initialState = new double[] {
-            0.0,     // horizontal position (km)
-            1500.0,  // vertical position (km)
-            1.48698278114141, // horizontal velocity (km/s)
-            0.0,     // vertical velocity (km/s)
+                -2715.3163563925214,     // horizontal position (km)
+                -944.8185459162208,  // vertical position (km)
+                0.5807482731466309, // horizontal velocity (km/s)
+                -1.6690138988461283,     // vertical velocity (km/s)
             0.0,     // tilt angle (rad)
             0.0      // tilt rate (rad/s)
         };
