@@ -1,0 +1,38 @@
+{
+  "best_individuals": [
+    {
+      "rank": 0,
+      "fitness": 0.123456,
+      "min_distance_to_titan_km": 8123.456,
+      "launch_position": {
+        "x": 1.5E7,
+        "y": 2.5E7,
+        "z": 3.5E7
+      },
+      "launch_velocity": {
+        "vx": 10.5,
+        "vy": 20.5,
+        "vz": 30.5
+      },
+      "launch_mass": 50000.0,
+      "delta_v_relative_to_earth": 12.34
+    },
+    {
+      "rank": 1,
+      "fitness": 0.111111,
+      "min_distance_to_titan_km": 9000.0,
+      "launch_position": {
+        "x": 1.6E7,
+        "y": 2.6E7,
+        "z": 3.6E7
+      },
+      "launch_velocity": {
+        "vx": 11.5,
+        "vy": 21.5,
+        "vz": 31.5
+      },
+      "launch_mass": 50000.0,
+      "delta_v_relative_to_earth": 13.45
+    }
+  ]
+}

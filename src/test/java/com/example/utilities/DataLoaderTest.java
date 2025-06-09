@@ -1,15 +1,12 @@
+package com.example.utilities;
+
 import com.example.solar_system.CelestialBody;
-import com.example.utilities.DataLoader;
-import com.example.utilities.Vector3D;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

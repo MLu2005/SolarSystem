@@ -1,4 +1,5 @@
-import com.example.utilities.Vector3D;
+package com.example.utilities;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.Vector;
