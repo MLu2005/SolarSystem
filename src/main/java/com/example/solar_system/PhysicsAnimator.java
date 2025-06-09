@@ -116,7 +116,7 @@ public class PhysicsAnimator {
 
             @Override
             public void handle(long now) {
-                double step = 1850;
+                double step = 3000;
 
                 engine.step(step);
 
