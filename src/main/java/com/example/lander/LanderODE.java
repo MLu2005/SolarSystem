@@ -1,3 +1,4 @@
+// src/com/example/lander/LanderODE.java
 package com.example.lander;
 
 import java.util.function.BiFunction;
@@ -7,7 +8,7 @@ import com.example.utilities.Vector3D;
 import com.example.utilities.titanAtmosphere.AtmosphericForce;
 import com.example.utilities.titanAtmosphere.TitanEnvironment;
 
-public class LanderODE implements BiFunction<Double, double[], double[]> {
+public class LanderODE implements BiFunction<Double,double[],double[]> {
     private static final double G_TITAN = 1.352e-3;
 
     private final Controller controller;
@@ -15,48 +16,45 @@ public class LanderODE implements BiFunction<Double, double[], double[]> {
     private final SpaceShip tempShip;
 
     public LanderODE(Controller controller,
-                     TitanEnvironment environment,
-                     double dragCoefficient,
-                     double maxAtmosphereHeight,
-                     double landerMassKilograms) {
-
+                     TitanEnvironment env,
+                     double dragC,
+                     double maxAtm,
+                     double massKg) {
         this.controller = controller;
-        Vector3D initialPosition = new Vector3D(0, 0, 0);
-        Vector3D initialVelocity = new Vector3D(0, 0, 0);
-        this.tempShip = new SpaceShip("LanderDummy", 0.0, initialVelocity, landerMassKilograms,0.0, initialPosition);
-        this.dragModel = new AtmosphericForce(environment, dragCoefficient, maxAtmosphereHeight);
+        this.tempShip   = new SpaceShip("LanderDummy", 0.0,
+                                        new Vector3D(0,0,0),
+                                        massKg, 0.0,
+                                        new Vector3D(0,0,0));
+        this.dragModel  = new AtmosphericForce(env, dragC, maxAtm);
     }
 
     @Override
-    public double[] apply(Double time, double[] stateVector) {
-        double horizontalPosition = stateVector[0];
-        double verticalPosition = stateVector[1];
-        double horizontalVelocity = stateVector[2];
-        double verticalVelocity = stateVector[3];
-        double tiltAngle = stateVector[4];
-        double tiltRate = stateVector[5];
+    public double[] apply(Double time, double[] s) {
+        double x = s[0], y = s[1],
+               vX= s[2], vY= s[3],
+               θ = s[4], θdot = s[5];
 
-        Vector3D shipPosition3D = new Vector3D(horizontalPosition, verticalPosition, 0);
-        Vector3D shipVelocity3D = new Vector3D(horizontalVelocity, verticalVelocity, 0);
-        tempShip.setPosition(shipPosition3D);
-        tempShip.setVelocity(shipVelocity3D);
+        tempShip.setPosition(new Vector3D(x, y, 0));
+        tempShip.setVelocity(new Vector3D(vX, vY, 0));
+        Vector3D drag = dragModel.compute(tempShip);
+        double m = tempShip.getMass();
 
-        Vector3D dragForce = dragModel.compute(tempShip);
-        double massKilograms = tempShip.getMass();
-        double dragAccelerationX = dragForce.getX() / massKilograms;
-        double dragAccelerationY = dragForce.getY() / massKilograms;
+        double aDragX = drag.getX()/m;
+        double aDragY = drag.getY()/m;
 
-        double thrustAcceleration = controller.getU(time, stateVector);
-        double rotationAcceleration = controller.getV(time, stateVector);
+        double u = controller.getU(time, s);
+        double v = controller.getV(time, s);
 
-        double[] derivatives = new double[6];
-        derivatives[0] = horizontalVelocity;
-        derivatives[1] = verticalVelocity;
-        derivatives[2] = thrustAcceleration * Math.sin(tiltAngle) + dragAccelerationX;
-        derivatives[3] = thrustAcceleration * Math.cos(tiltAngle) - G_TITAN + dragAccelerationY;
-        derivatives[4] = tiltRate;
-        derivatives[5] = rotationAcceleration;
-
-        return derivatives;
+        double[] d = new double[6];
+        d[0] = vX;
+        d[1] = vY;
+        d[2] = u * Math.sin(θ) + aDragX;
+        // vertical: clamp upward pop at <0.1 m
+        double netY = u * Math.cos(θ) - G_TITAN + aDragY;
+        if (y < 1e-4 && netY > 0) netY = 0;
+        d[3] = netY;
+        d[4] = θdot;
+        d[5] = v;
+        return d;
     }
 }

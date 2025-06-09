@@ -1,5 +1,6 @@
 package com.example.lander;
 
+import java.util.Arrays;
 import java.util.function.BiFunction;
 
 import com.example.utilities.Vector3D;
@@ -78,11 +79,48 @@ public class LanderSimulator {
         return solver.solve(odeFunction, 0.0, initialState, timeStep, maximumSteps, stopIfLanded);
     }
 
+    public static double[][] simulateCombined(
+        double[] initialState,
+        double timeStep,
+        int maximumSteps,
+        double windSpeed,
+        double landerMassKilograms
+    ) {
+        TitanEnvironment environment = buildEnvironment(windSpeed);
+
+        Controller openLoopController = new OpenLoopController();
+        Controller feedbackController = new FeedbackController();
+        // HERE is the only new line:
+        Controller combinedController = 
+            new CombinedController(openLoopController, feedbackController);
+
+        LanderODE odeFunction = new LanderODE(
+            combinedController,    // <– pass the combiner here
+            environment,
+            DRAG_COEFFICIENT,
+            MAX_ATMOS_HEIGHT,
+            landerMassKilograms
+        );
+
+        RK4Solver solver = new RK4Solver();
+        BiFunction<Double,double[],Boolean> stopIfLanded =
+            (time, state) -> state[1] <= 0.0;
+
+        return solver.solve(
+            odeFunction, 
+            0.0, 
+            initialState, 
+            timeStep, 
+            maximumSteps, 
+            stopIfLanded
+        );
+    }
+
     public static void main(String[] args) {
-        double titanRadius = 2575.0;
-        double distanceToTitan = 2875.004939539644;
-        double altitude = distanceToTitan - titanRadius;
-        double[] initialState = {
+        double titanRadius       = 2575.0;
+        double distanceToTitan   = 2875.004939539644;
+        double altitude          = distanceToTitan - titanRadius;
+        double[] initialState    = {
             -2715.3163563925214,
              altitude,
              0.5807482731466309,
@@ -90,40 +128,20 @@ public class LanderSimulator {
              0.0,
              0.0
         };
-        double timeStep = 1.0;
-        int maximumSteps = 200000;
-        double windSpeed = 0.0001;
-        double landerMassKilograms = 50000.0;
-        System.out.println("=== Initial Conditions ===");
-        System.out.printf("horizontalPosition = %.6f km%n", initialState[0]);
-        System.out.printf("verticalPosition   = %.6f km%n", initialState[1]);
-        System.out.printf("horizontalVelocity = %.6f km/s%n", initialState[2]);
-        System.out.printf("verticalVelocity   = %.6f km/s%n", initialState[3]);
-        System.out.printf("tiltAngle          = %.6f rad%n", initialState[4]);
-        System.out.printf("tiltRate           = %.6f rad/s%n", initialState[5]);
-        System.out.printf("landerMass         = %.1f kg%n", landerMassKilograms);
-        System.out.printf("timeStep           = %.3f s%n", timeStep);
-        System.out.printf("maximumSteps       = %d%n", maximumSteps);
-        System.out.printf("windSpeed          = %.4f km/s%n%n", windSpeed);
 
-        double[][] openLoopTrajectory = simulateOpenLoop(
-            initialState, timeStep, maximumSteps, windSpeed, landerMassKilograms
-        );
-        System.out.println("=== Open-Loop Trajectory ===");
-        System.out.println("time\tposX\tposY\tvelX\tvelY\ttilt\ttiltRate");
-        for (double[] row : openLoopTrajectory) {
-            System.out.printf(
-                "%6.1f\t%8.4f\t%8.4f\t%8.4f\t%8.4f\t%8.4f\t%8.4f%n",
-                row[0], row[1], row[2], row[3], row[4], row[5], row[6]
-            );
-        }
+        double timeStep    = 1.0;
+        int    maximumSteps= 2000000;
+        double windSpeed   = 0.0001;
+        double landerMass  = 50000.0;
 
-        double[][] feedbackTrajectory = simulateFeedback(
-            initialState, timeStep, maximumSteps, windSpeed, landerMassKilograms
+        double[][] combinedTraj = simulateCombined(
+            Arrays.copyOf(initialState, initialState.length),
+            timeStep, maximumSteps, windSpeed, landerMass
         );
-        System.out.println("\n=== Feedback Trajectory ===");
+
+        System.out.println("\n=== Combined Trajectory ===");
         System.out.println("time\tposX\tposY\tvelX\tvelY\ttilt\ttiltRate");
-        for (double[] row : feedbackTrajectory) {
+        for (double[] row : combinedTraj) {
             System.out.printf(
                 "%6.1f\t%8.4f\t%8.4f\t%8.4f\t%8.4f\t%8.4f\t%8.4f%n",
                 row[0], row[1], row[2], row[3], row[4], row[5], row[6]
