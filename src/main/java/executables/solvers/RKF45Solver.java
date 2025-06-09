@@ -10,97 +10,130 @@ import static executables.solvers.ODEUtility.*;
 /**
  * An RKF 45 implementation to increase accuracy compared to RK4 solver
  *
- *
- * param
- *We decided against an RK45 implementation as it may be more efficient, but learning about fsal
- * bookkeeping would have taken away resources from more relevant topics
- * For transparency its based on <a href="https://maths.cnam.fr/IMG/pdf/RungeKuttaFehlbergProof.pdf">this proof/a>
- * In this proof there is a
  */
 public class RKF45Solver implements ODESolver {
 
+    // Maximum allowed step size to prevent excessive jumps
+    private static final double MAX_STEP_SIZE = 1.0;
+
+    // Safety factor for step size control
+    private static final double SAFETY_FACTOR = 0.84;
+
+    // Minimum and maximum scaling factors for step size adjustment
+    private static final double MIN_SCALE = 0.1;
+    private static final double MAX_SCALE = 5.0;
+
+    @Override
     public double[][] solve(BiFunction<Double, double[], double[]> f, double t0, double[] y0,
                             double initialStepSize, int steps, BiFunction<Double, double[], Boolean> stopCondition) {
 
         int dim = y0.length;
         double[][] values = initStorage(steps, t0, y0);
 
-        double optimal_step_size = initialStepSize;
+        // Limit initial step size to prevent excessive jumps
+        double stepSize = Math.min(initialStepSize, MAX_STEP_SIZE);
         int i = 0;
         double t = t0;
+        double[] y = Arrays.copyOf(y0, dim);
 
         while (i < steps) {
-            if (stopCondition != null && stopCondition.apply(t, y0)) {
+            if (stopCondition != null && stopCondition.apply(t, y)) {
                 return Arrays.copyOf(values, i + 1);
             }
 
-            double[] k1 = f.apply(t, y0);
-            double[] k2 = f.apply(t + 0.25 * optimal_step_size, addVectors(y0, scaleVector(k1, 0.25 * optimal_step_size)));
+            // Calculate the six k values for the RKF45 method
+            double[] k1 = f.apply(t, y);
+            double[] k2 = f.apply(t + 0.25 * stepSize,
+                    addVectors(y, scaleVector(k1, 0.25 * stepSize)));
 
-            double[] k3 = f.apply(t + (3.0 / 8.0) * optimal_step_size, addVectors(y0, addVectors
-                    (scaleVector(k1, (3.0 / 32.0) * optimal_step_size), scaleVector(k2, (9.0 / 32.0) * optimal_step_size))));
+            double[] k3 = f.apply(t + (3.0 / 8.0) * stepSize,
+                    addVectors(y, addVectors(
+                        scaleVector(k1, (3.0 / 32.0) * stepSize),
+                        scaleVector(k2, (9.0 / 32.0) * stepSize))));
 
-            double[] k4 = f.apply(t + (12.0 / 13.0) * optimal_step_size, addVectors(y0, addVectors
-                    (addVectors(scaleVector(k1, (1932.0 / 2197.0) * optimal_step_size),
-                            scaleVector(k2, (-7200.0 / 2197.0) * optimal_step_size)), scaleVector(k3, (7296.0 / 2197.0) * optimal_step_size))));
+            double[] k4 = f.apply(t + (12.0 / 13.0) * stepSize,
+                    addVectors(y, addVectors(
+                        addVectors(
+                            scaleVector(k1, (1932.0 / 2197.0) * stepSize),
+                            scaleVector(k2, (-7200.0 / 2197.0) * stepSize)),
+                        scaleVector(k3, (7296.0 / 2197.0) * stepSize))));
 
-            double[] k5 = f.apply(t + optimal_step_size, addVectors(y0, addVectors(addVectors(
-                    addVectors(scaleVector(k1, (439.0 / 216.0) * optimal_step_size), scaleVector(k2, -8.0 * optimal_step_size)),
-                    scaleVector(k3, (3680.0 / 513.0) * optimal_step_size)), scaleVector(k4, (-845.0 / 4104.0) * optimal_step_size))));
+            double[] k5 = f.apply(t + stepSize,
+                    addVectors(y, addVectors(
+                        addVectors(
+                            addVectors(
+                                scaleVector(k1, (439.0 / 216.0) * stepSize),
+                                scaleVector(k2, -8.0 * stepSize)),
+                            scaleVector(k3, (3680.0 / 513.0) * stepSize)),
+                        scaleVector(k4, (-845.0 / 4104.0) * stepSize))));
 
-            double[] k6 = f.apply(t + 0.5 * optimal_step_size, addVectors(y0, addVectors(addVectors(
-                            addVectors(addVectors(scaleVector(k1, (-8.0 / 27.0) * optimal_step_size), scaleVector(k2, 2.0 * optimal_step_size)),
-                                    scaleVector(k3, (-3544.0 / 2565.0) * optimal_step_size)), scaleVector(k4, (1859.0 / 4104.0) * optimal_step_size)),
-                    scaleVector(k5, (-11.0 / 40.0) * optimal_step_size))));
+            double[] k6 = f.apply(t + 0.5 * stepSize,
+                    addVectors(y, addVectors(
+                        addVectors(
+                            addVectors(
+                                addVectors(
+                                    scaleVector(k1, (-8.0 / 27.0) * stepSize),
+                                    scaleVector(k2, 2.0 * stepSize)),
+                                scaleVector(k3, (-3544.0 / 2565.0) * stepSize)),
+                            scaleVector(k4, (1859.0 / 4104.0) * stepSize)),
+                        scaleVector(k5, (-11.0 / 40.0) * stepSize))));
 
+            // Calculate 4th order solution
             double[] yNext = new double[dim];
             for (int j = 0; j < dim; j++) {
-                yNext[j] = y0[j] +
-                        (25.0 / 216.0) * k1[j] +
-                        (1408.0 / 2565.0) * k3[j] +
-                        (2197.0 / 4104.0) * k4[j] -
-                        (1.0 / 5.0) * k5[j];
+                yNext[j] = y[j] +
+                        (25.0 / 216.0) * k1[j] * stepSize +
+                        (1408.0 / 2565.0) * k3[j] * stepSize +
+                        (2197.0 / 4104.0) * k4[j] * stepSize -
+                        (1.0 / 5.0) * k5[j] * stepSize;
             }
 
+            // Calculate 5th order solution
             double[] zNext = new double[dim];
             for (int j = 0; j < dim; j++) {
-                zNext[j] = y0[j] +
-                        (16.0 / 135.0) * k1[j] +
-                        (6656.0 / 12825.0) * k3[j] +
-                        (28561.0 / 56430.0) * k4[j] -
-                        (9.0 / 50.0) * k5[j] +
-                        (2.0 / 55.0) * k6[j];
+                zNext[j] = y[j] +
+                        (16.0 / 135.0) * k1[j] * stepSize +
+                        (6656.0 / 12825.0) * k3[j] * stepSize +
+                        (28561.0 / 56430.0) * k4[j] * stepSize -
+                        (9.0 / 50.0) * k5[j] * stepSize +
+                        (2.0 / 55.0) * k6[j] * stepSize;
             }
 
+            // Calculate error estimate
             double err = 0;
             for (int j = 0; j < dim; j++) {
-                double e = zNext[j] - yNext[j];
+                double e = Math.abs(zNext[j] - yNext[j]);
                 err += e * e;
             }
             err = Math.sqrt(err / dim);
 
-            double stepSizeTol = optimal_step_size * Constants.TOLERANCE;
+            // Calculate error tolerance
+            double tol = Constants.TOLERANCE;
+
+            // Calculate step size scaling factor
             double s;
-
-            if (err == 0) {
-                // we need a large jump, but also not to large. I believe matlab uses 4, but im unsure
-                s = 5.0;
+            if (err < 1e-15) {
+                s = MAX_SCALE;
             } else {
-                s = 0.84 * Math.pow(stepSizeTol / err, 0.25);
+                s = SAFETY_FACTOR * Math.pow(tol / err, 0.25);
+                s = Math.max(MIN_SCALE, Math.min(MAX_SCALE, s));
             }
-            s = Math.max(0.1, Math.min(5.0, s));
 
-            if (err <= stepSizeTol) {
-                t += optimal_step_size;
-                y0 = Arrays.copyOf(zNext, dim);  // Use 5th-order result
+            // Accept step if error is within tolerance
+            if (err <= tol) {
+                t += stepSize;
+                y = Arrays.copyOf(zNext, dim);  // Use 5th-order result
                 values[i + 1][0] = t;
                 for (int j = 0; j < dim; j++) {
-                    values[i + 1][j + 1] = y0[j];
+                    values[i + 1][j + 1] = y[j];
                 }
                 i++;
-                optimal_step_size *= s;
+
+                // Adjust step size for next step, but limit maximum step size
+                stepSize = Math.min(stepSize * s, MAX_STEP_SIZE);
             } else {
-                optimal_step_size *= s;
+                // Reduce step size and retry
+                stepSize *= s;
             }
         }
         return values;

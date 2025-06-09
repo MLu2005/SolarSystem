@@ -23,45 +23,77 @@ public class LanderSimulator {
             }
         }
         double cellSize = 1.0;
-        PlanetHeightGrid heightGrid = new PlanetHeightGrid(new com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetSurfaceGrid(titan, cellSize));
+        PlanetHeightGrid heightGrid = new PlanetHeightGrid(
+            new com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetSurfaceGrid(titan, cellSize)
+        );
         heightGrid.generateFlatTerrain(0.0);
-        PlanetWindGrid windGrid = new PlanetWindGrid(new com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetSurfaceGrid(titan, cellSize));
+        PlanetWindGrid windGrid = new PlanetWindGrid(
+            new com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetSurfaceGrid(titan, cellSize)
+        );
         windGrid.generateConstantWind(new Vector3D(windSpeedX, 0, 0));
         return new TitanEnvironment(heightGrid, windGrid);
     }
 
-    public static double[][] simulateOpenLoop(double[] initialState, double timeStep, int maximumSteps, double windSpeed, double landerMassKilograms) {
+    public static double[][] simulateOpenLoop(
+        double[] initialState,
+        double timeStep,
+        int maximumSteps,
+        double windSpeed,
+        double landerMassKilograms
+    ) {
         TitanEnvironment environment = buildEnvironment(windSpeed);
         Controller openLoopController = new OpenLoopController();
-        LanderODE odeFunction = new LanderODE(openLoopController, environment, DRAG_COEFFICIENT, MAX_ATMOS_HEIGHT, landerMassKilograms);
+        LanderODE odeFunction = new LanderODE(
+            openLoopController,
+            environment,
+            DRAG_COEFFICIENT,
+            MAX_ATMOS_HEIGHT,
+            landerMassKilograms
+        );
         RK4Solver solver = new RK4Solver();
-        BiFunction<Double, double[], Boolean> stopIfLanded = (time, state) -> state[1] <= 0.0;
+        BiFunction<Double,double[],Boolean> stopIfLanded =
+            (time, state) -> state[1] <= 0.0;
         return solver.solve(odeFunction, 0.0, initialState, timeStep, maximumSteps, stopIfLanded);
     }
 
-    public static double[][] simulateFeedback(double[] initialState, double timeStep, int maximumSteps, double windSpeed, double landerMassKilograms) {
+    public static double[][] simulateFeedback(
+        double[] initialState,
+        double timeStep,
+        int maximumSteps,
+        double windSpeed,
+        double landerMassKilograms
+    ) {
         TitanEnvironment environment = buildEnvironment(windSpeed);
         Controller feedbackController = new FeedbackController();
-        LanderODE odeFunction = new LanderODE(feedbackController, environment, DRAG_COEFFICIENT, MAX_ATMOS_HEIGHT, landerMassKilograms);
+        LanderODE odeFunction = new LanderODE(
+            feedbackController,
+            environment,
+            DRAG_COEFFICIENT,
+            MAX_ATMOS_HEIGHT,
+            landerMassKilograms
+        );
         RK4Solver solver = new RK4Solver();
-        BiFunction<Double, double[], Boolean> stopIfLanded = (time, state) -> state[1] <= 0.0;
+        BiFunction<Double,double[],Boolean> stopIfLanded =
+            (time, state) -> state[1] <= 0.0;
         return solver.solve(odeFunction, 0.0, initialState, timeStep, maximumSteps, stopIfLanded);
     }
 
     public static void main(String[] args) {
-        double[] initialState = new double[] {
-                -2715.3163563925214,     // horizontal position (km)
-                -944.8185459162208,  // vertical position (km)
-                0.5807482731466309, // horizontal velocity (km/s)
-                -1.6690138988461283,     // vertical velocity (km/s)
-            0.0,     // tilt angle (rad)
-            0.0      // tilt rate (rad/s)
+        double titanRadius = 2575.0;
+        double distanceToTitan = 2875.004939539644;
+        double altitude = distanceToTitan - titanRadius;
+        double[] initialState = {
+            -2715.3163563925214,
+             altitude,
+             0.5807482731466309,
+            -1.6690138988461283,
+             0.0,
+             0.0
         };
-
         double timeStep = 1.0;
-        int maximumSteps = 10000;
+        int maximumSteps = 200000;
         double windSpeed = 0.0001;
-        double landerMassKilograms = 10000.0;
+        double landerMassKilograms = 50000.0;
         System.out.println("=== Initial Conditions ===");
         System.out.printf("horizontalPosition = %.6f km%n", initialState[0]);
         System.out.printf("verticalPosition   = %.6f km%n", initialState[1]);
@@ -74,39 +106,27 @@ public class LanderSimulator {
         System.out.printf("maximumSteps       = %d%n", maximumSteps);
         System.out.printf("windSpeed          = %.4f km/s%n%n", windSpeed);
 
-        double[][] openLoopTrajectory = simulateOpenLoop(initialState, timeStep, maximumSteps, windSpeed, landerMassKilograms);
-
+        double[][] openLoopTrajectory = simulateOpenLoop(
+            initialState, timeStep, maximumSteps, windSpeed, landerMassKilograms
+        );
         System.out.println("=== Open-Loop Trajectory ===");
         System.out.println("time\tposX\tposY\tvelX\tvelY\ttilt\ttiltRate");
         for (double[] row : openLoopTrajectory) {
-            double time      = row[0];
-            double posX      = row[1];
-            double posY      = row[2];
-            double velX      = row[3];
-            double velY      = row[4];
-            double tiltAngle = row[5];
-            double tiltRate  = row[6];
             System.out.printf(
                 "%6.1f\t%8.4f\t%8.4f\t%8.4f\t%8.4f\t%8.4f\t%8.4f%n",
-                time, posX, posY, velX, velY, tiltAngle, tiltRate
+                row[0], row[1], row[2], row[3], row[4], row[5], row[6]
             );
         }
 
-        double[][] feedbackTrajectory = simulateFeedback(initialState, timeStep, maximumSteps, windSpeed, landerMassKilograms);
-
+        double[][] feedbackTrajectory = simulateFeedback(
+            initialState, timeStep, maximumSteps, windSpeed, landerMassKilograms
+        );
         System.out.println("\n=== Feedback Trajectory ===");
         System.out.println("time\tposX\tposY\tvelX\tvelY\ttilt\ttiltRate");
         for (double[] row : feedbackTrajectory) {
-            double time      = row[0];
-            double posX      = row[1];
-            double posY      = row[2];
-            double velX      = row[3];
-            double velY      = row[4];
-            double tiltAngle = row[5];
-            double tiltRate  = row[6];
             System.out.printf(
                 "%6.1f\t%8.4f\t%8.4f\t%8.4f\t%8.4f\t%8.4f\t%8.4f%n",
-                time, posX, posY, velX, velY, tiltAngle, tiltRate
+                row[0], row[1], row[2], row[3], row[4], row[5], row[6]
             );
         }
     }

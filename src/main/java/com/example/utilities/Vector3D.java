@@ -1,5 +1,6 @@
 package com.example.utilities;
 
+import java.util.Random;
 import java.util.Vector;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Vector;
  * in the solar system simulation. Includes common vector operations like addition, normalization, and dot product.
  */
 public class Vector3D {
-
+    private static final Random RANDOM = new Random();
     public static final Vector3D ZERO = new Vector3D(0, 0, 0);
     public double x, y, z;
 
@@ -155,5 +156,17 @@ public class Vector3D {
         vector.add(this.y);
         vector.add(this.z);
         return vector;
+    }
+
+    /**
+     * Returns a random unit vector (uniformly distributed on the surface of a sphere).
+     */
+    public static Vector3D randomUnitVector() {
+        double theta = 2 * Math.PI * RANDOM.nextDouble();   // Angle around the z-axis
+        double phi = Math.acos(2 * RANDOM.nextDouble() - 1); // Angle from the z-axis
+        double x = Math.sin(phi) * Math.cos(theta);
+        double y = Math.sin(phi) * Math.sin(theta);
+        double z = Math.cos(phi);
+        return new Vector3D(x, y, z);
     }
 }
