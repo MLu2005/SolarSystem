@@ -16,29 +16,19 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * The main application class for the Solar System Simulator.
- * Initializes the scene, camera, UI, and celestial bodies.
- */
 public class SolarSystemApp extends Application {
 
-    /** Node for attaching the spaceship sound */
     private Node soundNode;
-
-    /** Sound effect for the spaceship */
     private SpaceShipSound spaceShipSound;
-
-    /** Group node representing the spaceship */
     private Group spaceshipGroup;
 
     private static final int SCALE = 400000;
     private final List<Sphere> planetSpheres = new ArrayList<>();
     private List<CelestialBody> bodies;
 
-    /**
-     * Entry point for the JavaFX application.
-     * Displays splash screen before launching the main scene.
-     */
+    // FIX: Make sure this is the one we use
+    private BurnManager burnManager;
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         Stage splashStage = new Stage();
@@ -53,12 +43,6 @@ public class SolarSystemApp extends Application {
         });
     }
 
-    /**
-     * Sets up the main simulation scene, camera, UI, and renders all celestial bodies.
-     *
-     * @param primaryStage the main window
-     * @throws IOException if FXML or resources fail to load
-     */
     private void setupMainScene(Stage primaryStage) throws IOException {
         bodies = SolarSystemFactory.loadFromTable();
 
@@ -67,11 +51,20 @@ public class SolarSystemApp extends Application {
             return;
         }
 
-        // NEW: Create physics engine and register all celestial bodies
         PhysicsEngine engine = new PhysicsEngine();
         for (CelestialBody body : bodies) {
             engine.addBody(body);
         }
+
+        // FIX: Assign directly to field
+        Vector3D targetVel = new Vector3D(1.4918284984381769, -0.9472717047141451, 0.09959807890155617);
+        burnManager = new BurnManager(
+                1.0,                    // orbitMultiplier
+                "Titan",                // target body name
+                13000,                  // approachTriggerDistance in km
+                7850,                   // orbitTriggerDistance in km
+                targetVel               // target velocity vector
+        );
 
         StageBuilder sceneBuilder = new StageBuilder(SCALE);
         sceneBuilder.setupLighting();
@@ -89,16 +82,13 @@ public class SolarSystemApp extends Application {
         UIButtonsController uiController = loader.getController();
         uiController.initialize(cameraController, orbitRenderer, primaryStage);
 
-        // Initialize SpectatorMode
         SpectatorMode spectatorMode = new SpectatorMode(camera,
                 cameraController.getCameraXGroup(),
                 cameraController.getCameraYGroup(),
                 cameraController.getCameraZGroup()
         );
 
-        // Nodes to Targets for spectator mode
         Map<String, Node> targetMap = new HashMap<>();
-
         Pane labelPane = new Pane();
         labelPane.setMouseTransparent(true);
         LabelManager labelManager = new LabelManager(labelPane, camera, subScene);
@@ -129,10 +119,8 @@ public class SolarSystemApp extends Application {
             targetMap.put(name, sphere);
         }
 
-        // Provide target map to SpectatorMode
         spectatorMode.setNamedTargets(targetMap);
         uiController.setSpectatorMovement(spectatorMode);
-
         labelManager.updateLabelPositions();
 
         StackPane stackPane = new StackPane();
@@ -183,6 +171,8 @@ public class SolarSystemApp extends Application {
                 subScene,
                 engine
         );
+
+        animator.setBurnManager(burnManager);
 
         animator.initializeLabels();
         AnimationTimer orbitTimer = animator.createOrbitTimer();
