@@ -129,10 +129,8 @@ public class RKF45Solver implements ODESolver {
                 }
                 i++;
 
-                // Adjust step size for next step, but limit maximum step size
                 stepSize = Math.min(stepSize * s, MAX_STEP_SIZE);
             } else {
-                // Reduce step size and retry
                 stepSize *= s;
             }
         }

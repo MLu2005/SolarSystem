@@ -9,7 +9,7 @@ import java.util.Vector;
  * (in m/s) applied in consecutive “slots” around Titan approach.
  */
 public class InsertionThrustSchedule implements Cloneable {
-    // ΔV vectors (in m/s) for each time slot
+    // Vectors (in m/s) for each time slot
     private Vector3D[] deltaVSlots;
     // Duration of each slot in seconds
     private double slotDurationSec;

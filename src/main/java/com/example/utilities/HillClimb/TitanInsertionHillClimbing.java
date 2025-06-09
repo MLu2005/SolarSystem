@@ -3,10 +3,12 @@ package com.example.utilities.HillClimb;
 import java.util.*;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.function.BiFunction;
 
 import com.example.utilities.GA.Individual;
 import com.example.utilities.Vector3D;
 import executables.Constants;
+import executables.solvers.RKF45Solver;
 
 public class TitanInsertionHillClimbing {
 
@@ -131,7 +133,6 @@ public class TitanInsertionHillClimbing {
 
             double titanOrbitalPeriod = calculateTitanOrbitalPeriod();
 
-            // Simulate orbit for two periods
             Vector3D positionAfterTwoTurns = calculatePositionAfterTwoTurns(currentSchedule, titanOrbitalPeriod);
             Vector3D speedAfterTwoTurns = calculateSpeedAfterTwoTurns(currentSchedule, titanOrbitalPeriod);
 
@@ -190,9 +191,6 @@ public class TitanInsertionHillClimbing {
         // Calculate total ΔV magnitude
         double totalDV_mps = schedule.getTotalDeltaVMagnitude();
 
-        // Implementing the real simulation as described in the comments:
-        // 1. Reset simulation to initial state
-        // Create a simulated spacecraft at a position relative to Titan
         Vector3D initialPosition = new Vector3D(
             TARGET_RADIUS_KM * 2, // Start at twice the target radius away from Titan
             0,
@@ -200,46 +198,76 @@ public class TitanInsertionHillClimbing {
         );
         Vector3D initialVelocity = new Vector3D(
             0,
-            Math.sqrt(executables.Constants.MU_TITAN / (TARGET_RADIUS_KM * 2)), // Initial velocity for approach
+            Math.sqrt(executables.Constants.MU_TITAN / (TARGET_RADIUS_KM * 2)),
             0
         );
 
-        // 2. Apply the thrust schedule
         Vector3D position = initialPosition;
         Vector3D velocity = initialVelocity;
 
         // Apply each thrust in the schedule
-        for (int i = 0; i < schedule.getNumSlots(); i++) {
-            Vector3D deltaV = schedule.getDeltaVAt(i);
-            // Convert from m/s to km/s for consistency with position units
-            Vector3D deltaVkms = new Vector3D(
-                deltaV.getX() / 1000.0,
-                deltaV.getY() / 1000.0,
-                deltaV.getZ() / 1000.0
-            );
+        // Instantiate your RKF45 solver once before the thrust loop
+        RKF45Solver solver = new RKF45Solver();
 
-            // Apply the thrust (instantaneous velocity change)
+        // ─── Precede your thrust loop with these imports:
+// import java.util.function.BiFunction;
+
+// ─── Define the gravity ODE once, before the loop:
+        BiFunction<Double, double[], double[]> gravity = (t, y) -> {
+            // y[0..2]=position km, y[3..5]=velocity km/s
+            Vector3D r    = new Vector3D(y[0], y[1], y[2]);
+            double  rMag  = r.magnitude();
+            double  aMag  = -Constants.MU_TITAN / (rMag * rMag);
+            Vector3D aVec = r.normalize().scale(aMag);
+            return new double[]{
+                    y[3],        // dx/dt = vx
+                    y[4],        // dy/dt = vy
+                    y[5],        // dz/dt = vz
+                    aVec.getX(), // dvx/dt = ax
+                    aVec.getY(), // dvy/dt = ay
+                    aVec.getZ()  // dvz/dt = az
+            };
+        };
+
+        for (int i = 0; i < schedule.getNumSlots(); i++) {
+            Vector3D deltaV    = schedule.getDeltaVAt(i);
+            Vector3D deltaVkms = new Vector3D(
+                    deltaV.getX() / 1000.0,
+                    deltaV.getY() / 1000.0,
+                    deltaV.getZ() / 1000.0
+            );
             velocity = velocity.add(deltaVkms);
 
-            // Simulate motion until the next thrust (or end of simulation)
-            double timeStep = 60.0; // 60 seconds per step
-            double slotDuration = schedule.getSlotDuration();
 
-            for (double t = 0; t < slotDuration; t += timeStep) {
-                // Calculate gravitational acceleration towards Titan
-                double distanceToTitan = position.magnitude();
-                double acceleration = -executables.Constants.MU_TITAN / (distanceToTitan * distanceToTitan);
+            double duration = schedule.getSlotDuration();
+            double initialStep  = 60.0;
+            int maxSteps = (int) Math.ceil(duration / initialStep) + 1;
 
-                Vector3D accelerationVector = position.normalize().scale(acceleration);
+            // pack state [x,y,z,vx,vy,vz]
+            double[] y0 = new double[]{
+                    position.getX(), position.getY(), position.getZ(),
+                    velocity.getX(), velocity.getY(), velocity.getZ()
+            };
 
-                // Update velocity and position using simple Euler integration
-                velocity = velocity.add(accelerationVector.scale(timeStep));
-                position = position.add(velocity.scale(timeStep));
-            }
+            double[][] traj = solver.solve(
+                    gravity,
+                    0.0,
+                    y0,
+                    initialStep,
+                    maxSteps,
+                    null
+            );
+
+            // unpack final row
+            double[] yEnd = traj[traj.length - 1];
+            position = new Vector3D(yEnd[0], yEnd[1], yEnd[2]);
+            velocity = new Vector3D(yEnd[3], yEnd[4], yEnd[5]);
         }
 
+
+
         double titanOrbitalPeriod = calculateTitanOrbitalPeriod();
-        double timeStep = 60.0; // 60 seconds per step
+        double timeStep = 60.0; // seconds
 
         for (double t = 0; t < titanOrbitalPeriod; t += timeStep) {
             // Calculate gravitational acceleration towards Titan
