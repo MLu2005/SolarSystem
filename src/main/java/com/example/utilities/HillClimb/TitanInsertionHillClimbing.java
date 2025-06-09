@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.function.BiFunction;
 
 import com.example.utilities.GA.Individual;
+import com.example.utilities.SimulationFileWriter;
 import com.example.utilities.Vector3D;
 import executables.Constants;
 import executables.solvers.RKF45Solver;
@@ -15,12 +16,12 @@ public class TitanInsertionHillClimbing {
     /** Number of discrete thrust‐slots in the insertion profile **/
     private static final int N_SLOTS = 5;
 
-    /** Duration of each slot in seconds **/
+    /** Duration of each slot in seconds, one day here **/
     private static final double SLOT_DURATION_SEC = 86400.0; 
-    // (for example, 1 day per slot; replace with your actual slot length)
+
 
     /** How many hill‐climb iterations to attempt **/
-    private static final int MAX_ITERATIONS = 10000;
+    private static final int MAX_ITERATIONS = 250000;
 
     /** 
      * The maximum magnitude of a single random perturbation in one ΔV component (m/s). 
@@ -125,57 +126,15 @@ public class TitanInsertionHillClimbing {
         }
         System.out.println("\nTitan Insertion Hill Climbing completed successfully.");
         try {
-
-            StringBuilder json = new StringBuilder();
-            json.append("{\n");
-
-            json.append("  \"usedFuel\": ").append(bestCost).append(",\n");
-
-            double titanOrbitalPeriod = calculateTitanOrbitalPeriod();
-
-            Vector3D positionAfterTwoTurns = calculatePositionAfterTwoTurns(currentSchedule, titanOrbitalPeriod);
-            Vector3D speedAfterTwoTurns = calculateSpeedAfterTwoTurns(currentSchedule, titanOrbitalPeriod);
-
-            json.append("  \"positionAfterTwoTurns\": {\n");
-            json.append("    \"x\": ").append(positionAfterTwoTurns.getX()).append(",\n");
-            json.append("    \"y\": ").append(positionAfterTwoTurns.getY()).append(",\n");
-            json.append("    \"z\": ").append(positionAfterTwoTurns.getZ()).append("\n");
-            json.append("  },\n");
-
-
-            json.append("  \"speedAfterTwoTurns\": {\n");
-            json.append("    \"vx\": ").append(speedAfterTwoTurns.getX()).append(",\n");
-            json.append("    \"vy\": ").append(speedAfterTwoTurns.getY()).append(",\n");
-            json.append("    \"vz\": ").append(speedAfterTwoTurns.getZ()).append("\n");
-            json.append("  },\n");
-
-            double distanceToTitan = positionAfterTwoTurns.magnitude();
-            json.append("  \"distanceToTitan\": ").append(distanceToTitan).append(",\n");
-
-            json.append("  \"burns\": [\n");
-            for (int i = 0; i < currentSchedule.getNumSlots(); i++) {
-                Vector3D burn = currentSchedule.getDeltaVAt(i);
-                double burnTime = i * currentSchedule.getSlotDuration();
-
-                json.append("    {\n");
-                json.append("      \"time\": ").append(burnTime).append(",\n");
-                json.append("      \"deltaV\": {\n");
-                json.append("        \"x\": ").append(burn.getX()).append(",\n");
-                json.append("        \"y\": ").append(burn.getY()).append(",\n");
-                json.append("        \"z\": ").append(burn.getZ()).append("\n");
-                json.append("      }\n");
-                json.append("    }").append(i < currentSchedule.getNumSlots() - 1 ? "," : "").append("\n");
-            }
-            json.append("  ]\n");
-
-            json.append("}");
-
-            FileWriter writer = new FileWriter("src/main/java/com/example/utilities/HillClimb/hillclimb_results.json");
-            writer.write(json.toString());
-            writer.close();
+            // Use the SimulationFileWriter to write the results
+            SimulationFileWriter.writeHillClimbResults(
+                currentSchedule,
+                bestCost,
+                "src/main/java/com/example/utilities/HillClimb/hillclimb_results.json"
+            );
 
             System.out.println("Results saved to hillclimb_results.json");
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Error writing JSON file: " + e.getMessage());
         }
     }
@@ -188,8 +147,8 @@ public class TitanInsertionHillClimbing {
      * @return The cost (lower is better)
      */
     private static double computeCost(InsertionThrustSchedule schedule) {
-        // Calculate total ΔV magnitude
         double totalDV_mps = schedule.getTotalDeltaVMagnitude();
+        double totalFuel = schedule.getTotalFuelUsed();
 
         Vector3D initialPosition = new Vector3D(
             TARGET_RADIUS_KM * 2, // Start at twice the target radius away from Titan
@@ -285,7 +244,7 @@ public class TitanInsertionHillClimbing {
 
         // The cost is the total DV plus the penalties
         // This creates a smooth gradient for the hill climber to follow
-        return totalDV_mps + radiusPenalty + eccentricityPenalty;
+        return 0.8*totalDV_mps + radiusPenalty + eccentricityPenalty + totalFuel;
     }
 
 

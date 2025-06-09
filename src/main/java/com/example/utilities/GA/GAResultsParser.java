@@ -30,8 +30,6 @@ public class GAResultsParser {
         loadJsonFile();
     }
 
-
-
     /**
      * Gets all individuals parsed from the GA results file.
      *

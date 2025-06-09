@@ -1,0 +1,330 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.example.lander.LanderSimulator",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1322970774 { 
+   	label=example
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1219420038 { 
+   	label=utilities
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   CoordinateKey734759865[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CoordinateKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   col: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   row: int [1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+PlanetHeightGrid68212947[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)PlanetHeightGrid</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   grid: PlanetSurfaceGrid [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   heightMap: Map&lt;CoordinateKey, Double&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ generateFlatTerrain(height: double)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ generatePerlinTerrain(scale: double, amplitude: double, seed: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getAltitude(globalPosition: Vector3D): double</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+PlanetSurfaceGrid68212947[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)PlanetSurfaceGrid</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   cellSize: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   planet: CelestialBody [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ toCoordinateKey(globalPosition: Vector3D): CoordinateKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ toLocalPosition(globalPosition: Vector3D): Vector3D</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+PlanetWindGrid68212947[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)PlanetWindGrid</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   grid: PlanetSurfaceGrid [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   windMap: Map&lt;CoordinateKey, Vector3D&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ generateConstantWind(wind: Vector3D)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ generatePerlinWind(scale: double, maxWindSpeed: double, seed: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getWind(globalPosition: Vector3D): Vector3D</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SimplePerlinNoise68212947[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SimplePerlinNoise</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   permutation: int[] [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   random: Random [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- fade(t: double): double</TD></TR>
+<TR><TD ALIGN="LEFT" >- grad(hash: int, x: double, y: double): double</TD></TR>
+<TR><TD ALIGN="LEFT" >- lerp(t: double, a: double, b: double): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ noise(x: double, y: double): double</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SolarSystemFactory937669443[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SolarSystemFactory</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- getCelestialBody(saturn: CelestialBody): CelestialBody</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRadiusKm(name: String): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ loadFromTable(): List&lt;CelestialBody&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Vector3D2059666521[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Vector3D</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+   x: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   y: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   z: double [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ add(other: Vector3D): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ copy(): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ cross(other: Vector3D): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ distanceTo(other: Vector3D): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ dot(other: Vector3D): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ magnitude(): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ magnitudeSquared(): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ norm(): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ normalize(): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ safeNormalize(): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ scalarMultiply(v: double): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ scale(scalar: double): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ subtract(other: Vector3D): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ toVector(): Vector&lt;Double&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ zero(): Vector3D</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+
+subgraph cluster_509159204 { 
+   	label=lander
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   LanderSimulator272702697[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)LanderSimulator</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- buildEnvironment(windSpeedX: double): TitanEnvironment</TD></TR>
+<TR><TD ALIGN="LEFT" >+ main(args: String[])</TD></TR>
+<TR><TD ALIGN="LEFT" >+ simulateFeedback(initialState: double[], timeStep: double, maximumSteps: int, windSpeed: double, landerMassKilograms: double): double[][]</TD></TR>
+<TR><TD ALIGN="LEFT" >+ simulateOpenLoop(initialState: double[], timeStep: double, maximumSteps: int, windSpeed: double, landerMassKilograms: double): double[][]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+subgraph cluster_2030067008 { 
+   	label=solvers
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   EulerSolver270417723[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)EulerSolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ solve(f: BiFunction&lt;Double, double[], double[]&gt;, x: double, y0: double[], stepSize: double, steps: int, stopCondition: BiFunction&lt;Double, double[], Boolean&gt;): double[][]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ODEUtility270417723[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ODEUtility</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ addVectors(a: double[], b: double[]): double[]</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMax(valuePairs: double[][]): Double[]</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMin(valuePairs: double[][]): Double[]</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getValueAt(valuePairs: double[][], val: double): double[]</TD></TR>
+<TR><TD ALIGN="LEFT" >+ initStorage(maxSteps: int, t0: double, y0: double[]): double[][]</TD></TR>
+<TR><TD ALIGN="LEFT" ># roundTime(t: double): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ scaleVector(v: double[], scalar: double): double[]</TD></TR>
+<TR><TD ALIGN="LEFT" >+ textToFunction(): BiFunction&lt;Double, double[], double[]&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ xIntersectInStep(valuePairs: double[][]): Double[][]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+RK4Solver270417723[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)RK4Solver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ solve(f: BiFunction&lt;Double, double[], double[]&gt;, t0: double, y0: double[], stepSize: double, steps: int, stopCondition: BiFunction&lt;Double, double[], Boolean&gt;): double[][]</TD></TR>
+<TR><TD ALIGN="LEFT" >+ solveStep(f: BiFunction&lt;Double, double[], double[]&gt;, t: double, y: double[], h: double): double[]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+RKF45Solver270417723[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)RKF45Solver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ solve(f: BiFunction&lt;Double, double[], double[]&gt;, t0: double, y0: double[], initialStepSize: double, steps: int, stopCondition: BiFunction&lt;Double, double[], Boolean&gt;): double[][]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+
+'edges    
+LanderSimulator272702697 -> PlanetHeightGrid68212947[label="buildEnvironment() -> generateFlatTerrain()"];
+LanderSimulator272702697 -> PlanetWindGrid68212947[label="buildEnvironment() -> generateConstantWind()"];
+LanderSimulator272702697 -> SolarSystemFactory937669443[label="buildEnvironment() -> loadFromTable()"];
+PlanetHeightGrid68212947 -> CoordinateKey734759865[label="heightMap
+[0..*]"];
+PlanetHeightGrid68212947 -> PlanetSurfaceGrid68212947[label="grid
+[0..1]"];
+PlanetHeightGrid68212947 -> SimplePerlinNoise68212947[label="generatePerlinTerrain() -> noise()"];
+PlanetWindGrid68212947 -> CoordinateKey734759865[label="windMap
+[0..*]"];
+PlanetWindGrid68212947 -> PlanetSurfaceGrid68212947[label="grid
+[0..1]"];
+PlanetWindGrid68212947 -> Vector3D2059666521[label="windMap
+[0..*]"];
+RK4Solver270417723 -> EulerSolver270417723[arrowhead=none];
+RK4Solver270417723 -> RKF45Solver270417723[arrowhead=none];
+    
+}
+@enduml
