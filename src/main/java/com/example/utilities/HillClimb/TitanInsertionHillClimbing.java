@@ -205,14 +205,8 @@ public class TitanInsertionHillClimbing {
         Vector3D position = initialPosition;
         Vector3D velocity = initialVelocity;
 
-        // Apply each thrust in the schedule
-        // Instantiate your RKF45 solver once before the thrust loop
         RKF45Solver solver = new RKF45Solver();
 
-        // ─── Precede your thrust loop with these imports:
-// import java.util.function.BiFunction;
-
-// ─── Define the gravity ODE once, before the loop:
         BiFunction<Double, double[], double[]> gravity = (t, y) -> {
             // y[0..2]=position km, y[3..5]=velocity km/s
             Vector3D r    = new Vector3D(y[0], y[1], y[2]);
@@ -258,64 +252,42 @@ public class TitanInsertionHillClimbing {
                     null
             );
 
-            // unpack final row
+            // get final row
             double[] yEnd = traj[traj.length - 1];
             position = new Vector3D(yEnd[0], yEnd[1], yEnd[2]);
             velocity = new Vector3D(yEnd[3], yEnd[4], yEnd[5]);
         }
-
-
-
         double titanOrbitalPeriod = calculateTitanOrbitalPeriod();
-        double timeStep = 60.0; // seconds
+        double timeStep = 60.0;
 
         for (double t = 0; t < titanOrbitalPeriod; t += timeStep) {
-            // Calculate gravitational acceleration towards Titan
             double distanceToTitan = position.magnitude();
             double acceleration = -executables.Constants.MU_TITAN / (distanceToTitan * distanceToTitan);
 
             Vector3D accelerationVector = position.normalize().scale(acceleration);
 
-            // Update velocity and position using simple Euler integration
             velocity = velocity.add(accelerationVector.scale(timeStep));
             position = position.add(velocity.scale(timeStep));
         }
 
-        // 4. Calculate the deviation from the target orbit
         double finalRadius = position.magnitude();
         double deviation = Math.abs(finalRadius - TARGET_RADIUS_KM);
 
-        // Calculate eccentricity to check if the orbit is circular
+
         Vector3D angularMomentum = position.cross(velocity);
-        double angularMomentumMagnitude = angularMomentum.magnitude();
         double mu = executables.Constants.MU_TITAN;
         Vector3D eccentricityVector = velocity.cross(angularMomentum).scale(1.0/mu).subtract(position.normalize());
         double eccentricity = eccentricityVector.magnitude();
 
-        // Add penalty for non-circular orbits
         double eccentricityPenalty = DEVIATION_FACTOR * eccentricity * 10.0;
 
-        // Calculate continuous penalty based on deviation from target orbit
         double radiusPenalty = DEVIATION_FACTOR * deviation;
 
-        // The cost is the total ΔV plus the penalties
+        // The cost is the total DV plus the penalties
         // This creates a smooth gradient for the hill climber to follow
         return totalDV_mps + radiusPenalty + eccentricityPenalty;
     }
 
-    /**
-     * Utility to build a random Individual whose gene‐vector has 'geneCount' doubles.
-     * Adjust the range of each random gene (here: ±1e5 m/s) to something sensible for your problem.
-     */
-    private static Individual createRandomIndividual(int geneCount, Random rand) {
-        Vector<Double> genes = new Vector<>(geneCount);
-        for (int i = 0; i < geneCount; i++) {
-            // Example: uniform random in ±1e5 m/s. Change to your own gene‐range if needed.
-            double val = (rand.nextDouble() - 0.5) * 2.0e5;
-            genes.add(val);
-        }
-        return new Individual(genes);
-    }
 
     /**
      * Container for returning the hill‐climb result:
@@ -352,7 +324,8 @@ public class TitanInsertionHillClimbing {
     }
 
     /**
-     * Calculates Titan's orbital period.
+     * Computes the period of a circular orbit around Titan at the target altitude.
+     * Uses the standard Newton–Kepler formulation for a circular orbit
      * 
      * @return Titan's orbital period in seconds
      */
@@ -371,23 +344,63 @@ public class TitanInsertionHillClimbing {
      * @return The position vector after two turns
      */
     private static Vector3D calculatePositionAfterTwoTurns(InsertionThrustSchedule schedule, double titanOrbitalPeriod) {
-        // In a real implementation, this would use a physics engine to simulate
-        // the orbit for two periods and return the actual position.
-        // For this simplified version, we'll return a simulated position based on the schedule.
-
-        // Calculate a simulated position based on the schedule's total delta-V
-        double totalDV = schedule.getTotalDeltaVMagnitude();
-
-        // Simulate a circular orbit around Titan
         double r = TARGET_RADIUS_KM;
-        double angle = (totalDV % 1000) / 1000.0 * 2 * Math.PI; // Random angle based on totalDV
+        double v = Math.sqrt(executables.Constants.MU_TITAN / r);
 
-        // Position in a circular orbit at the given angle
-        double x = r * Math.cos(angle);
-        double y = r * Math.sin(angle);
-        double z = (totalDV % 100) / 10.0; // Small z-component for a nearly circular orbit
+        Vector3D initialPosition = new Vector3D(r, 0, 0);
+        Vector3D initialVelocity = new Vector3D(0, v, 0);
 
-        return new Vector3D(x, y, z);
+        double[] y0 = new double[6];
+        y0[0] = initialPosition.x;
+        y0[1] = initialPosition.y;
+        y0[2] = initialPosition.z;
+        y0[3] = initialVelocity.x;
+        y0[4] = initialVelocity.y;
+        y0[5] = initialVelocity.z;
+
+        for (int i = 0; i < schedule.getNumSlots(); i++) {
+            Vector3D deltaV = schedule.getDeltaVAt(i);
+            // Convert from m/s to km/s (deltaV is in m/s)
+            y0[3] += deltaV.x / 1000.0;
+            y0[4] += deltaV.y / 1000.0;
+            y0[5] += deltaV.z / 1000.0;
+        }
+
+        java.util.function.BiFunction<Double, double[], double[]> f = (t, state) -> {
+            double[] dydt = new double[6];
+
+            dydt[0] = state[3];
+            dydt[1] = state[4];
+            dydt[2] = state[5];
+
+            Vector3D pos = new Vector3D(state[0], state[1], state[2]);
+            double distSq = pos.magnitudeSquared();
+            double dist = Math.sqrt(distSq);
+
+            // Acceleration = -mu * r / |r|^3
+            double factor = -executables.Constants.MU_TITAN / (dist * distSq);
+
+            dydt[3] = factor * state[0];
+            dydt[4] = factor * state[1];
+            dydt[5] = factor * state[2];
+
+            return dydt;
+        };
+
+        RKF45Solver solver = new RKF45Solver();
+
+
+        double simulationTime = 2.0 * titanOrbitalPeriod;
+        int steps = (int)(simulationTime / executables.Constants.INITIAL_STEP_SIZE) + 1;
+        steps = Math.min(steps, executables.Constants.MAX_STEPS);
+
+
+        double[][] result = solver.solve(f, 0, y0, executables.Constants.INITIAL_STEP_SIZE, steps, null);
+
+        double[] finalState = result[result.length - 1];
+
+        // final pos
+        return new Vector3D(finalState[1], finalState[2], finalState[3]);
     }
 
     /**
@@ -398,24 +411,62 @@ public class TitanInsertionHillClimbing {
      * @return The velocity vector after two turns
      */
     private static Vector3D calculateSpeedAfterTwoTurns(InsertionThrustSchedule schedule, double titanOrbitalPeriod) {
-        // In a real implementation, this would use a physics engine to simulate
-        // the orbit for two periods and return the actual velocity.
-        // For this simplified version, we'll return a simulated velocity based on the schedule.
-
-        // Calculate a simulated velocity based on the schedule's total delta-V
-        double totalDV = schedule.getTotalDeltaVMagnitude();
-
-        // Calculate circular orbit velocity around Titan
+        // Initial state: circular orbit at target radius
         double r = TARGET_RADIUS_KM;
         double v = Math.sqrt(executables.Constants.MU_TITAN / r);
 
-        // Velocity tangential to the position calculated in calculatePositionAfterTwoTurns
-        double angle = (totalDV % 1000) / 1000.0 * 2 * Math.PI + Math.PI/2; // Perpendicular to position
+        // Initial position and velocity (starting in the x-y plane)
+        Vector3D initialPosition = new Vector3D(r, 0, 0);
+        Vector3D initialVelocity = new Vector3D(0, v, 0);
 
-        double vx = v * Math.cos(angle);
-        double vy = v * Math.sin(angle);
-        double vz = (totalDV % 50) / 100.0; // Small z-component for a nearly circular orbit
+        double[] y0 = new double[6];
+        y0[0] = initialPosition.x;
+        y0[1] = initialPosition.y;
+        y0[2] = initialPosition.z;
+        y0[3] = initialVelocity.x;
+        y0[4] = initialVelocity.y;
+        y0[5] = initialVelocity.z;
 
-        return new Vector3D(vx, vy, vz);
+        for (int i = 0; i < schedule.getNumSlots(); i++) {
+            Vector3D deltaV = schedule.getDeltaVAt(i);
+            // Convert from m/s to km/s (deltaV is in m/s)
+            y0[3] += deltaV.x / 1000.0;
+            y0[4] += deltaV.y / 1000.0;
+            y0[5] += deltaV.z / 1000.0;
+        }
+
+        java.util.function.BiFunction<Double, double[], double[]> f = (t, state) -> {
+            double[] dydt = new double[6];
+
+            dydt[0] = state[3];
+            dydt[1] = state[4];
+            dydt[2] = state[5];
+
+            Vector3D pos = new Vector3D(state[0], state[1], state[2]);
+            double distSq = pos.magnitudeSquared();
+            double dist = Math.sqrt(distSq);
+
+            // Acceleration = -mu * r / |r|^3
+            double factor = -executables.Constants.MU_TITAN / (dist * distSq);
+
+            dydt[3] = factor * state[0];
+            dydt[4] = factor * state[1];
+            dydt[5] = factor * state[2];
+
+            return dydt;
+        };
+
+        RKF45Solver solver = new RKF45Solver();
+
+        double simulationTime = 2.0 * titanOrbitalPeriod;
+        int steps = (int)(simulationTime / executables.Constants.INITIAL_STEP_SIZE) + 1;
+        steps = Math.min(steps, executables.Constants.MAX_STEPS);
+
+        double[][] result = solver.solve(f, 0, y0, executables.Constants.INITIAL_STEP_SIZE, steps, null);
+
+        double[] finalState = result[result.length - 1];
+
+        // final velocity
+        return new Vector3D(finalState[4], finalState[5], finalState[6]);
     }
 }
