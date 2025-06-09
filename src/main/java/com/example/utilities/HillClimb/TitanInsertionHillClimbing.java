@@ -388,8 +388,6 @@ public class TitanInsertionHillClimbing {
         };
 
         RKF45Solver solver = new RKF45Solver();
-
-
         double simulationTime = 2.0 * titanOrbitalPeriod;
         int steps = (int)(simulationTime / executables.Constants.INITIAL_STEP_SIZE) + 1;
         steps = Math.min(steps, executables.Constants.MAX_STEPS);
@@ -399,7 +397,7 @@ public class TitanInsertionHillClimbing {
 
         double[] finalState = result[result.length - 1];
 
-        // final pos
+
         return new Vector3D(finalState[1], finalState[2], finalState[3]);
     }
 
