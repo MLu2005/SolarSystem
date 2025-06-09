@@ -3,8 +3,10 @@ package com.example.solar_system;
 import com.example.utilities.Vector3D;
 import java.util.List;
 
-//* Highly elaborate description of the class below ->>
-/**
+/*
+ Highly elaborate description of the class below ->>
+ */
+/*
  * BurnManager handles automatic engine burns for the spacecraft across different flight phases:
  * APPROACH, ORBIT_INSERTION, LANDING, and COMPLETE.
  *
@@ -20,8 +22,9 @@ import java.util.List;
  * - Once within the final landing threshold, the COMPLETE phase locks the ship’s final trajectory and stops all burns.
  *
  * Each burn is limited in to simulate more realistic control and to prevent overcorrection.
+ *
+ * 13,000km start steering and approach titan - 5,000km start landing - 1,500 km start landerVisualizer.
  */
-
 
 
 /**
@@ -83,6 +86,8 @@ public class BurnManager {
         System.out.printf("Distance to %s: %.2f km | Phase: %s%n", targetBodyName, distanceKm, currentPhase);
 
         switch (currentPhase) {
+
+            // * We try to match the speed of the probe to that of titan if its higher we apply burning to reduce it. and so on.
             case APPROACH:
                 if (distanceKm <= approachTriggerDistance) {
                     // * Calculates the error between current and target relative velocity
@@ -108,6 +113,24 @@ public class BurnManager {
                 }
                 break;
 
+            /*
+             * This phase is responsible for inserting the spacecraft into a stable orbit
+             * around the target body once it has approached within a trigger distance.
+             *
+             * The burn strategy adapts based on proximity:
+             * - If within landingStartDistance, the phase transitions to LANDING.
+             * - If within orbitTriggerDistance, the system attempts to circularize the orbit
+             *   by calculating the ideal orbital speed and applying a progress burn along the orbital plane.
+             * - If still further away, a retrograde burn is combined with steering toward the target
+             *   to slow down and guide the spacecraft closer.
+             *
+             * The orbital insertion relies on:
+             * - Gravitational parameter of the target for orbital speed calculation
+             * - Cross products to compute angular momentum and burn direction
+             * - Controlled delta-V applications using limitDeltaV to shape the orbit safely
+             *
+             * Logging is included to show when burns are applied and when phase transitions occur.
+             */
             case ORBIT_INSERTION:
                 if (distanceKm <= landingStartDistance) {
                     // * If close enough, transition to landing phase
