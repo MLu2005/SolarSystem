@@ -35,4 +35,6 @@ module com.example.project {
     exports com.example.ode_gui;
     opens com.example.ode_gui to javafx.fxml;
     exports com.example.utilities.Ship;
+    exports com.example;
+    opens com.example to javafx.fxml;
 }

@@ -1,5 +1,6 @@
 package com.example.solar_system;
 
+import com.example.MissionExecution;
 import com.example.utilities.Vector3D;
 import com.example.utilities.physics_utilities.SolarSystemFactory;
 import com.example.utilities.physics_utilities.PhysicsEngine;
@@ -66,7 +67,7 @@ public class SolarSystemApp extends Application {
         }
 
         // * When to apply the burns.
-        BurnManager burnManager = new BurnManager(
+        MissionExecution missionExecution = new MissionExecution(
                 "Titan",
                 12100,
                 7850,
@@ -181,7 +182,7 @@ public class SolarSystemApp extends Application {
                 engine
         );
 
-        animator.setBurnManager(burnManager);
+        animator.setBurnManager(missionExecution);
 
         animator.initializeLabels();
         AnimationTimer orbitTimer = animator.createOrbitTimer();

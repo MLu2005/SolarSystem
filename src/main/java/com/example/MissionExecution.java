@@ -1,5 +1,6 @@
-package com.example.solar_system;
+package com.example;
 
+import com.example.solar_system.CelestialBody;
 import com.example.utilities.Vector3D;
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * BurnManager handles automated spacecraft maneuvering through distinct flight phases:
+ * Mission execution handles automated spacecraft maneuvering through distinct flight phases:
  * APPROACH, ORBIT_INSERTION, LANDING, and COMPLETE.
  *
  * This manager dynamically modifies the spacecraft’s velocity in real-time, guiding it
@@ -48,7 +49,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * - 1,500 km: Landing phase complete
  */
 
-public class BurnManager {
+public class MissionExecution {
 
     public boolean isComplete() {
         return currentPhase == Phase.COMPLETE;
@@ -70,7 +71,7 @@ public class BurnManager {
     private List<Burn> hillClimbBurns;  // from JSON, time-ordered burns
     private int nextBurnIndex = 0;
 
-    public BurnManager(
+    public MissionExecution(
             String targetBodyName,
             double approachTriggerDistance,
             double orbitTriggerDistance,
@@ -218,6 +219,7 @@ public class BurnManager {
             );
             hillClimbBurns = result.burns;
             scaleDownHillClimbBurns();
+            assert hillClimbBurns != null;
             System.out.println("Loaded " + hillClimbBurns.size() + " hillclimb burns.");
         } catch (IOException e) {
             System.err.println("Failed to load hillclimb burns: " + e.getMessage());

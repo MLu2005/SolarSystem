@@ -1,5 +1,6 @@
 package com.example.solar_system;
 
+import com.example.MissionExecution;
 import com.example.utilities.Vector3D;
 import com.example.utilities.physics_utilities.OrbitalEnergyMonitor;
 import com.example.utilities.physics_utilities.PhysicsEngine;
@@ -31,7 +32,7 @@ public class PhysicsAnimator {
     private final PerspectiveCamera camera;
     private final SubScene subScene;
     private final PhysicsEngine engine;
-    private BurnManager burnManager;
+    private MissionExecution missionExecution;
 
     private boolean isLockedToTitanVisual = false;
 
@@ -75,9 +76,9 @@ public class PhysicsAnimator {
     /**
      * Sets the burn manager that will control spaceship speed changes.
      *
-     * @param burnManager The object that manages when and how the spaceship changes speed
+     * @param missionExecution The object that manages when and how the spaceship changes speed
      */
-    public void setBurnManager(BurnManager burnManager) { this.burnManager = burnManager; }
+    public void setBurnManager(MissionExecution missionExecution) { this.missionExecution = missionExecution; }
 
 
     /**
@@ -183,10 +184,10 @@ public class PhysicsAnimator {
                     }
 
                     // * Apply burns using BurnManager
-                    burnManager.tryApplyBurn(bodies, "Noah's Ark", distanceKm);
+                    missionExecution.tryApplyBurn(bodies, "Noah's Ark", distanceKm);
 
                     // * Launch landingVisualizer once burnManager signals completion
-                    if (burnManager.isComplete()) {
+                    if (missionExecution.isComplete()) {
                         stop();
                         System.out.println("COMPLETE! Landing simulation ended.");
 
