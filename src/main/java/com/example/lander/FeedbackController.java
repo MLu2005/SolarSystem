@@ -25,18 +25,34 @@ public class FeedbackController implements Controller {
 
     @Override
     public double getV(double time, double[] state) {
-        double x = state[0];
-        double vX = state[2];
-        double theta = state[4];
-        double thetaDot = state[5];
+        double y        = state[1];      // km
+        double thetaDot = state[5];      // rad/s
 
-        double desiredTilt = -(KpHorizontal * x + KdHorizontal * vX);
-        desiredTilt = clamp(desiredTilt, -MAX_TILT, MAX_TILT);
+        // === Landing‐brake override ===
+        // If we’re under 0.01 km (10 m) altitude, just kill any rotation
+        if (y <= 0.02) {
+            // apply full torque opposite to the current spin
+            return -Math.signum(thetaDot) * V_MAX;
+        }
 
-        double tiltError = desiredTilt - theta;
-        double tiltRateError = 0 - thetaDot;
+        // === Otherwise, your normal tilt controller ===
+        double x          = state[0];
+        double vX         = state[2];
+        double theta      = state[4];
+
+        // desired tilt to brake horizontal error
+        double desiredTilt = - (KpHorizontal * x + KdHorizontal * vX);
+        desiredTilt = Math.max(-MAX_TILT, Math.min(MAX_TILT, desiredTilt));
+
+        // PD for tilt angle
+        double tiltError     = desiredTilt - theta;
+        double tiltRateError = 0.0 - thetaDot;
         double torque = KpTilt * tiltError + KdTilt * tiltRateError;
-        return clamp(torque, -V_MAX, V_MAX);
+
+        // clamp
+        if (torque >  V_MAX) torque =  V_MAX;
+        if (torque < -V_MAX) torque = -V_MAX;
+        return torque;
     }
 
     private double clamp(double value, double min, double max) {

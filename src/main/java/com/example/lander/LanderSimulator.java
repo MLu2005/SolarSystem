@@ -147,5 +147,13 @@ public class LanderSimulator {
                 row[0], row[1], row[2], row[3], row[4], row[5], row[6]
             );
         }
+
+        System.out.println("\n=== Initial Conditions ===");
+        System.out.printf("horizontalPosition = %.6f km%n", initialState[0]);
+        System.out.printf("verticalPosition   = %.6f km%n", initialState[1]);
+        System.out.printf("horizontalVelocity = %.6f km/s%n", initialState[2]);
+        System.out.printf("verticalVelocity   = %.6f km/s%n", initialState[3]);
+        System.out.printf("tiltAngle          = %.6f rad%n", initialState[4]);
+        System.out.printf("tiltRate           = %.6f rad/s%n", initialState[5]);
     }
 }
