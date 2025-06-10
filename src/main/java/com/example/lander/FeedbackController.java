@@ -2,7 +2,7 @@ package com.example.lander;
 
 public class FeedbackController implements Controller {
     public static final double MAX_THRUST = 10 * 1.352e-3;
-    public static final double MAX_STEERING_RATE = 1.0;
+    public static final double MAX_STEERING_RATE = 4.0;
     private final double proportional_gain_horizontal = 0.5;
     private final double derivative_gain_horizontal = 0.2;
     private final double max_tilt_angle = Math.toRadians(45.0);

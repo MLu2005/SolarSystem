@@ -7,6 +7,7 @@ import com.example.utilities.Vector3D;
 import com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetHeightGrid;
 import com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetWindGrid;
 import com.example.utilities.titanAtmosphere.TitanEnvironment;
+
 import executables.solvers.RK4Solver;
 
 
@@ -30,42 +31,15 @@ public class LanderSimulator {
         return new TitanEnvironment(heightGrid, windGrid);
     }
 
-    public static double[][] simulateOpenLoop(double[] initialState, double timeStep, int maxSteps, double windSpeed, double landerMass) {
+    public static double[][] simulateCombined(
+        double[] initialState, double timeStep, int maxSteps, 
+        double windSpeed, double landerMass, Controller controller
+    ) {
         TitanEnvironment environment = buildEnvironment(windSpeed);
-
-        Controller openLoopController = new OpenLoopController();
-        LanderODE odeFunction = new LanderODE(openLoopController, environment, DRAG_COEFF, MAX_ATMOS_HEIGHT, landerMass);
-
+        LanderODE odeFunction = new LanderODE(controller, environment, DRAG_COEFF, MAX_ATMOS_HEIGHT, landerMass);
         RK4Solver solver = new RK4Solver();
-        BiFunction<Double, double[], Boolean> stopIfLanded = (time, state) -> state[1] <= 0.0;
-
-        return solver.solve(odeFunction, 0.0, initialState, timeStep, maxSteps, stopIfLanded);
-    }
-
-    public static double[][] simulateFeedback(double[] initialState, double timeStep, int maxSteps, double windSpeed, double landerMass) {
-        TitanEnvironment environment = buildEnvironment(windSpeed);
-
-        Controller feedbackController = new FeedbackController();
-        LanderODE odeFunction = new LanderODE(feedbackController, environment, DRAG_COEFF, MAX_ATMOS_HEIGHT, landerMass);
-
-        RK4Solver solver = new RK4Solver();
-        BiFunction<Double, double[], Boolean> stopIfLanded = (time, state) -> state[1] <= 0.0;
-
-        return solver.solve(odeFunction, 0.0, initialState, timeStep, maxSteps, stopIfLanded);
-    }
-
-    public static double[][] simulateCombined(double[] initialState, double timeStep, int maxSteps, double windSpeed, double landerMass) {
-        TitanEnvironment environment = buildEnvironment(windSpeed);
-
-        Controller openLoopController = new OpenLoopController();
-        Controller feedbackController = new FeedbackController();
-        Controller combinedController = new CombinedController(openLoopController, feedbackController);
-
-        LanderODE odeFunction = new LanderODE(combinedController, environment, DRAG_COEFF, MAX_ATMOS_HEIGHT, landerMass);
-
-        RK4Solver solver = new RK4Solver();
-        BiFunction<Double, double[], Boolean> stopIfLanded = (time, state) -> state[1] <= 0.0;
-
+        BiFunction<Double, double[], Boolean> stopIfLanded = (time, state) -> state[1] <= 0.0002;
+        
         return solver.solve(odeFunction, 0.0, initialState, timeStep, maxSteps, stopIfLanded);
     }
 
@@ -80,7 +54,14 @@ public class LanderSimulator {
         double windSpeed = 0.0001;
         double landerMass = 50000.0;
 
-        double[][] combinedTrajectory = simulateCombined(Arrays.copyOf(initialState, initialState.length), timeStep, maxSteps, windSpeed, landerMass);
+        double optimalVerticalBrake = 32.85;
+        double optimalHorizontalBrake = 49.29;
+
+        Controller openLoop = new OpenLoopController(optimalVerticalBrake, optimalHorizontalBrake);
+        Controller feedback = new FeedbackController();
+        Controller combined = new CombinedController(openLoop, feedback);
+
+        double[][] combinedTrajectory = simulateCombined(Arrays.copyOf(initialState, initialState.length), timeStep, maxSteps, windSpeed, landerMass, combined);
 
         System.out.println("\n=== Combined Trajectory ===");
         System.out.println("time\tposX\tposY\tvelX\tvelY\ttilt\ttiltRate");
@@ -90,7 +71,7 @@ public class LanderSimulator {
                 row[0], row[1], row[2], row[3], row[4], row[5], row[6]
             );
         }
-
+        /*
         System.out.println("\n=== Initial Conditions ===");
         System.out.printf("horizontalPosition = %.6f km%n", initialState[0]);
         System.out.printf("verticalPosition   = %.6f km%n", initialState[1]);
@@ -98,5 +79,6 @@ public class LanderSimulator {
         System.out.printf("verticalVelocity   = %.6f km/s%n", initialState[3]);
         System.out.printf("tiltAngle          = %.6f rad%n", initialState[4]);
         System.out.printf("tiltRate           = %.6f rad/s%n", initialState[5]);
+        */
     }
 }

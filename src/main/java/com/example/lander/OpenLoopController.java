@@ -3,16 +3,21 @@ package com.example.lander;
 public class OpenLoopController implements Controller {
     private static final double TITAN_GRAVITY = 1.352e-3;
     public static final double MAX_THRUST = 10 * TITAN_GRAVITY;
-    private static final double VERTICAL_BRAKING_ALTITUDE = 2.0;
-    private static final double HORIZONTAL_BRAKING_ALTITUDE = 20.0;
+    private final double VERTICAL_BRAKING_ALTITUDE;
+    private final double HORIZONTAL_BRAKING_ALTITUDE;
     private static final double POSITION_TOLERANCE = 1e-4;
+
+    public OpenLoopController(double VERTICAL_BRAKING_ALTITUDE, double HORIZONTAL_BRAKING_ALTITUDE) {
+        this.VERTICAL_BRAKING_ALTITUDE = VERTICAL_BRAKING_ALTITUDE;
+        this.HORIZONTAL_BRAKING_ALTITUDE = HORIZONTAL_BRAKING_ALTITUDE;
+    }
 
     @Override
     public double getU(double time, double[] state) {
         double currentAltitude = state[1];
         double verticalVelocity = state[3];
 
-        if (currentAltitude > VERTICAL_BRAKING_ALTITUDE || currentAltitude <= 0.0) {
+        if (currentAltitude > this.VERTICAL_BRAKING_ALTITUDE || currentAltitude <= 0.0) {
             return 0.0;
         }
 
@@ -35,7 +40,7 @@ public class OpenLoopController implements Controller {
         double currentTiltAngle = state[4];
         double currentTiltRate = state[5];
 
-        if (currentAltitude > HORIZONTAL_BRAKING_ALTITUDE || Math.abs(horizontalVelocity) < 1e-6) {
+        if (currentAltitude > this.HORIZONTAL_BRAKING_ALTITUDE || Math.abs(horizontalVelocity) < 1e-6) {
             return -currentTiltAngle - 2.0 * currentTiltRate;
         }
 
