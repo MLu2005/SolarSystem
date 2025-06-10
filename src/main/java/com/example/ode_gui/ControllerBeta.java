@@ -1,6 +1,6 @@
 package com.example.ode_gui;
 
-import executables.solvers.*;
+import com.example.utilities.solvers.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;

@@ -1,7 +1,7 @@
 package executables.testing;
 
 
-import executables.solvers.RK4Solver;
+import com.example.utilities.solvers.RK4Solver;
 
 import java.util.function.BiFunction;
 

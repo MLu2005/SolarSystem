@@ -2,7 +2,7 @@ package executables.testing;
 
 
 
-import executables.solvers.EulerSolver;
+import com.example.utilities.solvers.EulerSolver;
 
 import java.util.function.BiFunction;
 

@@ -7,8 +7,8 @@ import java.util.function.BiFunction;
 import com.example.utilities.GA.Individual;
 import com.example.utilities.SimulationFileWriter;
 import com.example.utilities.Vector3D;
-import executables.Constants;
-import executables.solvers.RKF45Solver;
+import com.example.Constants;
+import com.example.utilities.solvers.RKF45Solver;
 
 public class TitanInsertionHillClimbing {
 
@@ -156,7 +156,7 @@ public class TitanInsertionHillClimbing {
         );
         Vector3D initialVelocity = new Vector3D(
             0,
-            Math.sqrt(executables.Constants.MU_TITAN / (TARGET_RADIUS_KM * 2)),
+            Math.sqrt(Constants.MU_TITAN / (TARGET_RADIUS_KM * 2)),
             0
         );
 
@@ -220,7 +220,7 @@ public class TitanInsertionHillClimbing {
 
         for (double t = 0; t < titanOrbitalPeriod; t += timeStep) {
             double distanceToTitan = position.magnitude();
-            double acceleration = -executables.Constants.MU_TITAN / (distanceToTitan * distanceToTitan);
+            double acceleration = -Constants.MU_TITAN / (distanceToTitan * distanceToTitan);
 
             Vector3D accelerationVector = position.normalize().scale(acceleration);
 
@@ -233,7 +233,7 @@ public class TitanInsertionHillClimbing {
 
 
         Vector3D angularMomentum = position.cross(velocity);
-        double mu = executables.Constants.MU_TITAN;
+        double mu = Constants.MU_TITAN;
         Vector3D eccentricityVector = velocity.cross(angularMomentum).scale(1.0/mu).subtract(position.normalize());
         double eccentricity = eccentricityVector.magnitude();
 
@@ -249,9 +249,9 @@ public class TitanInsertionHillClimbing {
 
     /**
      * Container for returning the hill‐climb result:
-     *   • schedule = best InsertionThrustSchedule
-     *   • approachTimeSec = time of closest Titan approach (s since departure)
-     *   • cost = final cost
+     *   *schedule = best InsertionThrustSchedule
+     *   *approachTimeSec= time of closest Titan approach (s since departure)
+     *   *cost= final cost
      */
     public static class Result {
         public final InsertionThrustSchedule schedule;
@@ -290,139 +290,8 @@ public class TitanInsertionHillClimbing {
     private static double calculateTitanOrbitalPeriod() {
         // Based on MyTitanSimulator.getTitanOrbitalPeriod()
         double r = TITAN_RADIUS_KM + TARGET_ALTITUDE_KM;
-        double mu = executables.Constants.MU_TITAN;
+        double mu = Constants.MU_TITAN;
         return 2.0 * Math.PI * Math.sqrt(r * r * r / mu);
     }
 
-    /**
-     * Calculates the position after two turns around Titan.
-     * 
-     * @param schedule The thrust schedule
-     * @param titanOrbitalPeriod Titan's orbital period
-     * @return The position vector after two turns
-     */
-    private static Vector3D calculatePositionAfterTwoTurns(InsertionThrustSchedule schedule, double titanOrbitalPeriod) {
-        double r = TARGET_RADIUS_KM;
-        double v = Math.sqrt(executables.Constants.MU_TITAN / r);
-
-        Vector3D initialPosition = new Vector3D(r, 0, 0);
-        Vector3D initialVelocity = new Vector3D(0, v, 0);
-
-        double[] y0 = new double[6];
-        y0[0] = initialPosition.x;
-        y0[1] = initialPosition.y;
-        y0[2] = initialPosition.z;
-        y0[3] = initialVelocity.x;
-        y0[4] = initialVelocity.y;
-        y0[5] = initialVelocity.z;
-
-        for (int i = 0; i < schedule.getNumSlots(); i++) {
-            Vector3D deltaV = schedule.getDeltaVAt(i);
-            // Convert from m/s to km/s (deltaV is in m/s)
-            y0[3] += deltaV.x / 1000.0;
-            y0[4] += deltaV.y / 1000.0;
-            y0[5] += deltaV.z / 1000.0;
-        }
-
-        java.util.function.BiFunction<Double, double[], double[]> f = (t, state) -> {
-            double[] dydt = new double[6];
-
-            dydt[0] = state[3];
-            dydt[1] = state[4];
-            dydt[2] = state[5];
-
-            Vector3D pos = new Vector3D(state[0], state[1], state[2]);
-            double distSq = pos.magnitudeSquared();
-            double dist = Math.sqrt(distSq);
-
-            // Acceleration = -mu * r / |r|^3
-            double factor = -executables.Constants.MU_TITAN / (dist * distSq);
-
-            dydt[3] = factor * state[0];
-            dydt[4] = factor * state[1];
-            dydt[5] = factor * state[2];
-
-            return dydt;
-        };
-
-        RKF45Solver solver = new RKF45Solver();
-        double simulationTime = 2.0 * titanOrbitalPeriod;
-        int steps = (int)(simulationTime / executables.Constants.INITIAL_STEP_SIZE) + 1;
-        steps = Math.min(steps, executables.Constants.MAX_STEPS);
-
-
-        double[][] result = solver.solve(f, 0, y0, executables.Constants.INITIAL_STEP_SIZE, steps, null);
-
-        double[] finalState = result[result.length - 1];
-
-
-        return new Vector3D(finalState[1], finalState[2], finalState[3]);
-    }
-
-    /**
-     * Calculates the speed after two turns around Titan.
-     * 
-     * @param schedule The thrust schedule
-     * @param titanOrbitalPeriod Titan's orbital period
-     * @return The velocity vector after two turns
-     */
-    private static Vector3D calculateSpeedAfterTwoTurns(InsertionThrustSchedule schedule, double titanOrbitalPeriod) {
-        // Initial state: circular orbit at target radius
-        double r = TARGET_RADIUS_KM;
-        double v = Math.sqrt(executables.Constants.MU_TITAN / r);
-
-        // Initial position and velocity (starting in the x-y plane)
-        Vector3D initialPosition = new Vector3D(r, 0, 0);
-        Vector3D initialVelocity = new Vector3D(0, v, 0);
-
-        double[] y0 = new double[6];
-        y0[0] = initialPosition.x;
-        y0[1] = initialPosition.y;
-        y0[2] = initialPosition.z;
-        y0[3] = initialVelocity.x;
-        y0[4] = initialVelocity.y;
-        y0[5] = initialVelocity.z;
-
-        for (int i = 0; i < schedule.getNumSlots(); i++) {
-            Vector3D deltaV = schedule.getDeltaVAt(i);
-            // Convert from m/s to km/s (deltaV is in m/s)
-            y0[3] += deltaV.x / 1000.0;
-            y0[4] += deltaV.y / 1000.0;
-            y0[5] += deltaV.z / 1000.0;
-        }
-
-        java.util.function.BiFunction<Double, double[], double[]> f = (t, state) -> {
-            double[] dydt = new double[6];
-
-            dydt[0] = state[3];
-            dydt[1] = state[4];
-            dydt[2] = state[5];
-
-            Vector3D pos = new Vector3D(state[0], state[1], state[2]);
-            double distSq = pos.magnitudeSquared();
-            double dist = Math.sqrt(distSq);
-
-            // Acceleration = -mu * r / |r|^3
-            double factor = -executables.Constants.MU_TITAN / (dist * distSq);
-
-            dydt[3] = factor * state[0];
-            dydt[4] = factor * state[1];
-            dydt[5] = factor * state[2];
-
-            return dydt;
-        };
-
-        RKF45Solver solver = new RKF45Solver();
-
-        double simulationTime = 2.0 * titanOrbitalPeriod;
-        int steps = (int)(simulationTime / executables.Constants.INITIAL_STEP_SIZE) + 1;
-        steps = Math.min(steps, executables.Constants.MAX_STEPS);
-
-        double[][] result = solver.solve(f, 0, y0, executables.Constants.INITIAL_STEP_SIZE, steps, null);
-
-        double[] finalState = result[result.length - 1];
-
-        // final velocity
-        return new Vector3D(finalState[4], finalState[5], finalState[6]);
-    }
 }

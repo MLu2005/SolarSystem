@@ -1,10 +1,10 @@
+import com.example.Constants;
 import com.example.utilities.GA.GAResultsParser;
 import com.example.utilities.GA.GeneticTitan;
 import com.example.utilities.Vector3D;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -157,20 +157,20 @@ public class GATest
 
         // Since minDistanceToTitan is 8123.456 km (between 1e5 and 1e6),
         // the time should be 60% of SIM_LEN according to the implementation
-        double expectedTime = executables.Constants.SIM_LEN * 0.7;
+        double expectedTime = Constants.SIM_LEN * 0.7;
 
         // Verify that the time matches the expected value
         assertEquals(expectedTime, time, 1e-6, "Time of closest approach should be correctly estimated");
 
         // Also verify that it's using the correct condition from the implementation
         if (best.minDistanceToTitan() < 1e5) {
-            assertEquals(executables.Constants.SIM_LEN * 0.7, time, 1e-6, 
+            assertEquals(Constants.SIM_LEN * 0.7, time, 1e-6,
                 "For distance < 1e5, time should be 70% of SIM_LEN");
         } else if (best.minDistanceToTitan() < 1e6) {
-            assertEquals(executables.Constants.SIM_LEN * 0.6, time, 1e-6, 
+            assertEquals(Constants.SIM_LEN * 0.6, time, 1e-6,
                 "For distance < 1e6, time should be 60% of SIM_LEN");
         } else {
-            assertEquals(executables.Constants.SIM_LEN * 0.5, time, 1e-6, 
+            assertEquals(Constants.SIM_LEN * 0.5, time, 1e-6,
                 "For distance >= 1e6, time should be 50% of SIM_LEN");
         }
     }

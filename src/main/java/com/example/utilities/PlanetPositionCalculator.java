@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import com.example.solar_system.CelestialBody;
-import executables.Constants;
-import executables.solvers.RKF45Solver;
+import com.example.Constants;
+import com.example.utilities.solvers.RKF45Solver;
 
 /**
  * PlanetPositionCalculator uses an RKF45 ODE solver to propagate a list of

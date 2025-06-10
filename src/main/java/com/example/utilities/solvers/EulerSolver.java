@@ -1,9 +1,9 @@
-package executables.solvers;
+package com.example.utilities.solvers;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
-import static executables.solvers.ODEUtility.*;
+import static com.example.utilities.solvers.ODEUtility.*;
 
 public class EulerSolver implements ODESolver {
     public double[][] solve(

@@ -3,10 +3,11 @@ package com.example.utilities;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.ArrayList;
 
+import com.example.Constants;
 import com.example.utilities.GA.Individual;
 import com.example.utilities.HillClimb.InsertionThrustSchedule;
+import com.example.utilities.solvers.RKF45Solver;
 
 /**
  * A utility class for writing simulation results to files.
@@ -161,7 +162,7 @@ public class SimulationFileWriter {
         double TITAN_RADIUS_KM = 2575.0;
         double TARGET_ALTITUDE_KM = 300.0;
         double r = TITAN_RADIUS_KM + TARGET_ALTITUDE_KM;
-        double mu = executables.Constants.MU_TITAN;
+        double mu = Constants.MU_TITAN;
         return 2.0 * Math.PI * Math.sqrt(r * r * r / mu);
     }
 
@@ -179,7 +180,7 @@ public class SimulationFileWriter {
         double TARGET_RADIUS_KM = TITAN_RADIUS_KM + TARGET_ALTITUDE_KM;
 
         double r = TARGET_RADIUS_KM;
-        double v = Math.sqrt(executables.Constants.MU_TITAN / r);
+        double v = Math.sqrt(Constants.MU_TITAN / r);
 
         Vector3D initialPosition = new Vector3D(r, 0, 0);
         Vector3D initialVelocity = new Vector3D(0, v, 0);
@@ -212,7 +213,7 @@ public class SimulationFileWriter {
             double dist = Math.sqrt(distSq);
 
             // Acceleration = -mu * r / |r|^3
-            double factor = -executables.Constants.MU_TITAN / (dist * distSq);
+            double factor = -Constants.MU_TITAN / (dist * distSq);
 
             dydt[3] = factor * state[0];
             dydt[4] = factor * state[1];
@@ -221,12 +222,12 @@ public class SimulationFileWriter {
             return dydt;
         };
 
-        executables.solvers.RKF45Solver solver = new executables.solvers.RKF45Solver();
+        RKF45Solver solver = new RKF45Solver();
         double simulationTime = 2.0 * titanOrbitalPeriod;
-        int steps = (int)(simulationTime / executables.Constants.INITIAL_STEP_SIZE) + 1;
-        steps = Math.min(steps, executables.Constants.MAX_STEPS);
+        int steps = (int)(simulationTime / Constants.INITIAL_STEP_SIZE) + 1;
+        steps = Math.min(steps, Constants.MAX_STEPS);
 
-        double[][] result = solver.solve(f, 0, y0, executables.Constants.INITIAL_STEP_SIZE, steps, null);
+        double[][] result = solver.solve(f, 0, y0, Constants.INITIAL_STEP_SIZE, steps, null);
 
         double[] finalState = result[result.length - 1];
 
@@ -248,7 +249,7 @@ public class SimulationFileWriter {
 
         // Initial state: circular orbit at target radius
         double r = TARGET_RADIUS_KM;
-        double v = Math.sqrt(executables.Constants.MU_TITAN / r);
+        double v = Math.sqrt(Constants.MU_TITAN / r);
 
         // Initial position and velocity (starting in the x-y plane)
         Vector3D initialPosition = new Vector3D(r, 0, 0);
@@ -282,7 +283,7 @@ public class SimulationFileWriter {
             double dist = Math.sqrt(distSq);
 
             // Acceleration = -mu * r / |r|^3
-            double factor = -executables.Constants.MU_TITAN / (dist * distSq);
+            double factor = -Constants.MU_TITAN / (dist * distSq);
 
             dydt[3] = factor * state[0];
             dydt[4] = factor * state[1];
@@ -291,13 +292,13 @@ public class SimulationFileWriter {
             return dydt;
         };
 
-        executables.solvers.RKF45Solver solver = new executables.solvers.RKF45Solver();
+        RKF45Solver solver = new RKF45Solver();
 
         double simulationTime = 2.0 * titanOrbitalPeriod;
-        int steps = (int)(simulationTime / executables.Constants.INITIAL_STEP_SIZE) + 1;
-        steps = Math.min(steps, executables.Constants.MAX_STEPS);
+        int steps = (int)(simulationTime / Constants.INITIAL_STEP_SIZE) + 1;
+        steps = Math.min(steps, Constants.MAX_STEPS);
 
-        double[][] result = solver.solve(f, 0, y0, executables.Constants.INITIAL_STEP_SIZE, steps, null);
+        double[][] result = solver.solve(f, 0, y0, Constants.INITIAL_STEP_SIZE, steps, null);
 
         double[] finalState = result[result.length - 1];
 

@@ -1,12 +1,7 @@
 package com.example.utilities.HillClimb;
 
-import com.example.utilities.GA.Individual;
 import com.example.utilities.Vector3D;
-import executables.Constants;
-
-import java.util.Vector;
-
-import static executables.Constants.F_T_MAX;
+import com.example.Constants;
 
 /**
  * An InsertionThrustSchedule represents a discrete sequence of instantaneous ΔV impulses

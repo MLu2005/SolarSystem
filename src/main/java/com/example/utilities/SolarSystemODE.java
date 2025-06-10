@@ -1,7 +1,7 @@
 package com.example.utilities;
 
 import com.example.solar_system.CelestialBody;
-import executables.Constants;
+import com.example.Constants;
 
 import java.util.List;
 import java.util.function.BiFunction;

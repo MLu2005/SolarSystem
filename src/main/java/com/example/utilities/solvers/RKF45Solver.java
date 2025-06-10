@@ -1,13 +1,13 @@
-package executables.solvers;
+package com.example.utilities.solvers;
 
-import executables.Constants;
+import com.example.Constants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import static executables.solvers.ODEUtility.*;
+import static com.example.utilities.solvers.ODEUtility.*;
 
 /**
  * An RKF45 implementation with adaptive step sizing for improved accuracy.

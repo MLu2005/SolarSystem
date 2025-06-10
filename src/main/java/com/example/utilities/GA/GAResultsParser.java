@@ -1,5 +1,6 @@
 package com.example.utilities.GA;
 
+import com.example.Constants;
 import com.example.utilities.Vector3D;
 
 import java.io.BufferedReader;
@@ -230,13 +231,13 @@ public class GAResultsParser {
                 // based on how close the spacecraft got to Titan
                 if (minDistanceToTitan < 1e5) {
                     // If very close, assume it happened around 70% of the way through the simulation
-                    return executables.Constants.SIM_LEN * 0.7;
+                    return Constants.SIM_LEN * 0.7;
                 } else if (minDistanceToTitan < 1e6) {
                     // If moderately close, assume it happened around 60% of the way through
-                    return executables.Constants.SIM_LEN * 0.6;
+                    return Constants.SIM_LEN * 0.6;
                 } else {
                     // Otherwise, assume it happened around the middle of the simulation
-                    return executables.Constants.SIM_LEN * 0.5;
+                    return Constants.SIM_LEN * 0.5;
                 }
             }
 
