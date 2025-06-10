@@ -23,6 +23,7 @@ public class Constants {
     public static final double TITAN_MASS_KG = 1.3452E23;
     public static final double MU_SATURN = G * 5.68E26; // Saturn's gravitational parameter in km³/s²
     public static final double MU_TITAN = G * TITAN_MASS_KG; // Titan's gravitational parameter in km³/s²
+    public static final double T_FINAL = SIM_LEN; // or any desired default
 
     // Spacecraft parameters
     public static final double PROBE_MASS = 50000.0; // kg
