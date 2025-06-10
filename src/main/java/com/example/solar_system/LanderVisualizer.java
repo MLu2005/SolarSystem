@@ -1,6 +1,10 @@
 package com.example.solar_system;
 
+import com.example.lander.CombinedController;
+import com.example.lander.Controller;
+import com.example.lander.FeedbackController;
 import com.example.lander.LanderSimulator;
+import com.example.lander.OpenLoopController;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -24,6 +28,8 @@ public class LanderVisualizer extends Application {
     private static final double WIND_SPEED_KM_PER_S = 0.0001;
     private static final double LANDER_MASS_KG = 50000.0;
     private static final double PLAYBACK_SPEED_FACTOR = 1000.0;
+    private static final double OPTIMAL_VERTICAL_BRAKE = 32.85;
+    private static final double OPTIMAL_HORIZONTAL_BRAKE = 49.29;
 
     private static final double[] INITIAL_STATE = {
         -2715.3163563925214,
@@ -44,12 +50,17 @@ public class LanderVisualizer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        Controller openLoop = new OpenLoopController(OPTIMAL_VERTICAL_BRAKE, OPTIMAL_HORIZONTAL_BRAKE);
+        Controller feedback = new FeedbackController();
+        Controller combined = new CombinedController(openLoop, feedback);
+        
         trajectoryData = LanderSimulator.simulateCombined(
             INITIAL_STATE,
             TIME_STEP_SECONDS,
             MAXIMUM_STEPS,
             WIND_SPEED_KM_PER_S,
-            LANDER_MASS_KG
+            LANDER_MASS_KG,
+            combined
         );
 
         if (trajectoryData.length < 2) {
