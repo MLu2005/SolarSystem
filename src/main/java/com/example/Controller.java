@@ -1,5 +1,5 @@
-package executables;
-import executables.solvers.*;
+package com.example;
+import com.example.utilities.solvers.*;
 import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;
 import javafx.scene.chart.NumberAxis;
@@ -23,9 +23,6 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 
-import java.util.function.BiFunction;
-
-
 public class Controller {
 
     @FXML
@@ -47,7 +44,6 @@ public class Controller {
 
 
     private void bindPlanetPositions() {
-
 
         DoubleBinding sunLayoutX = root.widthProperty().multiply(0.1);
         sun.layoutXProperty().bind(sunLayoutX);

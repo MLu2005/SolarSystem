@@ -6,7 +6,7 @@ import com.example.utilities.Vector3D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static executables.Constants.G;
+import static com.example.Constants.G;
 
 public class OrbitalEnergyMonitor {
 

@@ -7,7 +7,7 @@ import com.example.utilities.Vector3D;
 import com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetHeightGrid;
 import com.example.utilities.titanAtmosphere.TerrainGenerator.PlanetWindGrid;
 import com.example.utilities.titanAtmosphere.TitanEnvironment;
-import executables.solvers.RK4Solver;
+import com.example.utilities.solvers.RK4Solver;
 
 
 public class LanderSimulator {

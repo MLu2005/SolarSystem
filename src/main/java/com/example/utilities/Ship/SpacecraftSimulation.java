@@ -1,10 +1,9 @@
 package com.example.utilities.Ship;
 
 import com.example.solar_system.CelestialBody;
-import com.example.utilities.DataLoader;
 import com.example.utilities.Vector3D;
-import executables.Constants;
-import executables.solvers.RK4Solver;
+import com.example.Constants;
+import com.example.utilities.solvers.RK4Solver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

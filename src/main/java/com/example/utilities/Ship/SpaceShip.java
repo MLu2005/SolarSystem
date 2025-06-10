@@ -101,13 +101,11 @@ public class SpaceShip extends CelestialBody {
      * @return The maximum number of standard maneuvers
      */
     private double calculateMaxManeuvers(double fuelAmount) {
-        // Assuming a standard maneuver consumes a fixed amount of fuel
         double fuelPerManeuver = 10.0; // kg
 
         return Math.floor(fuelAmount / fuelPerManeuver);
     }
 
-    // --- Thrust ---
     public double getThrust() {
         return thrust;
     }
@@ -116,68 +114,6 @@ public class SpaceShip extends CelestialBody {
         this.thrust = newThrust;
     }
 
-    // --- Fuel ---
-    public void consumeFuel(double amount) {
-        fuelTracker.consume(amount);
-    }
-
-    public double getFuel() {
-        return fuelTracker.getRemaining();
-    }
-
-    public double getFuelUsed() {
-        return fuelTracker.getUsed();
-    }
-
-    public void resetFuel() {
-        fuelTracker.reset();
-    }
-
-    public FuelTracker getFuelTracker() {
-        return fuelTracker;
-    }
-
-    /**
-     * Estimates and updates the remaining mission capabilities based on current fuel status.
-     * This method recalculates all mission capabilities based on the current fuel level
-     * and updates the missionCapabilities map.
-     * 
-     * @return A map of mission capabilities and their current values
-     */
-    public Map<String, Double> estimateRemainingMissionCapabilities() {
-        double currentFuel = getFuel();
-        double initialFuel = fuelTracker.getInitialFuel();
-        double fuelRatio = currentFuel / initialFuel;
-
-        // Update capabilities based on current fuel
-        missionCapabilities.put("maxDeltaV", calculateMaxDeltaV(currentFuel));
-        missionCapabilities.put("maxMissionDuration", calculateMaxMissionDuration(currentFuel));
-        missionCapabilities.put("maxManeuvers", calculateMaxManeuvers(currentFuel));
-
-        // Orbit correction capability decreases non-linearly with fuel
-        // At 50% fuel, we still have ~70% capability, but it drops more rapidly as fuel gets lower
-        double orbitCorrectionCapability = Math.pow(fuelRatio, 0.7);
-        missionCapabilities.put("orbitCorrectionCapability", orbitCorrectionCapability);
-
-        // Add a summary capability metric (weighted average of all capabilities)
-        double overallCapability = 0.3 * (missionCapabilities.get("maxDeltaV") / calculateMaxDeltaV(initialFuel)) +
-                                  0.3 * (missionCapabilities.get("maxMissionDuration") / calculateMaxMissionDuration(initialFuel)) +
-                                  0.2 * (missionCapabilities.get("maxManeuvers") / calculateMaxManeuvers(initialFuel)) +
-                                  0.2 * orbitCorrectionCapability;
-
-        missionCapabilities.put("overallCapability", overallCapability);
-
-        return new HashMap<>(missionCapabilities);
-    }
-
-    /**
-     * Gets the current mission capabilities without recalculating.
-     * 
-     * @return A map of mission capabilities and their current values
-     */
-    public Map<String, Double> getMissionCapabilities() {
-        return new HashMap<>(missionCapabilities);
-    }
 
     /**
      * Returns the current position of the spaceship.

@@ -1,7 +1,7 @@
 package com.example.utilities.Ship;
 
 import com.example.utilities.Vector3D;
-import executables.Constants;
+import com.example.Constants;
 
 /**
  * StateVector represents the complete state of a spacecraft, including position, velocity, and orientation.

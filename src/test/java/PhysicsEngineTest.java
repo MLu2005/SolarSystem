@@ -1,7 +1,7 @@
 import com.example.solar_system.CelestialBody;
 import com.example.utilities.Vector3D;
 import com.example.utilities.physics_utilities.PhysicsEngine;
-import executables.Constants;
+import com.example.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

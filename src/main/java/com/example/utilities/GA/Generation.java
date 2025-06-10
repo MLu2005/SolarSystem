@@ -1,6 +1,6 @@
 package com.example.utilities.GA;
 
-import executables.Constants;
+import com.example.Constants;
 
 import java.util.Arrays;
 import java.util.Comparator;

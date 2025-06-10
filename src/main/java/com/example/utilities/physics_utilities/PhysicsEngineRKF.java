@@ -2,9 +2,9 @@ package com.example.utilities.physics_utilities;
 
 import com.example.solar_system.CelestialBody;
 import com.example.utilities.Vector3D;
-import executables.Constants;
-import executables.solvers.ODESolver;
-import executables.solvers.RKF45Solver;
+import com.example.Constants;
+import com.example.utilities.solvers.ODESolver;
+import com.example.utilities.solvers.RKF45Solver;
 
 import java.util.ArrayList;
 import java.util.List;

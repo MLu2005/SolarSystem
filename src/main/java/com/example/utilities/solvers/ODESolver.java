@@ -1,4 +1,4 @@
-package executables.solvers;
+package com.example.utilities.solvers;
 
 import java.util.function.BiFunction;
 

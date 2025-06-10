@@ -1,4 +1,4 @@
-package executables;
+package com.example;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,12 +13,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
-public class Main extends Application {
+public class Main_DEPRICATED extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/executables/odeUse.fxml"));
+        FXMLLoader loader = new FXMLLoader(Main_DEPRICATED.class.getResource("/executables/odeUse.fxml"));
 
         Scene scene = new Scene(loader.load());
         primaryStage.setScene(scene);

@@ -1,4 +1,4 @@
-package executables;
+package com.example;
 
 /**
  * Constants class contains all important constants used throughout the application.

@@ -1,4 +1,4 @@
-package executables.solvers;
+package com.example.utilities.solvers;
 
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-import static executables.Constants.TOLERANCE;
+import static com.example.Constants.TOLERANCE;
 
 // rewrote all methods to support nth Dimension ODE results
 // All are highly inefficient and should not be finally submitted

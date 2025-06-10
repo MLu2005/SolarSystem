@@ -1,6 +1,6 @@
 package SolverTests;
 
-import executables.solvers.RK4Solver;
+import com.example.utilities.solvers.RK4Solver;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.BiFunction;

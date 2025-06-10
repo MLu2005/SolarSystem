@@ -1,6 +1,6 @@
 import com.example.utilities.HillClimb.InsertionThrustSchedule;
 import com.example.utilities.Vector3D;
-import executables.Constants;
+import com.example.Constants;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -15,9 +15,6 @@ module com.example.project {
     opens com.example.coreGui to javafx.fxml;
     exports com.example.coreGui;
 
-    opens executables to javafx.fxml;
-    exports executables;
-
     opens com.example.utilities to javafx.graphics;
     opens com.example.utilities.GA to javafx.graphics;
 
