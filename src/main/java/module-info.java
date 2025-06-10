@@ -7,10 +7,10 @@ module com.example.project {
     requires exp4j;
     requires annotations;
     requires com.almasb.fxgl.all;
-    requires java.desktop;
     requires javafx.media;
     requires com.jfoenix;
     requires com.google.gson;
+    requires com.fasterxml.jackson.databind;
 
     opens com.example.coreGui to javafx.fxml;
     exports com.example.coreGui;

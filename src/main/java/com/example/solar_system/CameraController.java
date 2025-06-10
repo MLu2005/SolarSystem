@@ -43,7 +43,6 @@ public class CameraController {
 
     private boolean movementEnabled = true;
     private SpectatorMode spectatorMode;
-    private SpectatorMode cameraController;
 
     /**
      * Timer that continuously updates camera position and velocity.

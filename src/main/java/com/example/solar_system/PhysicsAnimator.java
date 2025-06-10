@@ -113,6 +113,8 @@ public class PhysicsAnimator {
         return new AnimationTimer() {
 
             private double currentTime = 0;
+            // * Do not under any circumstances change the step size!
+            private final double step = 3000;
 
             @Override
             public void handle(long now) {
@@ -129,7 +131,7 @@ public class PhysicsAnimator {
                     Vector3D pos = body.getPosition();
                     String name = body.getName().toLowerCase();
 
-                    // * saves important object positions.
+                    // * Save important object positions
                     if (name.equals("noah's ark")) {
                         rocketPos = pos;
                     } else if (name.equals("titan")) {
@@ -138,7 +140,7 @@ public class PhysicsAnimator {
                         saturnPos = pos;
                     }
 
-                    // * pushes moon visually away from earth for visualization purposes.
+                    // * Push moon visually away from earth for visualization
                     if (name.equals("moon")) {
                         Vector3D earthPos = bodies.stream()
                                 .filter(b -> b.getName().equalsIgnoreCase("earth"))
@@ -149,13 +151,13 @@ public class PhysicsAnimator {
                         pos = pos.add(directionFromEarth.scale(SCALE * 15));
                     }
 
-                    // * same for titan
-                    if (name.equals("titan")) {
+                    // * Push titan visually away from saturn
+                    if (name.equals("titan") && saturnPos != null) {
                         Vector3D directionFromSaturn = pos.subtract(saturnPos).normalize();
                         pos = pos.add(directionFromSaturn.scale(44 * SCALE));
                     }
 
-                    // * scaling factors
+                    // * Apply scaling for display
                     double x = pos.x / SCALE;
                     double y = pos.y / SCALE;
                     double z = pos.z / SCALE;
@@ -168,22 +170,23 @@ public class PhysicsAnimator {
                     }
                 }
 
-                // * Handles the spaceship visualization and when to show the landingVisualizer
+                // * Handle spaceship visualization and burns if positions are valid
                 if (rocketPos != null && titanPos != null && saturnPos != null) {
                     double distanceKm = rocketPos.subtract(titanPos).magnitude() / 1000.0;
+
                     // * Debugging distance for understanding and when to use burn logic
                     System.out.printf("Distance to Titan (physics): %.3f km%n", distanceKm);
 
-                    if (!isLockedToTitanVisual && distanceKm <= 13000) {
+                    if (!isLockedToTitanVisual && distanceKm <= 12100) {
                         isLockedToTitanVisual = true;
                         System.out.println("Visual lock-on to Titan triggered.");
                     }
 
-                    // * Applying any needed burns
+                    // * Apply burns using BurnManager
                     burnManager.tryApplyBurn(bodies, "Noah's Ark", distanceKm);
 
-                        // * After becoming 1500 above the surface of titan we launch the landingVisualizer.
-                        if (burnManager.isComplete()) {
+                    // * Launch landingVisualizer once burnManager signals completion
+                    if (burnManager.isComplete()) {
                         stop();
                         System.out.println("COMPLETE! Landing simulation ended.");
 
@@ -196,7 +199,6 @@ public class PhysicsAnimator {
                         });
                         return;
                     }
-
 
                     Vector3D displayRocketPos;
                     if (isLockedToTitanVisual) {
@@ -222,4 +224,5 @@ public class PhysicsAnimator {
             }
         };
     }
+
 }

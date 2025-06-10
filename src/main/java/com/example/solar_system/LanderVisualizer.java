@@ -2,9 +2,9 @@ package com.example.solar_system;
 
 import com.example.lander.LanderSimulator;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,203 +12,174 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class LanderVisualizer extends Application {
+    private static final int CANVAS_WIDTH = 1250;
+    private static final int CANVAS_HEIGHT = 950;
+    private static final double MARGIN = 50;
+    private double currentHorizontalPositionKm = 0;
 
-    // === CONFIGURATION: adjust as needed ===
-    private static final int WIDTH = 1250;     // window width in pixels
-    private static final int HEIGHT = 950;    // window height in pixels
+    private static final double TIME_STEP_SECONDS = 1.0;
+    private static final int MAXIMUM_STEPS = 200000;
+    private static final double WIND_SPEED_KM_PER_S = 0.0001;
+    private static final double LANDER_MASS_KG = 50000.0;
+    private static final double PLAYBACK_SPEED_FACTOR = 1000.0;
 
-    // Simulation parameters (must match LanderSimulator.simulateFeedback()):
-    private static final double DT = 0.5;      // [s] timestep
-    private static final int MAX_STEPS = 10000;
-    private static final double WIND = 0.0001; // km/s
-    private static final double MASS = 10000.0; // kg (from JSON’s "initialMass")
-
-    // Initial state (derived from your JSON “finalPosition” & “finalVelocity” relative to Titan):
-    private static final double[] INIT_STATE = new double[] {
-        0.0,                             // x = 0 km (above pad)
-        1500.0,                          // y = 1500 km altitude
-        1.48698278114141,                // xDot = 1.48698278114141 km/s (tangential orbital)
-        0.0,                             // yDot = 0 km/s (no radial velocity)
-        0.0,                             // θ = 0 rad (upright)
-        0.0                              // θ̇ = 0 rad/s
+    private static final double[] INITIAL_STATE = {
+        -2715.3163563925214,
+        2875.004939539644 - 2575.0,
+        0.5807482731466309,
+        -1.6690138988461283,
+        0.0,
+        0.0
     };
 
-    // Playback speed factor (5× real time)
-    private static final double SPEED_FACTOR = 20.0;
-
-    // Will hold the full trajectory returned by the simulator:
-    private double[][] trajectory;
-
-    // Scaling factors to convert km → pixels
-    private double verticalScale;    // px per km
-    private double horizontalScale;  // px per km
-
-    // Graphics canvas:
-    private Canvas canvas;
+    private double[][] trajectoryData;
+    private double horizontalScale;
+    private double verticalScale;
+    private double horizontalOffset;
+    private double verticalOffset;
+    private Canvas drawingCanvas;
     private Image backgroundImage;
 
     @Override
     public void start(Stage primaryStage) {
-        // 1) Run the feedback-controlled landing simulation with the JSON-derived initial state:
-        trajectory = LanderSimulator.simulateFeedback(
-                INIT_STATE,
-                DT,
-                MAX_STEPS,
-                WIND,
-                MASS
+        trajectoryData = LanderSimulator.simulateCombined(
+            INITIAL_STATE,
+            TIME_STEP_SECONDS,
+            MAXIMUM_STEPS,
+            WIND_SPEED_KM_PER_S,
+            LANDER_MASS_KG
         );
 
-        if (trajectory.length <= 1) {
-            System.err.println("Trajectory has length ≤ 1; nothing to animate.");
+        if (trajectoryData.length < 2) {
+            System.err.println("Not enough trajectory points!");
             System.exit(1);
         }
 
-        // 2) Find minX, maxX, maxY over the entire trajectory, so we can compute km→pixel scales:
-        double maxY = Double.NEGATIVE_INFINITY;
-        double minX = Double.POSITIVE_INFINITY;
-        double maxX = Double.NEGATIVE_INFINITY;
-        for (double[] row : trajectory) {
-            double x = row[1];
-            double y = row[2];
-            if (y > maxY) maxY = y;
-            if (x < minX) minX = x;
-            if (x > maxX) maxX = x;
+        double minHorizontalPosition = Double.POSITIVE_INFINITY;
+        double maxHorizontalPosition = Double.NEGATIVE_INFINITY;
+        double maxVerticalPosition = Double.NEGATIVE_INFINITY;
+        
+        for (var state : trajectoryData) {
+            double horizontalPos = state[1];
+            double verticalPos = state[2];
+            minHorizontalPosition = Math.min(minHorizontalPosition, horizontalPos);
+            maxHorizontalPosition = Math.max(maxHorizontalPosition, horizontalPos);
+            maxVerticalPosition = Math.max(maxVerticalPosition, verticalPos);
         }
-        // Add 10% margin:
-        maxY *= 1.1;
-        if (maxY < 0.1) maxY = 0.1;
 
-        double xRange = (maxX - minX) * 1.1;
-        if (xRange < 0.1) xRange = 0.1;
+        double horizontalRange = (maxHorizontalPosition - minHorizontalPosition) * 1.1;
+        maxVerticalPosition *= 1.1;
 
-        // Map y ∈ [0..maxY] → pixel ∈ [HEIGHT-50 .. 50]  (inverted vertically)
-        verticalScale = (HEIGHT - 100) / maxY;
-        // Map x ∈ [minX..maxX] → pixel ∈ [50 .. WIDTH-50]
-        horizontalScale = (WIDTH - 100) / xRange;
+        horizontalScale = (CANVAS_WIDTH - 2 * MARGIN) / horizontalRange;
+        verticalScale = (CANVAS_HEIGHT - 2 * MARGIN) / maxVerticalPosition;
+        horizontalOffset = CANVAS_WIDTH / 2.0;
+        verticalOffset = CANVAS_HEIGHT - MARGIN;
 
         backgroundImage = new Image(
             getClass().getResource("/guiStyling/titan_surface.jpg").toExternalForm(),
-            WIDTH,    // requestedWidth
-            HEIGHT,   // requestedHeight
-            false,    // preserveRatio? (false means stretch to exactly WIDTH×HEIGHT)
-            true      // smooth?
+            CANVAS_WIDTH, CANVAS_HEIGHT, false, true
         );
 
-        // 3) Prepare a Canvas and draw the static background (ground line, title):
-        canvas = new Canvas(WIDTH, HEIGHT);
-        drawStaticBackground();
+        drawingCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        drawStaticElements(drawingCanvas.getGraphicsContext2D());
 
-        // 4) Create a Timeline: one KeyFrame per trajectory row. Each fires at t = (DT*1000*index)/SPEED_FACTOR ms.
-        Timeline timeline = new Timeline();
-        timeline.setCycleCount(trajectory.length);
+        AnimationTimer animationTimer = new AnimationTimer() {
+            private long lastUpdateTime = 0;
+            private int currentStepIndex = 0;
 
-        for (int i = 0; i < trajectory.length; i++) {
-            final int idx = i;
-            KeyFrame frame = new KeyFrame(
-                    Duration.millis((DT * 1000 * idx) / SPEED_FACTOR),
-                    e -> drawLanderAtStep(idx)
-            );
-            timeline.getKeyFrames().add(frame);
-        }
+            @Override
+            public void handle(long currentTime) {
+                if (lastUpdateTime == 0) {
+                    lastUpdateTime = currentTime;
+                }
+                double elapsedSeconds = (currentTime - lastUpdateTime) / 1e9 * PLAYBACK_SPEED_FACTOR;
+                int stepsToAdvance = (int)(elapsedSeconds / TIME_STEP_SECONDS);
+                
+                if (stepsToAdvance > 0) {
+                    currentStepIndex = Math.min(currentStepIndex + stepsToAdvance, trajectoryData.length - 1);
+                    lastUpdateTime = currentTime;
+                    renderCurrentState(currentStepIndex);
+                    if (currentStepIndex >= trajectoryData.length - 1) {
+                        stop();
+                    }
+                }
+            }
+        };
+        animationTimer.start();
 
-
-        timeline.play();
-
-        // 5) Show the window:
-        primaryStage.setTitle("Titan Lander Visualization (5× Speed)");
-        primaryStage.setScene(new Scene(new javafx.scene.Group(canvas)));
+        primaryStage.setTitle("Titan Lander Visualizer");
+        primaryStage.setScene(new Scene(new Group(drawingCanvas)));
         primaryStage.show();
     }
 
-    /**
-     * Draws a black background, a gray “ground” line at y=0, and a title.
-     */
-    private void drawStaticBackground() {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        // Optionally clear to black first (not required if image covers all):
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, WIDTH, HEIGHT);
+    private void drawStaticElements(GraphicsContext graphicsContext) {
+        graphicsContext.setFill(Color.BLACK);
+        graphicsContext.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        graphicsContext.drawImage(backgroundImage, 0, 0);
 
-        // Draw the Titan surface background image:
-        gc.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT);
+        graphicsContext.setStroke(Color.DARKGRAY);
+        graphicsContext.setLineWidth(4);
+        double groundLevelY = mapVerticalPosition(0);
+        graphicsContext.strokeLine(0, groundLevelY, CANVAS_WIDTH, groundLevelY);
 
-        // Draw ground line at y=0 → pixelY = mapYToPixel(0.0)
-        double groundY = mapYToPixel(0.0);
-        gc.setStroke(Color.DARKGRAY);
-        gc.setLineWidth(4);
-        gc.strokeLine(0, groundY, WIDTH, groundY);
-
-        // Label:
-        gc.setFill(Color.WHITE);
-        gc.setFont(Font.font(14));
-        gc.fillText("Titan Lander Descent (20× Playback Speed)", 20, 20);
-        gc.fillText("Ground (y = 0 km)", 10, groundY - 10);
+        graphicsContext.setFill(Color.WHITE);
+        graphicsContext.setFont(Font.font(18));
+        graphicsContext.fillText("Titan Lander Descent", 20, 30);
     }
 
-    /**
-     * Draws the lander as an orange circle (with a red “nose”) at trajectory[row],
-     * then overlays the current time in the top-right.
-     */
-    private void drawLanderAtStep(int step) {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        // Redraw background to clear the previous frame:
-        drawStaticBackground();
+    private void renderCurrentState(int stepIndex) {
+        double[] currentState = trajectoryData[stepIndex];
+        currentHorizontalPositionKm = currentState[1];
 
-        // Extract x, y, θ from this row of the trajectory:
-        double x_km  = trajectory[step][1];
-        double y_km  = trajectory[step][2];
-        double theta = trajectory[step][5];
+        GraphicsContext graphicsContext = drawingCanvas.getGraphicsContext2D();
+        drawStaticElements(graphicsContext);
 
-        // Convert to pixel coordinates:
-        double pixelX = mapXToPixel(x_km);
-        double pixelY = mapYToPixel(y_km);
+        graphicsContext.setStroke(Color.LIME);
+        graphicsContext.setLineWidth(2);
+        graphicsContext.beginPath();
+        
+        for (int i = 0; i <= stepIndex; i++) {
+            double x = mapHorizontalPosition(trajectoryData[i][1]);
+            double y = mapVerticalPosition(trajectoryData[i][2]);
+            if (i == 0) {
+                graphicsContext.moveTo(x, y);
+            } else {
+                graphicsContext.lineTo(x, y);
+            }
+        }
+        graphicsContext.stroke();
 
-        // Draw a circle of radius 8 px at (pixelX, pixelY), rotated by θ:
-        double radius = 8.0;
-        gc.save();
-        gc.translate(pixelX, pixelY);
-        gc.rotate(-Math.toDegrees(theta)); // θ=0 means “nose” straight up on screen
-        gc.setFill(Color.ORANGE);
-        gc.fillOval(-radius, -radius, radius * 2, radius * 2);
-        gc.setStroke(Color.WHITE);
-        gc.strokeOval(-radius, -radius, radius * 2, radius * 2);
-        gc.restore();
+        double landerX = mapHorizontalPosition(currentHorizontalPositionKm);
+        double landerY = mapVerticalPosition(currentState[2]);
+        double tiltAngle = currentState[5];
+        double landerRadius = 8;
 
-        // Draw a red line from the center to indicate “nose” direction:
-        gc.save();
-        gc.translate(pixelX, pixelY);
-        gc.rotate(-Math.toDegrees(theta));
-        gc.setStroke(Color.RED);
-        gc.setLineWidth(2);
-        gc.strokeLine(0, 0, 0, -radius * 1.5);
-        gc.restore();
+        graphicsContext.save();
+        graphicsContext.translate(landerX, landerY);
+        graphicsContext.rotate(-Math.toDegrees(tiltAngle));
+        graphicsContext.setFill(Color.ORANGE);
+        graphicsContext.fillOval(-landerRadius, -landerRadius, 2 * landerRadius, 2 * landerRadius);
+        graphicsContext.setStroke(Color.WHITE);
+        graphicsContext.strokeOval(-landerRadius, -landerRadius, 2 * landerRadius, 2 * landerRadius);
+        graphicsContext.setStroke(Color.RED);
+        graphicsContext.setLineWidth(2);
+        graphicsContext.strokeLine(0, 0, 0, -landerRadius * 1.5);
+        graphicsContext.restore();
 
-        // Draw the current simulation time:
-        double t = trajectory[step][0];
-        gc.setFill(Color.LIME);
-        gc.setFont(Font.font(12));
-        gc.fillText(String.format("t = %.1f s", t), WIDTH - 120, 20);
+        graphicsContext.setFill(Color.LIME);
+        graphicsContext.setFont(Font.font(14));
+        graphicsContext.fillText(String.format("t = %.1f s", currentState[0]), CANVAS_WIDTH - 120, 30);
     }
 
-    /** Map a y-coordinate (km) to a pixel Y (inverted so larger y = higher on screen). */
-    private double mapYToPixel(double y_km) {
-        // Pixel = (HEIGHT - 50) - y_km * verticalScale, clamped:
-        double py = HEIGHT - 50 - (y_km * verticalScale);
-        if (py < 50)           py = 50;            // don’t go above top margin
-        if (py > HEIGHT - 50)  py = HEIGHT - 50;    // don’t go below ground line
-        return py;
+    private double mapHorizontalPosition(double horizontalPositionKm) {
+        double positionDifference = horizontalPositionKm - currentHorizontalPositionKm;
+        return CANVAS_WIDTH / 2.0 + positionDifference * horizontalScale;
     }
 
-    /** Map an x-coordinate (km) to a pixel X (centered horizontally, with 50px margins). */
-    private double mapXToPixel(double x_km) {
-        double centerX = WIDTH / 2.0;
-        double px = centerX + (x_km * horizontalScale);
-        if (px < 50)          px = 50;
-        if (px > WIDTH - 50)  px = WIDTH - 50;
-        return px;
+    private double mapVerticalPosition(double verticalPositionKm) {
+        return verticalOffset - verticalPositionKm * verticalScale;
     }
 
     public static void main(String[] args) {

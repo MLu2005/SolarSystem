@@ -1,32 +1,43 @@
 package com.example.lander;
 
 public class CombinedController implements Controller {
-    private final Controller feedForward;
-    private final Controller feedback;
+    private final Controller feedForwardController;
+    private final Controller feedbackController;
 
-    public CombinedController(Controller feedForward, Controller feedback) {
-        this.feedForward = feedForward;
-        this.feedback    = feedback;
+    public CombinedController(Controller feedForwardController, Controller feedbackController) {
+        this.feedForwardController = feedForwardController;
+        this.feedbackController = feedbackController;
     }
 
     @Override
-    public double getU(double t, double[] state) {
-        double uPlan = feedForward.getU(t, state);
-        double uCorr = feedback   .getU(t, state);
-        double uTot  = uPlan + uCorr;
-        if (uTot < 0)    uTot = 0;
-        if (uTot > FeedbackController.U_MAX)
-                         uTot = FeedbackController.U_MAX;
-        return uTot;
+    public double getU(double time, double[] state) {
+        double plannedControl = feedForwardController.getU(time, state);
+        double correctiveControl = feedbackController.getU(time, state);
+        double totalControl = plannedControl + correctiveControl;
+        
+        if (totalControl < 0) {
+            totalControl = 0;
+        }
+        if (totalControl > FeedbackController.MAX_THRUST) {
+            totalControl = FeedbackController.MAX_THRUST;
+        }
+        
+        return totalControl;
     }
 
     @Override
-    public double getV(double t, double[] state) {
-        double vPlan = feedForward.getV(t, state);
-        double vCorr = feedback   .getV(t, state);
-        double vTot  = vPlan + vCorr;
-        if (vTot >  FeedbackController.V_MAX) vTot =  FeedbackController.V_MAX;
-        if (vTot < -FeedbackController.V_MAX) vTot = -FeedbackController.V_MAX;
-        return vTot;
+    public double getV(double time, double[] state) {
+        double plannedSteering = feedForwardController.getV(time, state);
+        double correctiveSteering = feedbackController.getV(time, state);
+        double totalSteering = plannedSteering + correctiveSteering;
+        
+        if (totalSteering > FeedbackController.MAX_STEERING_RATE) {
+            totalSteering = FeedbackController.MAX_STEERING_RATE;
+        }
+        if (totalSteering < -FeedbackController.MAX_STEERING_RATE) {
+            totalSteering = -FeedbackController.MAX_STEERING_RATE;
+        }
+        
+        return totalSteering;
     }
 }
