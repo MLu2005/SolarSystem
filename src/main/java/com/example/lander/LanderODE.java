@@ -1,4 +1,3 @@
-// src/com/example/lander/LanderODE.java
 package com.example.lander;
 
 import java.util.function.BiFunction;
@@ -8,53 +7,52 @@ import com.example.utilities.Vector3D;
 import com.example.utilities.titanAtmosphere.AtmosphericForce;
 import com.example.utilities.titanAtmosphere.TitanEnvironment;
 
-public class LanderODE implements BiFunction<Double,double[],double[]> {
+public class LanderODE implements BiFunction<Double, double[], double[]> {
     private static final double G_TITAN = 1.352e-3;
 
     private final Controller controller;
     private final AtmosphericForce dragModel;
     private final SpaceShip tempShip;
 
-    public LanderODE(Controller controller,
-                     TitanEnvironment env,
-                     double dragC,
-                     double maxAtm,
-                     double massKg) {
+    public LanderODE(Controller controller, TitanEnvironment environment, double dragCoefficient, double maxAtmosphere, double massKg) {
         this.controller = controller;
-        this.tempShip   = new SpaceShip("LanderDummy", 0.0,
-                                        new Vector3D(0,0,0),
-                                        massKg, 0.0,
-                                        new Vector3D(0,0,0));
-        this.dragModel  = new AtmosphericForce(env, dragC, maxAtm);
+        this.tempShip = new SpaceShip("Noah Ark",0.0, new Vector3D(0, 0, 0), massKg,0.0, new Vector3D(0, 0, 0));
+        this.dragModel = new AtmosphericForce(environment, dragCoefficient, maxAtmosphere);
     }
 
     @Override
-    public double[] apply(Double time, double[] s) {
-        double x = s[0], y = s[1],
-               vX= s[2], vY= s[3],
-               θ = s[4], θdot = s[5];
+    public double[] apply(Double time, double[] state) {
+        double horizontalPosition = state[0];
+        double altitude = state[1];
+        double horizontalVelocity = state[2];
+        double verticalVelocity = state[3];
+        double tiltAngle = state[4];
+        double tiltRate = state[5];
 
-        tempShip.setPosition(new Vector3D(x, y, 0));
-        tempShip.setVelocity(new Vector3D(vX, vY, 0));
-        Vector3D drag = dragModel.compute(tempShip);
-        double m = tempShip.getMass();
+        tempShip.setPosition(new Vector3D(horizontalPosition, altitude, 0));
+        tempShip.setVelocity(new Vector3D(horizontalVelocity, verticalVelocity, 0));
+        Vector3D dragForce = dragModel.compute(tempShip);
+        double mass = tempShip.getMass();
 
-        double aDragX = drag.getX()/m;
-        double aDragY = drag.getY()/m;
+        double dragAccelerationX = dragForce.getX() / mass;
+        double dragAccelerationY = dragForce.getY() / mass;
 
-        double u = controller.getU(time, s);
-        double v = controller.getV(time, s);
+        double thrust = controller.getU(time, state);
+        double torque = controller.getV(time, state);
 
-        double[] d = new double[6];
-        d[0] = vX;
-        d[1] = vY;
-        d[2] = u * Math.sin(θ) + aDragX;
-        // vertical: clamp upward pop at <0.1 m
-        double netY = u * Math.cos(θ) - G_TITAN + aDragY;
-        if (y < 1e-4 && netY > 0) netY = 0;
-        d[3] = netY;
-        d[4] = θdot;
-        d[5] = v;
-        return d;
+        double[] derivatives = new double[6];
+        derivatives[0] = horizontalVelocity;
+        derivatives[1] = verticalVelocity;
+        derivatives[2] = thrust * Math.sin(tiltAngle) + dragAccelerationX;
+
+        double netVerticalAcceleration = thrust * Math.cos(tiltAngle) - G_TITAN + dragAccelerationY;
+        if (altitude < 1e-4 && netVerticalAcceleration > 0) {
+            netVerticalAcceleration = 0;
+        }
+        derivatives[3] = netVerticalAcceleration;
+
+        derivatives[4] = tiltRate;
+        derivatives[5] = torque;
+        return derivatives;
     }
 }

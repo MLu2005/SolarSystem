@@ -14,173 +14,172 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class LanderVisualizer extends Application {
+    private static final int CANVAS_WIDTH = 1250;
+    private static final int CANVAS_HEIGHT = 950;
+    private static final double MARGIN = 50;
+    private double currentHorizontalPositionKm = 0;
 
-    // ─── CONFIGURATION ─────────────────────────────────────
-    private static final int    CANVAS_WIDTH   = 1250;
-    private static final int    CANVAS_HEIGHT  = 950;
-    private static final double MARGIN         = 50;
-    private double currentXKm = 0;
+    private static final double TIME_STEP_SECONDS = 1.0;
+    private static final int MAXIMUM_STEPS = 200000;
+    private static final double WIND_SPEED_KM_PER_S = 0.0001;
+    private static final double LANDER_MASS_KG = 50000.0;
+    private static final double PLAYBACK_SPEED_FACTOR = 1000.0;
 
-    private static final double DT             = 1.0;       // seconds per sim step
-    private static final int    MAX_STEPS      = 200_000;
-    private static final double WIND_KM_S      = 0.0001;
-    private static final double MASS_KG       = 50_000.0;
-    private static final double SPEED_FACTOR  = 1_000.0;   // playback speed
-
-    private static final double[] INIT_STATE = {
-        -2715.3163563925214,   // x
-         (2875.004939539644 - 2575.0), // y
-         0.5807482731466309,   // vx
-        -1.6690138988461283,   // vy
-         0.0,                  // θ
-         0.0                   // θdot
+    private static final double[] INITIAL_STATE = {
+        -2715.3163563925214,
+        2875.004939539644 - 2575.0,
+        0.5807482731466309,
+        -1.6690138988461283,
+        0.0,
+        0.0
     };
-    // ────────────────────────────────────────────────────────
 
-    private double[][] trajectory;
-    private double   xScale, yScale, xOffset, yOffset;
-    private Canvas   canvas;
-    private Image    background;
+    private double[][] trajectoryData;
+    private double horizontalScale;
+    private double verticalScale;
+    private double horizontalOffset;
+    private double verticalOffset;
+    private Canvas drawingCanvas;
+    private Image backgroundImage;
 
     @Override
-    public void start(Stage stage) {
-        // 1) simulate
-        trajectory = LanderSimulator.simulateCombined(
-            INIT_STATE, DT, MAX_STEPS, WIND_KM_S, MASS_KG
+    public void start(Stage primaryStage) {
+        trajectoryData = LanderSimulator.simulateCombined(
+            INITIAL_STATE,
+            TIME_STEP_SECONDS,
+            MAXIMUM_STEPS,
+            WIND_SPEED_KM_PER_S,
+            LANDER_MASS_KG
         );
-        if (trajectory.length < 2) {
+
+        if (trajectoryData.length < 2) {
             System.err.println("Not enough trajectory points!");
             System.exit(1);
         }
 
-        // 2) compute world bounds
-        double minX = Double.POSITIVE_INFINITY, maxX = Double.NEGATIVE_INFINITY;
-        double maxY = Double.NEGATIVE_INFINITY;
-        for (var row : trajectory) {
-            double x = row[1], y = row[2];
-            minX = Math.min(minX, x);
-            maxX = Math.max(maxX, x);
-            maxY = Math.max(maxY, y);
+        double minHorizontalPosition = Double.POSITIVE_INFINITY;
+        double maxHorizontalPosition = Double.NEGATIVE_INFINITY;
+        double maxVerticalPosition = Double.NEGATIVE_INFINITY;
+        
+        for (var state : trajectoryData) {
+            double horizontalPos = state[1];
+            double verticalPos = state[2];
+            minHorizontalPosition = Math.min(minHorizontalPosition, horizontalPos);
+            maxHorizontalPosition = Math.max(maxHorizontalPosition, horizontalPos);
+            maxVerticalPosition = Math.max(maxVerticalPosition, verticalPos);
         }
-        // add padding
-        double xRange = (maxX - minX) * 1.1;
-        maxY *= 1.1;
 
-        // 3) mapping parameters
-        xScale  = (CANVAS_WIDTH  - 2*MARGIN) / xRange;
-        yScale  = (CANVAS_HEIGHT - 2*MARGIN) / maxY;
-        xOffset = CANVAS_WIDTH/2.0;
-        yOffset = CANVAS_HEIGHT - MARGIN;
+        double horizontalRange = (maxHorizontalPosition - minHorizontalPosition) * 1.1;
+        maxVerticalPosition *= 1.1;
 
-        // 4) load background
-        background = new Image(
+        horizontalScale = (CANVAS_WIDTH - 2 * MARGIN) / horizontalRange;
+        verticalScale = (CANVAS_HEIGHT - 2 * MARGIN) / maxVerticalPosition;
+        horizontalOffset = CANVAS_WIDTH / 2.0;
+        verticalOffset = CANVAS_HEIGHT - MARGIN;
+
+        backgroundImage = new Image(
             getClass().getResource("/guiStyling/titan_surface.jpg").toExternalForm(),
             CANVAS_WIDTH, CANVAS_HEIGHT, false, true
         );
 
-        // 5) set up Canvas
-        canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-        drawStatic(canvas.getGraphicsContext2D());
+        drawingCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        drawStaticElements(drawingCanvas.getGraphicsContext2D());
 
-        // 6) animation
-        AnimationTimer timer = new AnimationTimer() {
-            private long last = 0;
-            private int  idx  = 0;
+        AnimationTimer animationTimer = new AnimationTimer() {
+            private long lastUpdateTime = 0;
+            private int currentStepIndex = 0;
 
             @Override
-            public void handle(long now) {
-                if (last == 0) {
-                    last = now;
+            public void handle(long currentTime) {
+                if (lastUpdateTime == 0) {
+                    lastUpdateTime = currentTime;
                 }
-                double elapsedSec = (now - last) / 1e9 * SPEED_FACTOR;
-                int steps = (int)(elapsedSec / DT);
-                if (steps > 0) {
-                    idx = Math.min(idx + steps, trajectory.length - 1);
-                    last = now;
-                    renderStep(idx);
-                    if (idx >= trajectory.length - 1) stop();
+                double elapsedSeconds = (currentTime - lastUpdateTime) / 1e9 * PLAYBACK_SPEED_FACTOR;
+                int stepsToAdvance = (int)(elapsedSeconds / TIME_STEP_SECONDS);
+                
+                if (stepsToAdvance > 0) {
+                    currentStepIndex = Math.min(currentStepIndex + stepsToAdvance, trajectoryData.length - 1);
+                    lastUpdateTime = currentTime;
+                    renderCurrentState(currentStepIndex);
+                    if (currentStepIndex >= trajectoryData.length - 1) {
+                        stop();
+                    }
                 }
             }
         };
-        timer.start();
+        animationTimer.start();
 
-        // 7) show
-        stage.setTitle("Titan Lander Visualizer");
-        stage.setScene(new Scene(new Group(canvas)));
-        stage.show();
+        primaryStage.setTitle("Titan Lander Visualizer");
+        primaryStage.setScene(new Scene(new Group(drawingCanvas)));
+        primaryStage.show();
     }
 
-    private void drawStatic(GraphicsContext gc) {
-        // black background + surface
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        gc.drawImage(background, 0, 0);
+    private void drawStaticElements(GraphicsContext graphicsContext) {
+        graphicsContext.setFill(Color.BLACK);
+        graphicsContext.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        graphicsContext.drawImage(backgroundImage, 0, 0);
 
-        // ground line
-        gc.setStroke(Color.DARKGRAY);
-        gc.setLineWidth(4);
-        double groundY = mapY(0);
-        gc.strokeLine(0, groundY, CANVAS_WIDTH, groundY);
+        graphicsContext.setStroke(Color.DARKGRAY);
+        graphicsContext.setLineWidth(4);
+        double groundLevelY = mapVerticalPosition(0);
+        graphicsContext.strokeLine(0, groundLevelY, CANVAS_WIDTH, groundLevelY);
 
-        // title
-        gc.setFill(Color.WHITE);
-        gc.setFont(Font.font(18));
-        gc.fillText("Titan Lander Descent", 20, 30);
+        graphicsContext.setFill(Color.WHITE);
+        graphicsContext.setFont(Font.font(18));
+        graphicsContext.fillText("Titan Lander Descent", 20, 30);
     }
 
-    private void renderStep(int step) {
-        // grab the current state
-        double[] s = trajectory[step];
-        currentXKm = s[1];  // update camera focus
+    private void renderCurrentState(int stepIndex) {
+        double[] currentState = trajectoryData[stepIndex];
+        currentHorizontalPositionKm = currentState[1];
 
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        drawStatic(gc);
+        GraphicsContext graphicsContext = drawingCanvas.getGraphicsContext2D();
+        drawStaticElements(graphicsContext);
 
-        // draw trail
-        gc.setStroke(Color.LIME);
-        gc.setLineWidth(2);
-        gc.beginPath();
-        for (int i = 0; i <= step; i++) {
-            double x = mapX(trajectory[i][1]);
-            double y = mapY(trajectory[i][2]);
-            if (i == 0) gc.moveTo(x, y);
-            else       gc.lineTo(x, y);
+        graphicsContext.setStroke(Color.LIME);
+        graphicsContext.setLineWidth(2);
+        graphicsContext.beginPath();
+        
+        for (int i = 0; i <= stepIndex; i++) {
+            double x = mapHorizontalPosition(trajectoryData[i][1]);
+            double y = mapVerticalPosition(trajectoryData[i][2]);
+            if (i == 0) {
+                graphicsContext.moveTo(x, y);
+            } else {
+                graphicsContext.lineTo(x, y);
+            }
         }
-        gc.stroke();
+        graphicsContext.stroke();
 
-        // draw lander at center
-        double px = mapX(currentXKm);
-        double py = mapY(s[2]);
-        double theta = s[5];
-        double r = 8;
+        double landerX = mapHorizontalPosition(currentHorizontalPositionKm);
+        double landerY = mapVerticalPosition(currentState[2]);
+        double tiltAngle = currentState[5];
+        double landerRadius = 8;
 
-        gc.save();
-        gc.translate(px, py);
-        gc.rotate(-Math.toDegrees(theta));
-        gc.setFill(Color.ORANGE);
-        gc.fillOval(-r, -r, 2*r, 2*r);
-        gc.setStroke(Color.WHITE);
-        gc.strokeOval(-r, -r, 2*r, 2*r);
-        gc.setStroke(Color.RED);
-        gc.setLineWidth(2);
-        gc.strokeLine(0, 0, 0, -r * 1.5);
-        gc.restore();
+        graphicsContext.save();
+        graphicsContext.translate(landerX, landerY);
+        graphicsContext.rotate(-Math.toDegrees(tiltAngle));
+        graphicsContext.setFill(Color.ORANGE);
+        graphicsContext.fillOval(-landerRadius, -landerRadius, 2 * landerRadius, 2 * landerRadius);
+        graphicsContext.setStroke(Color.WHITE);
+        graphicsContext.strokeOval(-landerRadius, -landerRadius, 2 * landerRadius, 2 * landerRadius);
+        graphicsContext.setStroke(Color.RED);
+        graphicsContext.setLineWidth(2);
+        graphicsContext.strokeLine(0, 0, 0, -landerRadius * 1.5);
+        graphicsContext.restore();
 
-        // draw time
-        gc.setFill(Color.LIME);
-        gc.setFont(Font.font(14));
-        gc.fillText(String.format("t = %.1f s", s[0]), CANVAS_WIDTH - 120, 30);
+        graphicsContext.setFill(Color.LIME);
+        graphicsContext.setFont(Font.font(14));
+        graphicsContext.fillText(String.format("t = %.1f s", currentState[0]), CANVAS_WIDTH - 120, 30);
     }
 
-    // now mapX shifts everything so that currentXKm → center of screen
-    private double mapX(double xKm) {
-        double dx = xKm - currentXKm;
-        return CANVAS_WIDTH / 2.0 + dx * xScale;
+    private double mapHorizontalPosition(double horizontalPositionKm) {
+        double positionDifference = horizontalPositionKm - currentHorizontalPositionKm;
+        return CANVAS_WIDTH / 2.0 + positionDifference * horizontalScale;
     }
 
-    private double mapY(double yKm) {
-        // downward y positive in screen coords
-        return yOffset - yKm * yScale;
+    private double mapVerticalPosition(double verticalPositionKm) {
+        return verticalOffset - verticalPositionKm * verticalScale;
     }
 
     public static void main(String[] args) {
