@@ -4,10 +4,13 @@ import com.example.solar_system.CelestialBody;
 import com.example.utilities.Vector3D;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 // * Reads ths JSON file. see line 212 below.
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -211,19 +214,22 @@ public class MissionExecution {
     }
 
     private void loadHillClimbBurns() {
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            HillClimbResult result = mapper.readValue(
-                    new File("src/main/java/com/example/utilities/HillClimb/hillclimb_results.json"),
-                    HillClimbResult.class
-            );
-            hillClimbBurns = result.burns;
+            // Read the full JSON tree
+            JsonNode root = mapper.readTree(new File("src/main/java/com/example/utilities/HillClimb/hillclimb_results.json"));
+            // Extract the "burns" node
+            JsonNode burnsNode = root.path("burns");
+            // Deserialize only that node into a List<Burn>
+            hillClimbBurns = mapper.readerFor(new TypeReference<List<Burn>>() {})
+                    .readValue(burnsNode);
+
             scaleDownHillClimbBurns();
             assert hillClimbBurns != null;
             System.out.println("Loaded " + hillClimbBurns.size() + " hillclimb burns.");
         } catch (IOException e) {
             System.err.println("Failed to load hillclimb burns: " + e.getMessage());
-            hillClimbBurns = List.of(); // fallback empty list
+            hillClimbBurns = Collections.emptyList(); // fallback empty list
         }
     }
 
