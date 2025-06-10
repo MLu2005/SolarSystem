@@ -30,6 +30,30 @@ public class LanderSimulator {
         return new TitanEnvironment(heightGrid, windGrid);
     }
 
+    public static double[][] simulateOpenLoop(double[] initialState, double timeStep, int maxSteps, double windSpeed, double landerMass) {
+        TitanEnvironment environment = buildEnvironment(windSpeed);
+
+        Controller openLoopController = new OpenLoopController();
+        LanderODE odeFunction = new LanderODE(openLoopController, environment, DRAG_COEFF, MAX_ATMOS_HEIGHT, landerMass);
+
+        RK4Solver solver = new RK4Solver();
+        BiFunction<Double, double[], Boolean> stopIfLanded = (time, state) -> state[1] <= 0.0;
+
+        return solver.solve(odeFunction, 0.0, initialState, timeStep, maxSteps, stopIfLanded);
+    }
+
+    public static double[][] simulateFeedback(double[] initialState, double timeStep, int maxSteps, double windSpeed, double landerMass) {
+        TitanEnvironment environment = buildEnvironment(windSpeed);
+
+        Controller feedbackController = new FeedbackController();
+        LanderODE odeFunction = new LanderODE(feedbackController, environment, DRAG_COEFF, MAX_ATMOS_HEIGHT, landerMass);
+
+        RK4Solver solver = new RK4Solver();
+        BiFunction<Double, double[], Boolean> stopIfLanded = (time, state) -> state[1] <= 0.0;
+
+        return solver.solve(odeFunction, 0.0, initialState, timeStep, maxSteps, stopIfLanded);
+    }
+
     public static double[][] simulateCombined(double[] initialState, double timeStep, int maxSteps, double windSpeed, double landerMass) {
         TitanEnvironment environment = buildEnvironment(windSpeed);
 
