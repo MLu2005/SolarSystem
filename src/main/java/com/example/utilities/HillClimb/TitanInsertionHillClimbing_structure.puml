@@ -1,0 +1,357 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.example.utilities.HillClimb.TitanInsertionHillClimbing",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1322970774 { 
+   	label=example
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1219420038 { 
+   	label=utilities
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   GeneticTitan1622582927[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)GeneticTitan</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ computeDvRel(vx: double, vy: double, vz: double): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ main(args: String[])</TD></TR>
+<TR><TD ALIGN="LEFT" >+ writeToFile(pop: Generation, top_n: int)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Individual1622582927[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Individual</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   fitness: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   gene: Vector&lt;Double&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   minDistanceTitanKm: double [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- cloneBody(b: CelestialBody): CelestialBody</TD></TR>
+<TR><TD ALIGN="LEFT" >- createTitanStub(): CelestialBody</TD></TR>
+<TR><TD ALIGN="LEFT" >+ crossover(p1: Individual, p2: Individual): Individual</TD></TR>
+<TR><TD ALIGN="LEFT" >+ evaluate()</TD></TR>
+<TR><TD ALIGN="LEFT" >- find(name: String): CelestialBody</TD></TR>
+<TR><TD ALIGN="LEFT" >+ genes(): Vector&lt;Double&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ mutate(): Individual</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(g: Vector&lt;Double&gt;): Individual</TD></TR>
+<TR><TD ALIGN="LEFT" >- randomGene(): Vector&lt;Double&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+InsertionThrustSchedule1831687551[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InsertionThrustSchedule</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   deltaVSlots: Vector3D[] [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   fuelUsedSlots: double[] [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   slotDurationSec: double [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ clone(): InsertionThrustSchedule</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getDeltaVAt(i: int): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getFuelUsedAt(i: int): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getThrustAt(slotIdx: int): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getThrustVectorAt(slotIdx: int, massKg: double): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >- maxDeltaV(): double</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+PhysicsEngine937669443[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)PhysicsEngine</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   bodies: List&lt;CelestialBody&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ addBody(body: CelestialBody)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ step(dt: double)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SimulationFileWriter2059666521[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SimulationFileWriter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- calculatePositionAfterTwoTurns(schedule: InsertionThrustSchedule, titanOrbitalPeriod: double): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >- calculateSpeedAfterTwoTurns(schedule: InsertionThrustSchedule, titanOrbitalPeriod: double): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >- calculateTitanOrbitalPeriod(): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ writeGAResults(bestIndividuals: List&lt;Individual&gt;, outputPath: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ writeHillClimbResults(schedule: InsertionThrustSchedule, bestCost: double, outputPath: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >- writeToFile(content: String, filePath: String)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SolarSystemFactory937669443[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SolarSystemFactory</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- getCelestialBody(saturn: CelestialBody): CelestialBody</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRadiusKm(name: String): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ loadFromTable(): List&lt;CelestialBody&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+TitanInsertionHillClimbing1831687551[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)TitanInsertionHillClimbing</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- calculatePositionAfterTwoTurns(schedule: InsertionThrustSchedule, titanOrbitalPeriod: double): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >- calculateSpeedAfterTwoTurns(schedule: InsertionThrustSchedule, titanOrbitalPeriod: double): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >- calculateTitanOrbitalPeriod(): double</TD></TR>
+<TR><TD ALIGN="LEFT" >- computeCost(schedule: InsertionThrustSchedule): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ main(args: String[])</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Vector3D2059666521[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Vector3D</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+   x: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   y: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   z: double [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ add(other: Vector3D): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ copy(): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ cross(other: Vector3D): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ distanceTo(other: Vector3D): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ dot(other: Vector3D): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ magnitude(): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ magnitudeSquared(): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ norm(): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ normalize(): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ randomUnitVector(): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ safeNormalize(): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ scalarMultiply(v: double): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ scale(scalar: double): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ subtract(other: Vector3D): Vector3D</TD></TR>
+<TR><TD ALIGN="LEFT" >+ toVector(): Vector&lt;Double&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ zero(): Vector3D</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+
+subgraph cluster_510801009 { 
+   	label=solar_system
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   CelestialBody1224374974[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CelestialBody</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   acceleration: Vector3D [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mass: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   name: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   position: Vector3D [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   velocity: Vector3D [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getRadius(name: String): double</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+subgraph cluster_2030067008 { 
+   	label=solvers
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   EulerSolver270417723[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)EulerSolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ solve(f: BiFunction&lt;Double, double[], double[]&gt;, x: double, y0: double[], stepSize: double, steps: int, stopCondition: BiFunction&lt;Double, double[], Boolean&gt;): double[][]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ODEUtility270417723[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ODEUtility</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ addVectors(a: double[], b: double[]): double[]</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMax(valuePairs: double[][]): Double[]</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMin(valuePairs: double[][]): Double[]</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getValueAt(valuePairs: double[][], val: double): double[]</TD></TR>
+<TR><TD ALIGN="LEFT" >+ initStorage(maxSteps: int, t0: double, y0: double[]): double[][]</TD></TR>
+<TR><TD ALIGN="LEFT" ># roundTime(t: double): double</TD></TR>
+<TR><TD ALIGN="LEFT" >+ scaleVector(v: double[], scalar: double): double[]</TD></TR>
+<TR><TD ALIGN="LEFT" >+ textToFunction(): BiFunction&lt;Double, double[], double[]&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ xIntersectInStep(valuePairs: double[][]): Double[][]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+RK4Solver270417723[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)RK4Solver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ solve(f: BiFunction&lt;Double, double[], double[]&gt;, t0: double, y0: double[], stepSize: double, steps: int, stopCondition: BiFunction&lt;Double, double[], Boolean&gt;): double[][]</TD></TR>
+<TR><TD ALIGN="LEFT" >+ solveStep(f: BiFunction&lt;Double, double[], double[]&gt;, t: double, y: double[], h: double): double[]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+RKF45Solver270417723[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)RKF45Solver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ solve(f: BiFunction&lt;Double, double[], double[]&gt;, t0: double, y0: double[], initialStepSize: double, steps: int, stopCondition: BiFunction&lt;Double, double[], Boolean&gt;): double[][]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+
+'edges    
+EulerSolver270417723 -> ODEUtility270417723[label="solve() -> initStorage()"];
+Individual1622582927 -> RK4Solver270417723[label="evaluate() -> solveStep()"];
+Individual1622582927 -> SolarSystemFactory937669443[label="evaluate() -> getRadiusKm()"];
+InsertionThrustSchedule1831687551 -> Vector3D2059666521[label="deltaVSlots
+[0..*]"];
+PhysicsEngine937669443 -> CelestialBody1224374974[label="bodies
+[0..*]"];
+PhysicsEngine937669443 -> RK4Solver270417723[label="step() -> solveStep()"];
+RKF45Solver270417723 -> EulerSolver270417723[arrowhead=none];
+RKF45Solver270417723 -> RK4Solver270417723[arrowhead=none];
+SimulationFileWriter2059666521 -> GeneticTitan1622582927[label="writeGAResults() -> computeDvRel()"];
+SimulationFileWriter2059666521 -> Individual1622582927[label="writeGAResults() -> genes()"];
+TitanInsertionHillClimbing1831687551 -> SimulationFileWriter2059666521[label="main() -> writeHillClimbResults()"];
+    
+}
+@enduml

@@ -27,6 +27,7 @@ public class Constants {
     // Spacecraft parameters
     public static final double PROBE_MASS = 50000.0; // kg
     public static final double ORIENTATION_EPS = 1e-12; // Orientation epsilon
+    public static final double F_T_MAX = 3e7; // Maximum thrust force in N
 
     // Physics engine parameters
     public static final double SOFTENING_LENGTH = 100.0; // km
