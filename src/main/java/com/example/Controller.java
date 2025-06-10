@@ -1,4 +1,5 @@
 package com.example;
+import com.example.ode_gui.plotter;
 import com.example.utilities.solvers.*;
 import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;
@@ -6,7 +7,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.chart.LineChart;
-import executables.testing.plotter;
+
 
 import java.util.*;
 import java.util.function.BiFunction;
