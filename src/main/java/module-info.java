@@ -25,13 +25,13 @@ module com.example.project {
     exports com.example.utilities;
     exports com.example.utilities.physics_utilities;
     exports com.example.utilities.GA;
+    exports com.example.utilities.HillClimb;
     exports com.example.spaceMissions;
     exports com.example.lander;
 
     exports com.example.solar_system;
     opens com.example.solar_system to javafx.fxml;
 
-    exports executables.solvers;
     exports com.example.ode_gui;
     opens com.example.ode_gui to javafx.fxml;
     exports com.example.utilities.Ship;

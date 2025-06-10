@@ -99,7 +99,6 @@ public class RKF45Solver implements ODESolver {
                         (2.0 / 55.0) * k6[j] * stepSize;
             }
 
-            // Calculate error estimate
             double err = 0;
             for (int j = 0; j < dim; j++) {
                 double e = Math.abs(zNext[j] - yNext[j]);
@@ -107,10 +106,8 @@ public class RKF45Solver implements ODESolver {
             }
             err = Math.sqrt(err / dim);
 
-            // Calculate error tolerance
             double tol = Constants.TOLERANCE;
 
-            // Calculate step size scaling factor
             double s;
             if (err < 1e-15) {
                 s = MAX_SCALE;
@@ -119,10 +116,9 @@ public class RKF45Solver implements ODESolver {
                 s = Math.max(MIN_SCALE, Math.min(MAX_SCALE, s));
             }
 
-            // Accept step if error is within tolerance
             if (err <= tol) {
                 t += stepSize;
-                y = Arrays.copyOf(zNext, dim);  // Use 5th-order result
+                y = Arrays.copyOf(zNext, dim);
                 values[i + 1][0] = t;
                 for (int j = 0; j < dim; j++) {
                     values[i + 1][j + 1] = y[j];
