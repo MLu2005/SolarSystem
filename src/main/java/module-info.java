@@ -17,7 +17,6 @@ module com.example.project {
 
     opens com.example.utilities to javafx.graphics;
     opens com.example.utilities.GA to javafx.graphics;
-
     // Export packages needed for testing
     exports com.example.utilities;
     exports com.example.utilities.physics_utilities;
