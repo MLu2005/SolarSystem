@@ -13,6 +13,16 @@ public class Vector3D {
     public double x, y, z;
 
     /**
+     * No-argument constructor required for deserialization frameworks like Jackson.
+     * Initializes the vector components to zero.
+     */
+    public Vector3D() {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+    }
+
+    /**
      * Constructs a new 3D vector with specified x, y, and z values.
      */
     public Vector3D(double x, double y, double z) {
@@ -21,17 +31,31 @@ public class Vector3D {
         this.z = z;
     }
 
-    public double getX(){
+
+    public double getX() {
         return this.x;
     }
 
-    public double getY(){
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
         return this.y;
     }
 
-    public double getZ(){
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public double getZ() {
         return this.z;
     }
+
+    public void setZ(double z) {
+        this.z = z;
+    }
+
 
     /**
      * Returns the zero vector (0, 0, 0).
@@ -147,7 +171,7 @@ public class Vector3D {
 
     /**
      * Converts this Vector3D to a Vector<Double> containing the x, y, and z components.
-     * 
+     *
      * @return a Vector<Double> containing the x, y, and z components of this Vector3D
      */
     public Vector<Double> toVector() {

@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.*;
 
+// * The main portrait of the solarSystem.
 public class SolarSystemApp extends Application {
 
     private Node soundNode;
@@ -25,9 +26,6 @@ public class SolarSystemApp extends Application {
     private static final int SCALE = 400000;
     private final List<Sphere> planetSpheres = new ArrayList<>();
     private List<CelestialBody> bodies;
-
-    // FIX: Make sure this is the one we use
-    private BurnManager burnManager;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -56,15 +54,26 @@ public class SolarSystemApp extends Application {
             engine.addBody(body);
         }
 
-        // FIX: Assign directly to field
-        Vector3D targetVel = new Vector3D(1.4918284984381769, -0.9472717047141451, 0.09959807890155617);
-        burnManager = new BurnManager(
-                1.0,                    // orbitMultiplier
-                "Titan",                // target body name
-                13000,                  // approachTriggerDistance in km
-                7850,                   // orbitTriggerDistance in km
-                targetVel               // target velocity vector
+        // * Dynamically fetch Titan's velocity at runtime to initialize BurnManager
+        Optional<Vector3D> titanVelocityOpt = bodies.stream()
+                .filter(b -> b.getName().equalsIgnoreCase("titan"))
+                .findFirst()
+                .map(CelestialBody::getVelocity);
+
+        // * For debugging purposes.
+        if (titanVelocityOpt.isEmpty()) {
+            System.err.println("Warning: Titan not found. Defaulting to zero velocity.");
+        }
+
+        // * When to apply the burns.
+        BurnManager burnManager = new BurnManager(
+                "Titan",
+                12100,
+                7850,
+                1.0,
+                titanVelocityOpt.orElse(Vector3D.zero())
         );
+
 
         StageBuilder sceneBuilder = new StageBuilder(SCALE);
         sceneBuilder.setupLighting();
