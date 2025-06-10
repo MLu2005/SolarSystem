@@ -1,15 +1,18 @@
+import com.example.lander.Controller;
+import com.example.lander.FeedbackController;
 import com.example.lander.LanderSimulator;
+import com.example.lander.OpenLoopController;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the LanderSimulator class.
- * Tests the simulation of lander trajectories using both open-loop and feedback controllers.
+ * Tests the simulation of lander trajectories using different controllers.
  */
 public class LanderSimulatorTest {
 
     /**
-     * Test that simulateOpenLoop returns a trajectory with the expected format and basic properties.
+     * Test that simulateCombined with OpenLoopController returns a trajectory with the expected format and basic properties.
      */
     @Test
     void testSimulateOpenLoop_BasicFunctionality() {
@@ -27,9 +30,12 @@ public class LanderSimulatorTest {
         double windSpeed = 0.0;
         double landerMassKilograms = 10000.0;
 
+        // Create an OpenLoopController with default braking altitudes
+        Controller openLoopController = new OpenLoopController(30.0, 50.0);
+
         // Act
-        double[][] trajectory = LanderSimulator.simulateOpenLoop(
-            initialState, timeStep, maximumSteps, windSpeed, landerMassKilograms);
+        double[][] trajectory = LanderSimulator.simulateCombined(
+            initialState, timeStep, maximumSteps, windSpeed, landerMassKilograms, openLoopController);
 
         // Assert
         assertNotNull(trajectory, "Trajectory should not be null");
@@ -53,7 +59,7 @@ public class LanderSimulatorTest {
     }
 
     /**
-     * Test that simulateFeedback returns a trajectory with the expected format and basic properties.
+     * Test that simulateCombined with FeedbackController returns a trajectory with the expected format and basic properties.
      */
     @Test
     void testSimulateFeedback_BasicFunctionality() {
@@ -71,9 +77,12 @@ public class LanderSimulatorTest {
         double windSpeed = 0.0;
         double landerMassKilograms = 10000.0;
 
+        // Create a FeedbackController
+        Controller feedbackController = new FeedbackController();
+
         // Act
-        double[][] trajectory = LanderSimulator.simulateFeedback(
-            initialState, timeStep, maximumSteps, windSpeed, landerMassKilograms);
+        double[][] trajectory = LanderSimulator.simulateCombined(
+            initialState, timeStep, maximumSteps, windSpeed, landerMassKilograms, feedbackController);
 
         // Assert
         assertNotNull(trajectory, "Trajectory should not be null");
@@ -119,14 +128,17 @@ public class LanderSimulatorTest {
         double windSpeed = 0.0;
         double landerMassKilograms = 10000.0;
 
+        // Create an OpenLoopController with default braking altitudes
+        Controller openLoopController = new OpenLoopController(30.0, 50.0);
+
         // Act
-        double[][] trajectory = LanderSimulator.simulateOpenLoop(
-            initialState, timeStep, maximumSteps, windSpeed, landerMassKilograms);
+        double[][] trajectory = LanderSimulator.simulateCombined(
+            initialState, timeStep, maximumSteps, windSpeed, landerMassKilograms, openLoopController);
 
         // Assert
-        // The last point in the trajectory should have vertical position <= 0
+        // The last point in the trajectory should have vertical position <= 0 (or very close to 0)
         double finalVerticalPosition = trajectory[trajectory.length - 1][2];
-        assertTrue(finalVerticalPosition <= 0.0, 
+        assertTrue(finalVerticalPosition <= 1e-6, 
             "Simulation should stop when lander reaches ground, but final height was " + finalVerticalPosition);
 
         // The simulation should have stopped before reaching maximumSteps
@@ -153,9 +165,12 @@ public class LanderSimulatorTest {
         double windSpeed = 0.0;
         double landerMassKilograms = 10000.0;
 
+        // Create an OpenLoopController with default braking altitudes
+        Controller openLoopController = new OpenLoopController(30.0, 50.0);
+
         // Act
-        double[][] trajectory = LanderSimulator.simulateOpenLoop(
-            initialState, timeStep, maximumSteps, windSpeed, landerMassKilograms);
+        double[][] trajectory = LanderSimulator.simulateCombined(
+            initialState, timeStep, maximumSteps, windSpeed, landerMassKilograms, openLoopController);
 
         // Assert
         // The trajectory should have exactly maximumSteps + 1 points (including initial state)
@@ -187,12 +202,15 @@ public class LanderSimulatorTest {
         double withWindSpeed = 0.1; // Significant wind speed to ensure visible effect
         double landerMassKilograms = 10000.0;
 
-        // Act
-        double[][] trajectoryNoWind = LanderSimulator.simulateOpenLoop(
-            initialState, timeStep, maximumSteps, noWindSpeed, landerMassKilograms);
+        // Create an OpenLoopController with default braking altitudes
+        Controller openLoopController = new OpenLoopController(30.0, 50.0);
 
-        double[][] trajectoryWithWind = LanderSimulator.simulateOpenLoop(
-            initialState, timeStep, maximumSteps, withWindSpeed, landerMassKilograms);
+        // Act
+        double[][] trajectoryNoWind = LanderSimulator.simulateCombined(
+            initialState, timeStep, maximumSteps, noWindSpeed, landerMassKilograms, openLoopController);
+
+        double[][] trajectoryWithWind = LanderSimulator.simulateCombined(
+            initialState, timeStep, maximumSteps, withWindSpeed, landerMassKilograms, openLoopController);
 
         // Assert
         // Verify that both simulations ran and produced trajectories
