@@ -1,7 +1,6 @@
 package com.example.utilities.HillClimb;
 
 import java.util.*;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.function.BiFunction;
 

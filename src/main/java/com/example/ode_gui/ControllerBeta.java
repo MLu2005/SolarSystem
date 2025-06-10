@@ -240,10 +240,15 @@ public class ControllerBeta {
             ODESolver[] solvers = {
                     new EulerSolver(),
                     new RK4Solver(),
-                    new RKF45Solver()
+                    new RKF45Solver(),    // adaptive
+                    null                  // placeholder for fixed‐step RKF5
             };
-            String[] solverId = { "Euler", "RK4", "RKF45" };
-
+            String[] solverId = {
+                    "Euler",
+                    "RK4",
+                    "RKF45 (adaptive)",
+                    "RKF45 (fixed-h)"
+            };
 
             NumberAxis xAxis = new NumberAxis(-2.0, -0.6, 0.4);
             xAxis.setLabel("Step size h");
@@ -278,32 +283,48 @@ public class ControllerBeta {
             chart.setTitle("Solver Accuracy (log–log)");
             chart.setCreateSymbols(true);
 
-            for (int s = 0; s < solvers.length; s++) {
+            for (int s = 0; s < solverId.length; s++) {
+                XYChart.Series<Number,Number> series = new XYChart.Series<>();
+                series.setName(solverId[s]);
+
                 double[] logHs = new double[stepSizes.length];
                 double[] logEs = new double[stepSizes.length];
 
-                XYChart.Series<Number, Number> series = new XYChart.Series<>();
-                series.setName(solverId[s]);
-
                 for (int i = 0; i < stepSizes.length; i++) {
                     double h = stepSizes[i];
-                    int steps = (int) ((tEnd - x0) / h);
+                    int steps = (int)((tEnd - x0)/h);
 
-                    double[][] result = solvers[s].solve(
-                            ode,
-                            x0,
-                            Arrays.copyOf(y0, y0.length),
-                            h,
-                            steps,
-                            null
-                    );
-                    double err = Math.abs(result[result.length - 1][1] - exactAtEnd);
+                    double err;
+                    if (s == 3) {
+                        // --- RKF45 fixed-h experiment ---
+                        RKF45Solver rkf = new RKF45Solver();
+                        double t = x0;
+                        double[] y = Arrays.copyOf(y0, y0.length);
+
+                        for (int k = 0; k < steps; k++) {
+                            // call your single‐step 5th‐order method
+                            y = rkf.solveStep(ode, t, y, h);
+                            t += h;
+                        }
+                        err = Math.abs(y[0] - exactAtEnd);
+                    }
+                    else {
+                        // --- Other solvers experiment ---
+                        double[][] out = solvers[s].solve(
+                                ode,
+                                x0,
+                                Arrays.copyOf(y0, y0.length),
+                                h,
+                                steps,
+                                null
+                        );
+                        err = Math.abs(out[out.length-1][1] - exactAtEnd);
+                    }
 
                     double lx = Math.log10(h);
                     double ly = Math.log10(err);
                     logHs[i] = lx;
                     logEs[i] = ly;
-
                     series.getData().add(new XYChart.Data<>(lx, ly));
                 }
 
@@ -311,7 +332,6 @@ public class ControllerBeta {
                 series.setName(
                         solverId[s] + String.format(" (slope ≈ %.2f)", slope)
                 );
-
                 chart.getData().add(series);
             }
 
